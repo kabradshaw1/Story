@@ -2,8 +2,7 @@ package Kyle.backend.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
@@ -11,8 +10,7 @@ import java.util.Date;
 @Entity
 @Table(name = "user")
 @Data
-@Getter
-@Setter
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -34,5 +32,8 @@ public class User {
     private Date dateCreated;
 
     public User(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
     }
 }
