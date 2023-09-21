@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import Kyle.backend.entity.User;
 import Kyle.backend.service.JwtService;
 import Kyle.backend.service.UserService;
+import Kyle.backend.dto.RegisterRequest;
 
 @RestController
 public class RegisterationController {
