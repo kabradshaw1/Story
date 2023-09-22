@@ -1,7 +1,7 @@
-DROP SCHEMA IF EXISTS `story-app`
+DROP SCHEMA IF EXISTS `story-app`;
 
-CREATE SCHEMA `story-app`
-USE `story-app`
+CREATE SCHEMA `story-app`;
+USE `story-app`;
 
 CREATE TABLE `user` (
   `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
