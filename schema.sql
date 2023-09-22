@@ -1,0 +1,16 @@
+DROP SCHEMA IF EXISTS `story-app`
+
+CREATE SCHEMA `story-app`
+USE `story-app`
+
+CREATE TABLE `user` (
+  `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
+  `username` VARCHAR(255) NOT NULL,
+  `email` VARCHAR(255) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  `date_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE `user`
+ADD UNIQUE (`username`),
+ADD UNIQUE (`email`);
