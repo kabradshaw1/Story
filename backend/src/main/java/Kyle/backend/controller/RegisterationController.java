@@ -22,7 +22,7 @@ public class RegisterationController {
   @Autowired
   private JwtService jwtService;
 
-  @PostMapping("/register")
+  @PostMapping("/api/register/")
   public ResponseEntity<String> registerUser(@RequestBody RegisterRequest request) {
     User user = userService.registerUser(request.getUsername(), request.getPassword(), request.getEmail());
     String jwt = jwtService.generateToken(user);
