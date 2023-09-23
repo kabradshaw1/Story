@@ -27,6 +27,9 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "isAdmin")
+    private Boolean isAdmin;
+
     @Column(name = "date_created")
     @CreationTimestamp
     private Date dateCreated;
