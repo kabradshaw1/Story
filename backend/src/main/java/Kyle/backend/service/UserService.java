@@ -20,4 +20,8 @@ public class UserService {
         User newUser = new User(username, password, email);
         return userRepository.save(newUser);
     }
+
+    public User validateUserCredentials(String username, String password) {
+        return null;
+    }
 }
