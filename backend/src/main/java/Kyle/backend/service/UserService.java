@@ -2,6 +2,9 @@ package Kyle.backend.service;
 
 import Kyle.backend.dao.UserRepository;
 import Kyle.backend.entity.User;
+
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,11 @@ public class UserService {
     }
 
     public User validateUserCredentials(String username, String password) {
+        Optional<User> user = userRepository.findByUsername(username);
+
+        if(user.isPresent() && passwordEncoder.matches(password, user.get().getPassword())) {
+            return user.get();
+        }
         return null;
     }
 }
