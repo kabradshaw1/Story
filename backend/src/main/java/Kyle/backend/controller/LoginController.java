@@ -25,7 +25,7 @@ public class LoginController {
 
   @PostMapping("/api/login/")
   public ResponseEntity<String> loginUser(@RequestBody LoginRequest loginRequest) {
-    User user = userService.validateUserCredentials(loginRequest.getUsername(), loginRequest.getPassword());
+    User user = userService.validateUserCredentials(loginRequest.getEmail(), loginRequest.getPassword());
 
     if(user == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
