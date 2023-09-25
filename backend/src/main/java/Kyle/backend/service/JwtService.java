@@ -20,4 +20,14 @@ public class JwtService {
       .withIssuer("backend")
       .sign(algorithm);
   }
+
+  public String refreshAccessToken(User user) {
+    Algorithm algorithm = Algorithm.HMAC256(SECRET);
+    return JWT.create()
+      .withClaim("username", user.getUsername())
+      .withClaim("email", user.getEmail())
+      .withIssuer("backend")
+      .sign(algorithm);
+  }
 }
+
