@@ -25,7 +25,7 @@ public class RegisterationController {
   @PostMapping("/api/register/")
   public ResponseEntity<String> registerUser(@RequestBody RegisterRequest request) {
     User user = userService.registerUser(request.getUsername(), request.getPassword(), request.getEmail());
-    String jwt = jwtService.generateToken(user);
+    String jwt = jwtService.generateAccessToken(user);
     return ResponseEntity.ok(jwt);
   }
 }

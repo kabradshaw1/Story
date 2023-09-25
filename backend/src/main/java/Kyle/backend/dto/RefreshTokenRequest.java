@@ -1,9 +1,12 @@
 package Kyle.backend.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class RefreshTokenRequest {
 
-  public Object getRefreshToken() {
-    return null;
-  }
+  private String refreshToken;
 
 }

@@ -31,7 +31,7 @@ public class LoginController {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
     }
 
-    String jwt = jwtService.generateToken(user);
+    String jwt = jwtService.generateAccessToken(user);
     return ResponseEntity.ok(jwt);
   }
 }
