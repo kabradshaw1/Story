@@ -24,8 +24,8 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
-    public User validateUserCredentials(String username, String password) {
-        Optional<User> user = userRepository.findByUsername(username);
+    public User validateUserCredentials(String email, String password) {
+        Optional<User> user = userRepository.findByEmail(email);
 
         if(user.isPresent() && passwordEncoder.matches(password, user.get().getPassword())) {
             return user.get();
