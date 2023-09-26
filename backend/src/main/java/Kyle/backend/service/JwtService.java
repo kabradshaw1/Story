@@ -43,7 +43,7 @@ public class JwtService {
       .withExpiresAt(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION))
       .sign(algorithm);
   }
-  
+
   public String refreshAccessToken(String refreshToken) {
     try {
       DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC256(SECRET))
@@ -53,7 +53,7 @@ public class JwtService {
         String email = decodedJWT.getClaim("email").asString();
 
         Optional<User> userOptional = userRepository.findByEmail(email);
-         if(userOptional.isPresent()) {
+        if(userOptional.isPresent()) {
           User user = userOptional.get();
           return JWT.create()
             .withClaim("username", user.getUsername())

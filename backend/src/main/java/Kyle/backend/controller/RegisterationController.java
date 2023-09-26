@@ -1,6 +1,7 @@
 package Kyle.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,7 @@ import Kyle.backend.entity.User;
 import Kyle.backend.service.JwtService;
 import Kyle.backend.service.UserService;
 import Kyle.backend.dto.RegisterRequest;
+import Kyle.backend.dto.TokenResponse;
 
 @RestController
 @CrossOrigin("http://localhost:4200")
@@ -23,9 +25,15 @@ public class RegisterationController {
   private JwtService jwtService;
 
   @PostMapping("/api/register/")
-  public ResponseEntity<String> registerUser(@RequestBody RegisterRequest request) {
+  public ResponseEntity<?> registerUser(@RequestBody RegisterRequest request) {
     User user = userService.registerUser(request.getUsername(), request.getPassword(), request.getEmail());
-    String jwt = jwtService.generateAccessToken(user);
-    return ResponseEntity.ok(jwt);
+
+    if(user == null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Could not register user");
+    }
+    
+    String refreshToken = jwtService.generateRefreshToken(user);
+    String accessToken = jwtService.generateAccessToken(user);
+    return ResponseEntity.ok(new TokenResponse(accessToken, refreshToken));
   }
 }
