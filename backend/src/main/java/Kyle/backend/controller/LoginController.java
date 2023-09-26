@@ -25,7 +25,7 @@ public class LoginController {
   private JwtService jwtService;
 
   @PostMapping("/api/login/")
-  public ResponseEntity<TokenResponse> loginUser(@RequestBody LoginRequest loginRequest) {
+  public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
     User user = userService.validateUserCredentials(loginRequest.getEmail(), loginRequest.getPassword());
 
     if(user == null) {
