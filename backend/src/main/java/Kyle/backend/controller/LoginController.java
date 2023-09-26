@@ -1,6 +1,7 @@
 package Kyle.backend.controller;
 
 import Kyle.backend.dto.LoginRequest;
+import Kyle.backend.dto.TokenResponse;
 import Kyle.backend.entity.User;
 import Kyle.backend.service.JwtService;
 import Kyle.backend.service.UserService;
@@ -24,14 +25,15 @@ public class LoginController {
   private JwtService jwtService;
 
   @PostMapping("/api/login/")
-  public ResponseEntity<String> loginUser(@RequestBody LoginRequest loginRequest) {
+  public ResponseEntity<TokenResponse> loginUser(@RequestBody LoginRequest loginRequest) {
     User user = userService.validateUserCredentials(loginRequest.getEmail(), loginRequest.getPassword());
 
     if(user == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
     }
 
-    String jwt = jwtService.generateAccessToken(user);
-    return ResponseEntity.ok(jwt);
+    String accessToken = jwtService.generateAccessToken(user);
+    String refreshToken = jwtService.generateRefreshToken(user);
+    return ResponseEntity.ok(new TokenResponse(accessToken, refreshToken));
   }
 }

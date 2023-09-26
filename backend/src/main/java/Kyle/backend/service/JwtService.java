@@ -43,6 +43,7 @@ public class JwtService {
       .withExpiresAt(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION))
       .sign(algorithm);
   }
+  
   public String refreshAccessToken(String refreshToken) {
     try {
       DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC256(SECRET))
