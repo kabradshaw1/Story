@@ -16,7 +16,7 @@ public class RefreshController {
     @Autowired
     private JwtService jwtService; // Inject JwtService
 
-    @PostMapping("/api/refresh")
+    @PostMapping("/api/refresh/")
     public ResponseEntity<?> refreshAccessToken(@RequestHeader(name = "X-Refresh-Token") String refreshToken) {
         try {
             String newAccessToken = jwtService.refreshAccessToken(refreshToken);
