@@ -19,9 +19,9 @@ public class RefreshController {
     private JwtService jwtService; // Inject JwtService
 
     @PostMapping("/api/refresh")
-    public ResponseEntity<String> generateRefreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+    public ResponseEntity<String> refreshAccessToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
         try {
-            String newAccessToken = jwtService.generateRefreshToken(refreshTokenRequest.getRefreshToken());
+            String newAccessToken = jwtService.refreshAccessToken(refreshTokenRequest.getRefreshToken());
             return ResponseEntity.ok(newAccessToken); // Return the new access token
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");

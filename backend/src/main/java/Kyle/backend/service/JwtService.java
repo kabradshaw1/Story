@@ -4,8 +4,6 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
@@ -36,7 +34,16 @@ public class JwtService {
       .sign(algorithm);
   }
 
-  public String generateRefreshToken(String refreshToken) {
+  public String generateRefreshToken(User user) {
+
+    return JWT.create()
+      .withClaim("username", user.getUsername())
+      .withClaim("email", user.getEmail())
+      .withIssuer("backend")
+      .withExpiresAt(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION))
+      .sign(algorithm);
+  }
+  public String refreshAccessToken(String refreshToken) {
     try {
       DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC256(SECRET))
         .build()
@@ -51,7 +58,7 @@ public class JwtService {
             .withClaim("username", user.getUsername())
             .withClaim("email", user.getEmail())
             .withIssuer("backend")
-            .withExpiresAt(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION))
+            .withExpiresAt(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION))
             .sign(algorithm);
          } else {
           return "User was not found";
