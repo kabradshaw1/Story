@@ -5,6 +5,8 @@ import Kyle.backend.dto.TokenResponse;
 import Kyle.backend.entity.User;
 import Kyle.backend.service.JwtService;
 import Kyle.backend.service.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +27,7 @@ public class LoginController {
   private JwtService jwtService;
 
   @PostMapping("/api/login/")
-  public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
+  public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
     User user = userService.validateUserCredentials(loginRequest.getEmail(), loginRequest.getPassword());
 
     if(user == null) {
@@ -34,6 +36,12 @@ public class LoginController {
 
     String accessToken = jwtService.generateAccessToken(user);
     String refreshToken = jwtService.generateRefreshToken(user);
-    return ResponseEntity.ok(new TokenResponse(accessToken, refreshToken));
+
+    Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
+    refreshTokenCookie.setHttpOnly(true);
+    refreshTokenCookie.setPath("/api/refresh");
+    response.addCookie(refreshTokenCookie);
+
+    return ResponseEntity.ok(new TokenResponse(accessToken));
   }
 }
