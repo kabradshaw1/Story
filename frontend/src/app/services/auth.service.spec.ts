@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { AuthService } from './auth.service';
 import { StoreModule } from '@ngrx/store';
-import { authReducer } from '../store/reducers';
+import { authReducer } from '../store/reducers/auth.reducers';
 
 describe('AuthService', () => {
   let service: AuthService;
