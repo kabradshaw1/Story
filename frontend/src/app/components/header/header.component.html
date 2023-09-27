@@ -3,13 +3,13 @@
     <div class="container">
       <a class="navbar-brand" [routerLink]="['/']">Story App</a>
       <ul class="navbar-nav">
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" data-toggle="dropdown">Welcome</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" [routerLink]="['/register/']"></a></li>
-            <li><a class="dropdown-item" [routerLink]="['/']"></a></li>
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" role="button" id="navbarDropdown" data-bs-toggle="dropdown">Welcome</a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" [routerLink]="['/register']">Register</a></li>
+            <li><a class="dropdown-item" [routerLink]="['/login']">Login</a></li>
           </ul>
-        </li>
+        </div>
       </ul>
     </div>
   </nav>
