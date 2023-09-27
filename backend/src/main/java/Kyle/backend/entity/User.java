@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 
@@ -11,6 +13,7 @@ import java.util.Date;
 @Table(name = "user")
 @Data
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class User {
 
     @Id
@@ -33,6 +36,10 @@ public class User {
     @Column(name = "date_created")
     @CreationTimestamp
     private Date dateCreated;
+
+    @Column(name = "date_updated")
+    @LastModifiedDate
+    private Date dateModified;
 
     public User(String username, String password, String email) {
         this.username = username;
