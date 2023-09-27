@@ -2,11 +2,14 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { AuthService } from './auth.service';
 import { StoreModule } from '@ngrx/store';
+import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { authReducer } from '../store/reducers/auth.reducers';
 
 describe('AuthService', () => {
   let service: AuthService;
   let httpMock: HttpTestingController;
+  let store: MockStore;
+  const initialState = { auth: { token: null } };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -29,22 +32,17 @@ describe('AuthService', () => {
   });
 
   describe('login', () => {
-    it('should return an access token and a refresh token and store the access token', () => {
-      const mockResponse = {
-        accessToken: 'mock-access-token',
-        refreshToken: 'mock-refresh-token'
-      };
+    it('should perform login and store the access token in the state', () => {
+      const mockResponse = { accessToken: 'mock-access-token' };
+      const loginDetails = { email: 'test@example.com', password: 'password' };
 
-      service.login('username', 'password').subscribe((response: { accessToken: string; refreshToken: string; }) => {
+      service.login(loginDetails.email, loginDetails.password).subscribe((response: { accessToken: string }) => {
         expect(response.accessToken).toEqual('mock-access-token');
-        expect(response.refreshToken).toEqual('mock-refresh-token');
 
-        // Validate if token is stored in local storage or in ngrx store based on your implementation.
         expect(localStorage.getItem('accessToken')).toEqual('mock-access-token');
-        // Add additional expectations based on how you handle the refresh token.
       });
 
-      const req = httpMock.expectOne(`YOUR_API_ENDPOINT`); // Replace with your actual endpoint.
+      const req = httpMock.expectOne(`http://localhost:8080/api/login/`);
       expect(req.request.method).toBe('POST');
       req.flush(mockResponse);
     });
