@@ -15,15 +15,15 @@ import jakarta.servlet.http.HttpServletRequest;
 public class RefreshController {
 
     @Autowired
-    private JwtService jwtService; // Inject JwtService
+    private JwtService jwtService; 
 
     @PostMapping("/api/refresh/")
     public ResponseEntity<?> refreshAccessToken(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if ("refreshToken".equals(cookie.getName())) { // Assuming getName is not available
-                    String refreshToken = cookie.getValue(); // Obtain the value of the cookie
+                if ("refreshToken".equals(cookie.getName())) {
+                    String refreshToken = cookie.getValue();
                     try {
                         String newAccessToken = jwtService.refreshAccessToken(refreshToken);
                         return ResponseEntity.ok(newAccessToken);
