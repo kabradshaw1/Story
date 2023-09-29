@@ -12,8 +12,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-
-
 import Kyle.backend.service.JwtService;
 import jakarta.servlet.http.Cookie;
 
@@ -24,7 +22,8 @@ public class RefreshControllerTest {
   @Autowired
   private MockMvc mockMvc;
 
-  @MockBean JwtService jwtService;
+  @MockBean
+  JwtService jwtService;
 
   @Test
   public void refreshAccessToken() throws Exception {
