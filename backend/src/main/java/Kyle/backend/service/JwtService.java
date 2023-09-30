@@ -50,9 +50,9 @@ public class JwtService {
         .build()
         .verify(refreshToken);
 
-        String email = decodedJWT.getClaim("email").asString();
+        Long id = decodedJWT.getClaim("id").asLong();
 
-        Optional<User> userOptional = userRepository.findByEmail(email);
+        Optional<User> userOptional = userRepository.findById(id);
         if(userOptional.isPresent()) {
           User user = userOptional.get();
           return JWT.create()
