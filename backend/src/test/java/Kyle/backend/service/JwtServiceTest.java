@@ -31,7 +31,7 @@ public class JwtServiceTest {
   private User user;
 
   @BeforeEach
-  public void setup() {
+  private void setup() {
     user = new User();
     user.setUsername("testUser");
     user.setId(1L);
