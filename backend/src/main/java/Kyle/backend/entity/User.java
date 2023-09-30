@@ -37,7 +37,7 @@ public class User {
     @CreationTimestamp
     private Date dateCreated;
 
-    @Column(name = "date_updated")
+    @Column(name = "date_modified")
     @LastModifiedDate
     private Date dateModified;
 
