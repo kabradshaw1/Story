@@ -28,7 +28,7 @@ public class JwtService {
 
     return JWT.create()
       .withClaim("username", user.getUsername())
-      .withClaim("email", user.getEmail())
+      .withClaim("id", user.getId())
       .withIssuer("backend")
       .withExpiresAt(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION))
       .sign(algorithm);
@@ -38,7 +38,7 @@ public class JwtService {
 
     return JWT.create()
       .withClaim("username", user.getUsername())
-      .withClaim("email", user.getEmail())
+      .withClaim("id", user.getId())
       .withIssuer("backend")
       .withExpiresAt(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION))
       .sign(algorithm);

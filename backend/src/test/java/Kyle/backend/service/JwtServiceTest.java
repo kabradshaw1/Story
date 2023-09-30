@@ -1,10 +1,19 @@
 package Kyle.backend.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Date;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 
 import Kyle.backend.dao.UserRepository;
 import Kyle.backend.entity.User;
@@ -19,10 +28,25 @@ public class JwtServiceTest {
   private JwtService jwtService;
 
   @Test
-  public void givenUser_whenGenerateAccessTken_thenReturnToken() {
+  public void givenUser_whenGenerateAccessToken_thenReturnAccessToken() {
     // Given
     User user = new User();
     user.setUsername("testUser");
-    user.setEmail("test@email.com");
+    user.setId(1L);
+
+    String token = jwtService.generateAccessToken(user);
+
+    assertNotNull(token);
+
+    DecodedJWT decodedJWT = JWT.decode(token);
+
+    assertEquals(user.getId(), decodedJWT.getClaim("id").asString());
+    assertEquals(user.getUsername(), decodedJWT.getClaim("username").asString());
+
+    Date expiresAt = decodedJWT.getExpiresAt();
+    long diff = expiresAt.getTime() - System.currentTimeMillis();
+    long fifteenMinutesInMilliseconds = 15 * 60 * 1000;
+
+    assertTrue(diff <= fifteenMinutesInMilliseconds && diff > 0); // Assert that expiration is set correctly
   }
 }
