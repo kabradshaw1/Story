@@ -1,4 +1,4 @@
-package Kyle.backend.dao; // Corrected the package name from 'doa' to 'dao'
+package Kyle.backend.dao;
 
 import java.util.Optional;
 
@@ -7,12 +7,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.TestPropertySource;
 
 import Kyle.backend.entity.User;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
+@TestPropertySource(locations = "classpath:test.properties")
 public class UserRepositoryTest {
 
     @Autowired
