@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Date;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,15 +28,24 @@ public class JwtServiceTest {
   @InjectMocks
   private JwtService jwtService;
 
+  private User user;
+
+  @BeforeEach
+  public void setup() {
+    user = new User();
+    user.setUsername("testUser");
+    user.setId(1L);
+  }
+
   @Test
   public void givenUser_whenGenerateAccessToken_thenReturnAccessToken() {
     // Given
-    User user = new User();
-    user.setUsername("testUser");
-    user.setId(1L);
+    // ... setup in @BeforeEach method
 
+    // When
     String token = jwtService.generateAccessToken(user);
 
+    // Then
     assertNotNull(token);
 
     DecodedJWT decodedJWT = JWT.decode(token);
@@ -43,10 +53,16 @@ public class JwtServiceTest {
     assertEquals(user.getId(), decodedJWT.getClaim("id").asString());
     assertEquals(user.getUsername(), decodedJWT.getClaim("username").asString());
 
+    // My access token should last 15 minutes
     Date expiresAt = decodedJWT.getExpiresAt();
     long diff = expiresAt.getTime() - System.currentTimeMillis();
     long fifteenMinutesInMilliseconds = 15 * 60 * 1000;
 
     assertTrue(diff <= fifteenMinutesInMilliseconds && diff > 0); // Assert that expiration is set correctly
+  }
+
+  @Test
+  public void givenUser_whenGenerateRefreshToken_thenReturnRefreshToken() {
+
   }
 }
