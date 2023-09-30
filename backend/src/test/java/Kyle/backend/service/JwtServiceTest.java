@@ -50,19 +50,38 @@ public class JwtServiceTest {
 
     DecodedJWT decodedJWT = JWT.decode(token);
 
-    assertEquals(user.getId(), decodedJWT.getClaim("id").asString());
+    assertEquals(user.getId(), decodedJWT.getClaim("id").asLong());
     assertEquals(user.getUsername(), decodedJWT.getClaim("username").asString());
 
     // My access token should last 15 minutes
     Date expiresAt = decodedJWT.getExpiresAt();
     long diff = expiresAt.getTime() - System.currentTimeMillis();
-    long fifteenMinutesInMilliseconds = 15 * 60 * 1000;
+    long fifteenMinutesInMilliseconds = 15 * 60 * 1000; // 15 minutes in milliseconds
 
     assertTrue(diff <= fifteenMinutesInMilliseconds && diff > 0); // Assert that expiration is set correctly
   }
 
   @Test
   public void givenUser_whenGenerateRefreshToken_thenReturnRefreshToken() {
+    // Given
+    // ... setup in @BeforeEach method
 
+    // When
+    String token = jwtService.generateAccessToken(user);
+
+    // Then
+    assertNotNull(token);
+
+    DecodedJWT decodedJWT = JWT.decode(token);
+
+    assertEquals(user.getId(), decodedJWT.getClaim("id").asLong());
+    assertEquals(user.getUsername(), decodedJWT.getClaim("username").asString());
+
+    // My access token should last 15 minutes
+    Date expiresAt = decodedJWT.getExpiresAt();
+    long diff = expiresAt.getTime() - System.currentTimeMillis();
+    long fifteenMinutesInMilliseconds = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+
+    assertTrue(diff <= fifteenMinutesInMilliseconds && diff > 0); // Assert that expiration is set correctly
   }
 }
