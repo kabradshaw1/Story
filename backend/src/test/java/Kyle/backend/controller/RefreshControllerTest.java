@@ -1,7 +1,5 @@
 package Kyle.backend.controller;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -12,7 +10,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import Kyle.backend.service.JwtService;
@@ -26,10 +23,10 @@ public class RefreshControllerTest {
   private MockMvc mockMvc;
 
   @MockBean
-  JwtService jwtService;
+  private JwtService jwtService;
 
   @Test
-  public void refreshAccessToken() throws Exception {
+  public void refreshAccessTokenWithRefreshToken() throws Exception {
     // Given
     String dummyToken = "DummyRefreshToken";
     String dummyNewAccessToken = "dummyNewAccessToken";
@@ -37,18 +34,18 @@ public class RefreshControllerTest {
     when(jwtService.refreshAccessToken(dummyToken)).thenReturn(dummyNewAccessToken);
 
     // When & Then
-    MvcResult result = mockMvc.perform(
-          MockMvcRequestBuilders.post("/api/refresh/")
-            .cookie(new Cookie("refreshToken", dummyToken))
-        )
-          .andExpect(status().isOk())
-          .andExpect(content().string(dummyNewAccessToken))
-          .andReturn(); // capture the result to inspect the response
-
-    Cookie responseCookie = result.getResponse().getCookie("cookieName"); // replace with actual cookie name
-    assertNotNull(responseCookie, "Cookie should not be null");
-    assertEquals("expectedValue", responseCookie.getValue(), "Cookie value should match");
+    mockMvc.perform(
+      MockMvcRequestBuilders.post("/api/refresh/")
+        .cookie(new Cookie("refreshToken", dummyToken))
+    )
+      .andExpect(status().isOk())
+      .andExpect(content().string(dummyNewAccessToken));
 
     verify(jwtService).refreshAccessToken(dummyToken);
+  }
+
+  @Test
+  public void noAccessTokenReturnedWithoutRefreshToken() {
+
   }
 }

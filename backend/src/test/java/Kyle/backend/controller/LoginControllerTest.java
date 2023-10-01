@@ -1,5 +1,6 @@
 package Kyle.backend.controller;
 
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,9 +19,14 @@ public class LoginControllerTest {
   private MockMvc mockMvc;
 
   @MockBean
-  JwtService jwtService;
+  private JwtService jwtService;
 
   @MockBean
-  UserService userService;
+  private UserService userService;
 
+  @Test
+  public void returnsTokensIfCredentialsAreCorrect() {
+    // Given
+    
+  }
 }
