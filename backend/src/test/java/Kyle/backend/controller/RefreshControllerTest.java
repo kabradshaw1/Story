@@ -45,7 +45,7 @@ public class RefreshControllerTest {
   }
 
   @Test
-  public void noAccessTokenReturnedWithoutRefreshToken() {
+  public void returnsErrorWithoutValidRefreshToken() {
 
   }
 }
