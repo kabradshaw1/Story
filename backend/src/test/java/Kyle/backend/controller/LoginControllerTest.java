@@ -55,6 +55,7 @@ public class LoginControllerTest {
     when(jwtService.generateAccessToken(user)).thenReturn(dummyAccessToken);
     when(jwtService.generateRefreshToken(user)).thenReturn(dummyRefreshToken);
 
+    // When & Then
     MvcResult result = mockMvc.perform(
       MockMvcRequestBuilders.post("/api/login/")
       .contentType(MediaType.APPLICATION_JSON)

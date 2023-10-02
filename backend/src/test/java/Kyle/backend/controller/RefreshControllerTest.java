@@ -3,6 +3,7 @@ package Kyle.backend.controller;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +25,12 @@ public class RefreshControllerTest {
 
   @MockBean
   private JwtService jwtService;
+  private String dummyRefreshToken = "DummyRefreshToken";
+  private String dummyAccessToken = "dummyAccessToken";
 
   @Test
   public void refreshAccessTokenWithRefreshToken() throws Exception {
     // Given
-    String dummyRefreshToken = "DummyRefreshToken";
-    String dummyAccessToken = "dummyNewAccessToken";
-
     when(jwtService.refreshAccessToken(dummyRefreshToken)).thenReturn(dummyAccessToken);
 
     // When & Then
@@ -45,7 +45,28 @@ public class RefreshControllerTest {
   }
 
   @Test
-  public void returnsErrorWithoutValidRefreshToken() {
-
+  public void returnsErrorIfRefreshTokenIsMissing() throws Exception {
+      // When & Then
+      mockMvc.perform(MockMvcRequestBuilders.post("/api/refresh/"))
+          .andExpect(status().isBadRequest())
+          .andExpect(content().string("Refresh token not found"));
   }
+
+  @Test
+  public void returnsErrorIfRefreshTokenIsInvalid() throws Exception {
+      // Given
+      String invalidRefreshToken = "invalidRefreshToken";
+      when(jwtService.refreshAccessToken(invalidRefreshToken)).thenThrow(new Exception("Invalid refresh token"));
+
+      // When & Then
+      mockMvc.perform(
+        MockMvcRequestBuilders.post("/api/refresh/")
+          .cookie(new Cookie("refreshToken", invalidRefreshToken))
+      )
+        .andExpect(status().isUnauthorized())
+        .andExpect(content().string("Invalid refresh token"));
+
+      verify(jwtService).refreshAccessToken(invalidRefreshToken);
+  }
+
 }
