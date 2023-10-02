@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import Kyle.backend.dto.TokenResponse;
 import Kyle.backend.service.JwtService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,7 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 public class RefreshController {
 
     @Autowired
-    private JwtService jwtService; 
+    private JwtService jwtService;
 
     @PostMapping("/api/refresh/")
     public ResponseEntity<?> refreshAccessToken(HttpServletRequest request) {
@@ -25,8 +27,8 @@ public class RefreshController {
                 if ("refreshToken".equals(cookie.getName())) {
                     String refreshToken = cookie.getValue();
                     try {
-                        String newAccessToken = jwtService.refreshAccessToken(refreshToken);
-                        return ResponseEntity.ok(newAccessToken);
+                        String accessToken = jwtService.refreshAccessToken(refreshToken);
+                        return ResponseEntity.ok(new TokenResponse(accessToken));
                     } catch (Exception e) {
                         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
                     }
