@@ -2,7 +2,7 @@ package Kyle.backend.controller;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class RefreshControllerTest {
         .cookie(new Cookie("refreshToken", dummyRefreshToken))
     )
       .andExpect(status().isOk())
-      .andExpect(jsonPath("$.accessToken").value(dummyNewAccessToken));
+      .andExpect(content().string(dummyNewAccessToken));
 
     verify(jwtService).refreshAccessToken(dummyRefreshToken);
   }

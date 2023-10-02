@@ -1,19 +1,18 @@
 package Kyle.backend.controller;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import Kyle.backend.entity.User;
 import Kyle.backend.service.JwtService;
@@ -35,15 +34,11 @@ public class LoginControllerTest {
   @MockBean
   private UserService userService;
 
-  @Autowired
-  private TestEntityManager entityManager;
-
   private User user;
 
-    @BeforeEach
-    private void setup() {
-        user = new User("testUser", "testPassword", "test@example.com");
-        entityManager.persistAndFlush(user);
+  @BeforeEach
+  private void setup() {
+      user = new User("testUser", "testPassword", "test@example.com");
     }
 
   @Test
@@ -56,17 +51,15 @@ public class LoginControllerTest {
     String dummyAccessToken = "dummyAccessToken";
 
     when(userService.validateUserCredentials(email, password)).thenReturn(user);
-
     when(jwtService.generateAccessToken(user)).thenReturn(dummyAccessToken);
-
-    when(jwtService.generateAccessToken(user)).thenReturn(dummyRefreshToken);
+    when(jwtService.generateRefreshToken(user)).thenReturn(dummyRefreshToken);
 
     MvcResult result = mockMvc.perform(
       MockMvcRequestBuilders.post("/api/login/")
         .cookie(new Cookie("refreshToken", dummyRefreshToken))
     )
       .andExpect(status().isOk())
-      .andExpect(jsonPath("$.accessToken").value(dummyAccessToken))
+      .andExpect(content().string(dummyAccessToken))
       .andReturn();
 
     Cookie responseCookie = result.getResponse().getCookie("refreshToken");
