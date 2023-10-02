@@ -2,7 +2,7 @@ package Kyle.backend.controller;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,20 +28,20 @@ public class RefreshControllerTest {
   @Test
   public void refreshAccessTokenWithRefreshToken() throws Exception {
     // Given
-    String dummyToken = "DummyRefreshToken";
+    String dummyRefreshToken = "DummyRefreshToken";
     String dummyNewAccessToken = "dummyNewAccessToken";
 
-    when(jwtService.refreshAccessToken(dummyToken)).thenReturn(dummyNewAccessToken);
+    when(jwtService.refreshAccessToken(dummyRefreshToken)).thenReturn(dummyNewAccessToken);
 
     // When & Then
     mockMvc.perform(
       MockMvcRequestBuilders.post("/api/refresh/")
-        .cookie(new Cookie("refreshToken", dummyToken))
+        .cookie(new Cookie("refreshToken", dummyRefreshToken))
     )
       .andExpect(status().isOk())
-      .andExpect(content().string(dummyNewAccessToken));
+      .andExpect(jsonPath("$.accessToken").value(dummyNewAccessToken));
 
-    verify(jwtService).refreshAccessToken(dummyToken);
+    verify(jwtService).refreshAccessToken(dummyRefreshToken);
   }
 
   @Test

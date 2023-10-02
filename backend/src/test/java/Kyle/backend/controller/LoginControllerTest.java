@@ -1,8 +1,6 @@
 package Kyle.backend.controller;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +12,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import Kyle.backend.entity.User;
 import Kyle.backend.service.JwtService;
@@ -52,7 +52,7 @@ public class LoginControllerTest {
     String password = "testPassword";
     String email = "test@example.com";
 
-    String dummyRefreshToken = "DummyRefreshToken";
+    String dummyRefreshToken = "dummyRefreshToken";
     String dummyAccessToken = "dummyAccessToken";
 
     when(userService.validateUserCredentials(email, password)).thenReturn(user);
@@ -66,11 +66,15 @@ public class LoginControllerTest {
         .cookie(new Cookie("refreshToken", dummyRefreshToken))
     )
       .andExpect(status().isOk())
-      .andExpect(content().string(dummyAccessToken))
+      .andExpect(jsonPath("$.accessToken").value(dummyAccessToken))
       .andReturn();
-    Cookie responseCookie = result.getResponse().getCookie(dummyAccessToken);
+
+    Cookie responseCookie = result.getResponse().getCookie("refreshToken");
     assertNotNull(responseCookie);
-    assertEquals("DummyAccessToken", responseCookie.getValue());
+    assertEquals("dummyRefreshToken", responseCookie.getValue());
+
+    verify(jwtService).generateAccessToken(user);
+    verify(jwtService).generateRefreshToken(user);
   }
 
   @Test
