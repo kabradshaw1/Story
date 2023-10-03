@@ -10,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import Kyle.backend.exception.InvalidTokenException;
 import Kyle.backend.service.JwtService;
 import jakarta.servlet.http.Cookie;
 
@@ -56,14 +58,14 @@ public class RefreshControllerTest {
   public void returnsErrorIfRefreshTokenIsInvalid() throws Exception {
       // Given
       String invalidRefreshToken = "invalidRefreshToken";
-      when(jwtService.refreshAccessToken(invalidRefreshToken)).thenThrow(new Exception("Invalid refresh token"));
+      when(jwtService.refreshAccessToken(invalidRefreshToken)).thenThrow(new InvalidTokenException("Invalid refresh token"));
 
       // When & Then
       mockMvc.perform(
         MockMvcRequestBuilders.post("/api/refresh/")
           .cookie(new Cookie("refreshToken", invalidRefreshToken))
       )
-        .andExpect(status().isUnauthorized())
+        .andExpect(status().is(HttpStatus.UNAUTHORIZED.value()))
         .andExpect(content().string("Invalid refresh token"));
 
       verify(jwtService).refreshAccessToken(invalidRefreshToken);
