@@ -74,7 +74,16 @@ public class LoginControllerTest {
   }
 
   @Test
-  public void returnsErrorIfCredentialsAreIncorrect() {
-    
+  public void returnsErrorIfEmailIsIncorrect() {
+    // Given
+    String password = "testPassword";
+    String email = "wrong@example.com";
+
+    // when(userService.validateUserCredentials(email, password)).thenReturn()
+  }
+
+  @Test
+  public void returnErrorIfPasswordIsIncorrect() {
+
   }
 }
