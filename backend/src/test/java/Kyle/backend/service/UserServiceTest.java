@@ -1,6 +1,7 @@
 package Kyle.backend.service;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import Kyle.backend.dao.UserRepository;
 import Kyle.backend.entity.User;
@@ -21,6 +23,9 @@ public class UserServiceTest {
   @Mock
   private UserRepository userRepository;
 
+  @Mock
+  private BCryptPasswordEncoder passwordEncoder;
+
   @InjectMocks
   private UserService userService;
 
@@ -29,6 +34,8 @@ public class UserServiceTest {
   @BeforeEach
   private void setup() {
     user = new User("testUser", "testPassword", "test@example.com");
+    when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
+    when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);  // This sets up the mock to return true for any password match check. Adjust as needed.
   }
 
   @Test
