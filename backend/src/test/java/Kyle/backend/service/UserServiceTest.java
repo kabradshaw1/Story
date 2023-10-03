@@ -22,4 +22,31 @@ public class UserServiceTest {
 
   }
 
+  @Test
+  public void givenExistingEmail_whenRegisterUser_thenThrowException() {
+
+  }
+  @Test
+  public void givenInvalidEmail_whenRegisterUser_thenThrowException() {
+
+  }
+
+  @Test
+  public void givenShortPassword_whenRegisterUser_thenThrowException() {
+
+  }
+
+  @Test
+  public void givenExistingUsername_whenRegisterUser_thenThrowException() {
+
+  }
+
+  @Test
+  public void givenValidUserCredentials_whenValidateUserCredentials_thenReturnUser() {
+
+  }
+  @Test
+  public void givenInvalidUserCredentials_whenValidateUserCredentials_thenThrowException() {
+
+  }
 }
