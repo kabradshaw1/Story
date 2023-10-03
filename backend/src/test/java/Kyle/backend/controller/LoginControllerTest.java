@@ -84,6 +84,8 @@ public class LoginControllerTest {
 
   @Test
   public void returnErrorIfPasswordIsIncorrect() {
-
+    // Given
+    String password = "wrongPassword";
+    String email = "test@example.com";
   }
 }
