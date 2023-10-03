@@ -1,8 +1,8 @@
 package Kyle.backend.service;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -35,7 +35,7 @@ public class UserServiceTest {
   private void setup() {
     user = new User("testUser", "testPassword", "test@example.com");
     when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
-    when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);  // This sets up the mock to return true for any password match check. Adjust as needed.
+    when(userRepository.save(any(User.class))).thenReturn(user);
   }
 
   @Test
@@ -45,45 +45,40 @@ public class UserServiceTest {
     String password = "testPassword";
     String email = "test1@example.com";
 
-    // Mocking behavior: assume the user with the given email and username does not exist
-    when(userRepository.findByEmail(email)).thenReturn(null);
-    when(userRepository.findByUsername(username)).thenReturn(null);
-
     // When
-    userService.registerUser(username, password, email); // assuming your service has this method
+    User createdUser = userService.registerUser(username, password, email);
 
     // Then
-    // This assertion checks that the save method of the repository was called exactly once.
-    verify(userRepository, times(1)).save(any(User.class));
-
-
+    verify(passwordEncoder).encode(password);  // Verify that the encode method was called with the provided password
+    assertNotNull(createdUser);
   }
 
-  @Test
-  public void givenExistingEmail_whenRegisterUser_thenThrowException() {
+  // @Test
+  // public void givenExistingEmail_whenRegisterUser_thenThrowException() {
 
-  }
-  @Test
-  public void givenInvalidEmail_whenRegisterUser_thenThrowException() {
+  // }
+  // @Test
+  // public void givenInvalidEmail_whenRegisterUser_thenThrowException() {
 
-  }
+  // }
 
-  @Test
-  public void givenShortPassword_whenRegisterUser_thenThrowException() {
+  // @Test
+  // public void givenShortPassword_whenRegisterUser_thenThrowException() {
 
-  }
+  // }
 
-  @Test
-  public void givenExistingUsername_whenRegisterUser_thenThrowException() {
+  // @Test
+  // public void givenExistingUsername_whenRegisterUser_thenThrowException() {
 
-  }
+  // }
 
-  @Test
-  public void givenValidUserCredentials_whenValidateUserCredentials_thenReturnUser() {
+  // @Test
+  // public void givenValidUserCredentials_whenValidateUserCredentials_thenReturnUser() {
 
-  }
-  @Test
-  public void givenInvalidUserCredentials_whenValidateUserCredentials_thenThrowException() {
+  // }
 
-  }
+  // @Test
+  // public void givenInvalidUserCredentials_whenValidateUserCredentials_thenThrowException() {
+
+  // }
 }
