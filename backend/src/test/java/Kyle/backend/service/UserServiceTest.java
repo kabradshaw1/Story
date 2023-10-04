@@ -23,6 +23,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import Kyle.backend.dao.UserRepository;
 import Kyle.backend.entity.User;
 import Kyle.backend.exception.EmailAlreadyExistsException;
+import Kyle.backend.exception.InvalidEmailException;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
@@ -87,10 +88,33 @@ public class UserServiceTest {
 
       assertEquals("Email already registered: " + email, exception.getMessage());
   }
-  // @Test
-  // public void givenInvalidEmail_whenRegisterUser_thenThrowException() {
 
-  // }
+  @Test
+  public void givenInvalidEmail_whenRegisterUser_thenThrowException() {
+    // Given
+    String username = "testUser";
+    String password = "testPassword";
+
+    // Examples of invalid emails
+    String[] invalidEmails = {
+        "plainaddress",
+        "@missingusername.org",
+        "username@.com",
+        "username@domain.com.",
+        "username@.domain.com",
+        ".username@domain.com"
+        // Add other invalid formats as required
+    };
+
+    for (String email : invalidEmails) {
+        // Then
+        InvalidEmailException exception = assertThrows(InvalidEmailException.class,
+            () -> userService.registerUser(username, password, email),
+            "Expected to throw an exception for invalid email format.");
+
+        assertEquals("Invalid email format: " + email, exception.getMessage());
+    }
+  }
 
   // @Test
   // public void givenShortPassword_whenRegisterUser_thenThrowException() {
