@@ -2,6 +2,7 @@ package Kyle.backend.service;
 
 import Kyle.backend.dao.UserRepository;
 import Kyle.backend.entity.User;
+import Kyle.backend.exception.EmailAlreadyExistsException;
 
 import java.util.Optional;
 
@@ -19,6 +20,12 @@ public class UserService {
     private BCryptPasswordEncoder passwordEncoder;
 
     public User registerUser(String username, String password, String email) {
+        Optional<User> existingUser = userRepository.findByEmail(email);
+
+        if (existingUser.isPresent()) {
+            throw new EmailAlreadyExistsException("Email already registered: " + email);
+        }
+        
         password = passwordEncoder.encode(password);
         User newUser = new User(username, password, email);
         return userRepository.save(newUser);
