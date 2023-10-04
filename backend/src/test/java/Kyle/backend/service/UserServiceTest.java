@@ -97,22 +97,22 @@ public class UserServiceTest {
 
     // Examples of invalid emails
     String[] invalidEmails = {
-        "plainaddress",
-        "@missingusername.org",
-        "username@.com",
-        "username@domain.com.",
-        "username@.domain.com",
-        ".username@domain.com"
-        // Add other invalid formats as required
+      "plainaddress",
+      "@missingusername.org",
+      "username@.com",
+      "username@domain.com.",
+      "username@.domain.com",
+      ".username@domain.com"
+      // Add other invalid formats as required
     };
 
     for (String email : invalidEmails) {
-        // Then
-        InvalidEmailException exception = assertThrows(InvalidEmailException.class,
-            () -> userService.registerUser(username, password, email),
-            "Expected to throw an exception for invalid email format.");
+      // Then
+      InvalidEmailException exception = assertThrows(InvalidEmailException.class,
+        () -> userService.registerUser(username, password, email),
+        "Expected to throw an exception for invalid email format.");
 
-        assertEquals("Invalid email format: " + email, exception.getMessage());
+      assertEquals("Invalid email format: " + email, exception.getMessage());
     }
   }
 
