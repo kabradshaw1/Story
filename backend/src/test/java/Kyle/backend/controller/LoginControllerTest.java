@@ -43,7 +43,7 @@ public class LoginControllerTest {
     }
 
   @Test
-  public void returnsTokensIfCredentialsAreCorrect() throws Exception {
+  public void givenCorrect_whenLoginUser_then_returnAccessKeys() throws Exception {
     // Given
     String password = "testPassword";
     String email = "test@example.com";
@@ -73,19 +73,19 @@ public class LoginControllerTest {
     verify(jwtService).generateRefreshToken(user);
   }
 
-  @Test
-  public void returnsErrorIfEmailIsIncorrect() {
-    // Given
-    String password = "testPassword";
-    String email = "wrong@example.com";
+  // @Test
+  // public void returnsErrorIfEmailIsIncorrect() {
+  //   // Given
+  //   String password = "testPassword";
+  //   String email = "wrong@example.com";
 
-    // when(userService.validateUserCredentials(email, password)).thenReturn()
-  }
+  //   // when(userService.validateUserCredentials(email, password)).thenReturn()
+  // }
 
-  @Test
-  public void returnErrorIfPasswordIsIncorrect() {
-    // Given
-    String password = "wrongPassword";
-    String email = "test@example.com";
-  }
+  // @Test
+  // public void returnErrorIfPasswordIsIncorrect() {
+  //   // Given
+  //   String password = "wrongPassword";
+  //   String email = "test@example.com";
+  // }
 }

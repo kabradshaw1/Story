@@ -84,8 +84,8 @@ public class JwtServiceTest {
 
     assertTrue(diff <= fifteenMinutesInMilliseconds && diff > 0); // Assert that expiration is set correctly
   }
+
   @Test
-  
   public void givenValidRefresh_whenRefreshAccessToken_thenReturnAccessToken() {
 
   }
