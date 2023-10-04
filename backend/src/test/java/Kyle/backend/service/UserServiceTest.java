@@ -1,5 +1,6 @@
 package Kyle.backend.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -9,6 +10,7 @@ import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -51,6 +53,11 @@ public class UserServiceTest {
     // Then
     verify(passwordEncoder).encode(password);  // Verify that the encode method was called with the provided password
     assertNotNull(createdUser);
+    ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
+    verify(userRepository).save(userArgumentCaptor.capture());
+    User savedUser = userArgumentCaptor.getValue();
+    assertEquals(email, savedUser.getEmail());
+    assertEquals(username, savedUser.getUsername());
   }
 
   // @Test
