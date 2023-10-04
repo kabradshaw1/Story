@@ -60,10 +60,11 @@ public class UserServiceTest {
     assertEquals(username, savedUser.getUsername());
   }
 
-  // @Test
-  // public void givenExistingEmail_whenRegisterUser_thenThrowException() {
+  @Test
+  public void givenExistingEmail_whenRegisterUser_thenThrowException() {
 
-  // }
+  }
+  
   // @Test
   // public void givenInvalidEmail_whenRegisterUser_thenThrowException() {
 
