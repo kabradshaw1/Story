@@ -4,6 +4,8 @@ import Kyle.backend.dao.UserRepository;
 import Kyle.backend.entity.User;
 import Kyle.backend.exception.EmailAlreadyExistsException;
 import Kyle.backend.exception.InvalidEmailException;
+import Kyle.backend.exception.PasswordTooShortException;
+import Kyle.backend.exception.UsernameAlreadyExistsException;
 
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -25,13 +27,20 @@ public class UserService {
         Pattern.compile("^(?!\\.)[A-Za-z0-9._%+-]+@(?![.])[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}$", Pattern.CASE_INSENSITIVE);
 
     public User registerUser(String username, String password, String email) {
-        Optional<User> existingUser = userRepository.findByEmail(email);
+        Optional<User> existingEmail = userRepository.findByEmail(email);
+        Optional<User> existingUsername = userRepository.findByUsername(username);
 
-        if (existingUser.isPresent()) {
+        if (existingEmail.isPresent()) {
             throw new EmailAlreadyExistsException("Email already registered: " + email);
+        }
+        if (existingUsername.isPresent()) {
+            throw new UsernameAlreadyExistsException("Username already registered: " + username);
         }
         if (!isValidEmail(email)) {
             throw new InvalidEmailException("Invalid email format: " + email);
+        }
+        if (password.length() < 8) {
+        throw new PasswordTooShortException("Password is too short.");
         }
         password = passwordEncoder.encode(password);
         User newUser = new User(username, password, email);

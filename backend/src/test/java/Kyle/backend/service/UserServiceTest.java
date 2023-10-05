@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -24,6 +25,8 @@ import Kyle.backend.dao.UserRepository;
 import Kyle.backend.entity.User;
 import Kyle.backend.exception.EmailAlreadyExistsException;
 import Kyle.backend.exception.InvalidEmailException;
+import Kyle.backend.exception.PasswordTooShortException;
+import Kyle.backend.exception.UsernameAlreadyExistsException;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
@@ -90,9 +93,28 @@ public class UserServiceTest {
   }
 
   @Test
+  public void givenExistingUsername_whenRegisterUser_thenThrowException() {
+    // Given
+    String username = "testUser1";
+    String password = "testPassword";
+    String email = "test@example.com";
+
+    // Setup the mock to make findByUsername return an Optional with a user (indciating the username exists)
+    when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
+
+    // Then
+    UsernameAlreadyExistsException exception = assertThrows(UsernameAlreadyExistsException.class,
+      () -> userService.registerUser(username, password, email),
+      "This username has already been used.");
+
+    assertEquals("Username already registered: " + username, exception.getMessage());
+  }
+
+
+  @Test
   public void givenInvalidEmail_whenRegisterUser_thenThrowException() {
     // Given
-    String username = "testUser";
+    String username = "testUser1";
     String password = "testPassword";
 
     // Examples of invalid emails
@@ -116,15 +138,23 @@ public class UserServiceTest {
     }
   }
 
-  // @Test
-  // public void givenShortPassword_whenRegisterUser_thenThrowException() {
+  @Test
+  public void givenShortPassword_whenRegisterUser_thenThrowException() {
+    // Given
+    String password = "test123";
+    String username = "testUser1";
+    String email = "test1@example.com";
 
-  // }
+    // Then
+    PasswordTooShortException exception = assertThrows(PasswordTooShortException.class,
+    () -> userService.registerUser(username, password, email),
+    "Expected to throw an exception for a short password.");
 
-  // @Test
-  // public void givenExistingUsername_whenRegisterUser_thenThrowException() {
+    assertEquals("Password is too short.", exception.getMessage());
 
-  // }
+    // To ensure that the entry wasn't created
+    verify(userRepository, never()).save(any(User.class));
+  }
 
   // @Test
   // public void givenValidUserCredentials_whenValidateUserCredentials_thenReturnUser() {
