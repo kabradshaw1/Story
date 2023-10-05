@@ -28,6 +28,7 @@ import Kyle.backend.dao.UserRepository;
 import Kyle.backend.entity.User;
 import Kyle.backend.exception.EmailAlreadyExistsException;
 import Kyle.backend.exception.InvalidEmailException;
+import Kyle.backend.exception.InvalidLoginException;
 import Kyle.backend.exception.PasswordTooShortException;
 import Kyle.backend.exception.UsernameAlreadyExistsException;
 
@@ -161,30 +162,66 @@ public class UserServiceTest {
 
   @Test
   public void givenValidUserCredentials_whenValidateUserCredentials_thenReturnUser() {
-      // Given
-      String password = "testPassword";
-      String email = "test@example.com";
-      User expectedUser = new User("testUser", passwordEncoder.encode(password), email);
+    // Given
+    String password = "testPassword";
+    String email = "test@example.com";
+    User expectedUser = new User("testUser", passwordEncoder.encode(password), email);
 
-      // Mock the behavior of the password encoder
-      when(passwordEncoder.matches(eq("testPassword"), any())).thenReturn(true); // or false, depending on your use case.
+    // Mock the behavior of the password encoder
+    when(passwordEncoder.matches(eq("testPassword"), any())).thenReturn(true);
 
-      // Setup the mock to make findByEmail return an Optional with the expectedUser
-      when(userRepository.findByEmail(email)).thenReturn(Optional.of(expectedUser));
+    // Setup the mock to make findByEmail return an Optional with the expectedUser
+    when(userRepository.findByEmail(email)).thenReturn(Optional.of(expectedUser));
 
-      // When
-      User returnedUser = userService.validateUserCredentials(email, password);
+    // When
+    User returnedUser = userService.validateUserCredentials(email, password);
 
-      // Then
-      assertNotNull(returnedUser);
-      assertEquals(returnedUser.getEmail(), email);
-      assertEquals(returnedUser.getUsername(), expectedUser.getUsername());
-      verify(userRepository, times(1)).findByEmail(email);
-      verifyNoMoreInteractions(userRepository);  // Ensure that no other methods like save() were called on the userRepository
+    // Then
+    assertNotNull(returnedUser);
+    assertEquals(returnedUser.getEmail(), email);
+    assertEquals(returnedUser.getUsername(), expectedUser.getUsername());
+    verify(userRepository, times(1)).findByEmail(email);
+    verifyNoMoreInteractions(userRepository);  // Ensure that no other methods like save() were called on the userRepository
   }
 
-  // @Test
-  // public void givenInvalidUserCredentials_whenValidateUserCredentials_thenThrowException() {
+  @Test
+  public void givenInvalidEmail_whenValidateUserCredentials_thenThrowException() {
+      // Given
+      String email = "invalid@example.com";
+      String password = "testPassword";
 
-  // }
+      // Set the mock to return an empty Optional, as if the email doesn't exist in the repository.
+      when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+
+      // Then
+      InvalidLoginException exception = assertThrows(InvalidLoginException.class,
+          () -> userService.validateUserCredentials(email, password),
+          "Expected an InvalidLoginException due to invalid email.");
+
+      assertEquals("Invalid login credentials.", exception.getMessage());
+      verify(userRepository, times(1)).findByEmail(email);
+      verifyNoMoreInteractions(userRepository);
+  }
+
+  @Test
+  public void givenInvalidPassword_whenValidateUserCredentials_thenThrowException() {
+      // Given
+      String email = "test@example.com";
+      String invalidPassword = "wrongPassword";
+      User userWithValidCredentials = new User("testUser", passwordEncoder.encode("testPassword"), email);
+
+      // Setup the mock to emulate the behavior that the password doesn't match.
+      when(passwordEncoder.matches(eq(invalidPassword), any())).thenReturn(false);
+      when(userRepository.findByEmail(email)).thenReturn(Optional.of(userWithValidCredentials));
+
+      // Then
+      InvalidLoginException exception = assertThrows(InvalidLoginException.class,
+          () -> userService.validateUserCredentials(email, invalidPassword),
+          "Expected an InvalidLoginException due to invalid password.");
+
+      assertEquals("Invalid login credentials.", exception.getMessage());
+      verify(userRepository, times(1)).findByEmail(email);
+      verifyNoMoreInteractions(userRepository);
+  }
+
 }

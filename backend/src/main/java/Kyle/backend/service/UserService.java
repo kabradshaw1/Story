@@ -4,6 +4,7 @@ import Kyle.backend.dao.UserRepository;
 import Kyle.backend.entity.User;
 import Kyle.backend.exception.EmailAlreadyExistsException;
 import Kyle.backend.exception.InvalidEmailException;
+import Kyle.backend.exception.InvalidLoginException;
 import Kyle.backend.exception.PasswordTooShortException;
 import Kyle.backend.exception.UsernameAlreadyExistsException;
 
@@ -57,6 +58,6 @@ public class UserService {
         if(user.isPresent() && passwordEncoder.matches(password, user.get().getPassword())) {
             return user.get();
         }
-        return null;
+        throw new InvalidLoginException();
     }
 }
