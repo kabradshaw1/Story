@@ -77,7 +77,7 @@ public class JwtServiceTest {
     assertEquals(user.getId(), decodedJWT.getClaim("id").asLong());
     assertEquals(user.getUsername(), decodedJWT.getClaim("username").asString());
 
-    // My access token should last 15 minutes
+    // My refresh token should last 7 days
     Date expiresAt = decodedJWT.getExpiresAt();
     long diff = expiresAt.getTime() - System.currentTimeMillis();
     long fifteenMinutesInMilliseconds = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
@@ -86,7 +86,7 @@ public class JwtServiceTest {
   }
 
   @Test
-  public void givenValidRefresh_whenRefreshAccessToken_thenReturnAccessToken() {
+  public void givenRefresh_whenRefreshAccessToken_thenReturnAccessToken() {
 
   }
 }

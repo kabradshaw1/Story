@@ -24,10 +24,6 @@ public class UserService {
     private static final Pattern VALID_EMAIL_ADDRESS_REGEX =
         Pattern.compile("^(?!\\.)[A-Za-z0-9._%+-]+@(?![.])[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}$", Pattern.CASE_INSENSITIVE);
 
-    Pattern getValidEmailRegex() {
-        return VALID_EMAIL_ADDRESS_REGEX;
-    }
-
     public User registerUser(String username, String password, String email) {
         Optional<User> existingUser = userRepository.findByEmail(email);
 
