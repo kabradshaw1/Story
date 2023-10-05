@@ -31,7 +31,7 @@ public class RefreshControllerTest {
   private String dummyAccessToken = "dummyAccessToken";
 
   @Test
-  public void refreshAccessTokenWithRefreshToken() throws Exception {
+  public void giveRefreshToken_whenPostApiRefresh_thenRefreshAccessToken() throws Exception {
     // Given
     when(jwtService.refreshAccessToken(dummyRefreshToken)).thenReturn(dummyAccessToken);
 
@@ -47,7 +47,7 @@ public class RefreshControllerTest {
   }
 
   @Test
-  public void returnsErrorIfRefreshTokenIsMissing() throws Exception {
+  public void givenNoToken_whenPostApiRefresh_thenReturnsError() throws Exception {
       // When & Then
       mockMvc.perform(MockMvcRequestBuilders.post("/api/refresh/"))
           .andExpect(status().isBadRequest())
@@ -55,7 +55,7 @@ public class RefreshControllerTest {
   }
 
   @Test
-  public void returnsErrorIfRefreshTokenIsInvalid() throws Exception {
+  public void givenInvalidRefreshToken_whenPostApiRefresh_thenReturnsError() throws Exception {
       // Given
       String invalidRefreshToken = "invalidRefreshToken";
       when(jwtService.refreshAccessToken(invalidRefreshToken)).thenThrow(new InvalidTokenException("Invalid refresh token"));
