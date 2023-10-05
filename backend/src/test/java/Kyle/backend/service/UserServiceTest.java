@@ -6,8 +6,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -156,10 +159,29 @@ public class UserServiceTest {
     verify(userRepository, never()).save(any(User.class));
   }
 
-  // @Test
-  // public void givenValidUserCredentials_whenValidateUserCredentials_thenReturnUser() {
+  @Test
+  public void givenValidUserCredentials_whenValidateUserCredentials_thenReturnUser() {
+      // Given
+      String password = "testPassword";
+      String email = "test@example.com";
+      User expectedUser = new User("testUser", passwordEncoder.encode(password), email);
 
-  // }
+      // Mock the behavior of the password encoder
+      when(passwordEncoder.matches(eq("testPassword"), any())).thenReturn(true); // or false, depending on your use case.
+
+      // Setup the mock to make findByEmail return an Optional with the expectedUser
+      when(userRepository.findByEmail(email)).thenReturn(Optional.of(expectedUser));
+
+      // When
+      User returnedUser = userService.validateUserCredentials(email, password);
+
+      // Then
+      assertNotNull(returnedUser);
+      assertEquals(returnedUser.getEmail(), email);
+      assertEquals(returnedUser.getUsername(), expectedUser.getUsername());
+      verify(userRepository, times(1)).findByEmail(email);
+      verifyNoMoreInteractions(userRepository);  // Ensure that no other methods like save() were called on the userRepository
+  }
 
   // @Test
   // public void givenInvalidUserCredentials_whenValidateUserCredentials_thenThrowException() {
