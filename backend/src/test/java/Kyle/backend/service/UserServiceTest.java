@@ -49,7 +49,6 @@ public class UserServiceTest {
   @BeforeEach
   private void setup() {
     user = new User("testUser", "testPassword", "test@example.com");
-
   }
 
   @Test
@@ -186,42 +185,41 @@ public class UserServiceTest {
 
   @Test
   public void givenInvalidEmail_whenValidateUserCredentials_thenThrowException() {
-      // Given
-      String email = "invalid@example.com";
-      String password = "testPassword";
+    // Given
+    String email = "invalid@example.com";
+    String password = "testPassword";
 
-      // Set the mock to return an empty Optional, as if the email doesn't exist in the repository.
-      when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+    // Set the mock to return an empty Optional, as if the email doesn't exist in the repository.
+    when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
 
-      // Then
-      InvalidLoginException exception = assertThrows(InvalidLoginException.class,
-          () -> userService.validateUserCredentials(email, password),
-          "Expected an InvalidLoginException due to invalid email.");
+    // Then
+    InvalidLoginException exception = assertThrows(InvalidLoginException.class,
+        () -> userService.validateUserCredentials(email, password),
+        "Expected an InvalidLoginException due to invalid email.");
 
-      assertEquals("Invalid login credentials.", exception.getMessage());
-      verify(userRepository, times(1)).findByEmail(email);
-      verifyNoMoreInteractions(userRepository);
+    assertEquals("Invalid login credentials.", exception.getMessage());
+    verify(userRepository, times(1)).findByEmail(email);
+    verifyNoMoreInteractions(userRepository);
   }
 
   @Test
   public void givenInvalidPassword_whenValidateUserCredentials_thenThrowException() {
-      // Given
-      String email = "test@example.com";
-      String invalidPassword = "wrongPassword";
-      User userWithValidCredentials = new User("testUser", passwordEncoder.encode("testPassword"), email);
+    // Given
+    String email = "test@example.com";
+    String invalidPassword = "wrongPassword";
+    User userWithValidCredentials = new User("testUser", passwordEncoder.encode("testPassword"), email);
 
-      // Setup the mock to emulate the behavior that the password doesn't match.
-      when(passwordEncoder.matches(eq(invalidPassword), any())).thenReturn(false);
-      when(userRepository.findByEmail(email)).thenReturn(Optional.of(userWithValidCredentials));
+    // Setup the mock to emulate the behavior that the password doesn't match.
+    when(passwordEncoder.matches(eq(invalidPassword), any())).thenReturn(false);
+    when(userRepository.findByEmail(email)).thenReturn(Optional.of(userWithValidCredentials));
 
-      // Then
-      InvalidLoginException exception = assertThrows(InvalidLoginException.class,
-          () -> userService.validateUserCredentials(email, invalidPassword),
-          "Expected an InvalidLoginException due to invalid password.");
+    // Then
+    InvalidLoginException exception = assertThrows(InvalidLoginException.class,
+        () -> userService.validateUserCredentials(email, invalidPassword),
+        "Expected an InvalidLoginException due to invalid password.");
 
-      assertEquals("Invalid login credentials.", exception.getMessage());
-      verify(userRepository, times(1)).findByEmail(email);
-      verifyNoMoreInteractions(userRepository);
+    assertEquals("Invalid login credentials.", exception.getMessage());
+    verify(userRepository, times(1)).findByEmail(email);
+    verifyNoMoreInteractions(userRepository);
   }
-
 }

@@ -89,4 +89,9 @@ public class JwtServiceTest {
   public void givenRefresh_whenRefreshAccessToken_thenReturnAccessToken() {
 
   }
+
+  @Test
+  public void givenInvalidUser_whenGenerateRefreshToken_thenReturnError() {
+    
+  }
 }

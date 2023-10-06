@@ -43,7 +43,7 @@ public class LoginControllerTest {
     }
 
   @Test
-  public void givenCorrect_whenLoginUser_then_returnAccessKeys() throws Exception {
+  public void givenCorrect_whenLoginUser_thenReturnAccessKeys() throws Exception {
     // Given
     String password = "testPassword";
     String email = "test@example.com";
@@ -69,6 +69,7 @@ public class LoginControllerTest {
     assertNotNull(responseCookie);
     assertEquals("dummyRefreshToken", responseCookie.getValue());
 
+    verify(userService).validateUserCredentials(email, password);
     verify(jwtService).generateAccessToken(user);
     verify(jwtService).generateRefreshToken(user);
   }
