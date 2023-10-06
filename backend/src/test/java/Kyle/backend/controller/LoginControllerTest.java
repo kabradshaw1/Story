@@ -1,5 +1,6 @@
 package Kyle.backend.controller;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -74,19 +75,47 @@ public class LoginControllerTest {
     verify(jwtService).generateRefreshToken(user);
   }
 
-  // @Test
-  // public void returnsErrorIfEmailIsIncorrect() {
-  //   // Given
-  //   String password = "testPassword";
-  //   String email = "wrong@example.com";
+  @Test
+  public void givenInvalidEmail_whenLogin_thenReturnsError() throws Exception {
+    // Given
+    String password = "testPassword";
+    String email = "wrong@example.com";
 
-  //   // when(userService.validateUserCredentials(email, password)).thenReturn()
-  // }
+    when(userService.validateUserCredentials(email, password)).thenReturn(null);
 
-  // @Test
-  // public void returnErrorIfPasswordIsIncorrect() {
-  //   // Given
-  //   String password = "wrongPassword";
-  //   String email = "test@example.com";
-  // }
+    // When & Then
+    mockMvc.perform(
+      MockMvcRequestBuilders.post("/api/login/")
+      .contentType(MediaType.APPLICATION_JSON)
+      .content("{\"email\":\"" + email + "\", \"password\":\"" + password + "\"}")
+    )
+      .andExpect(status().isUnauthorized())
+      .andExpect(result -> assertTrue(result.getResponse().getContentAsString().contains("Invalid credentials")));
+
+    verify(userService).validateUserCredentials(email, password);
+    verify(jwtService, never()).generateAccessToken(any());
+    verify(jwtService, never()).generateRefreshToken(any());
+  }
+
+  @Test
+  public void givenInvalidPassword_whenLogin_thenReturnError() throws Exception {
+    // Given
+    String password = "wrongPassword";
+    String email = "test@example.com";
+
+    when(userService.validateUserCredentials(email, password)).thenReturn(null);
+
+    // When & Then
+    mockMvc.perform(
+      MockMvcRequestBuilders.post("/api/login/")
+      .contentType(MediaType.APPLICATION_JSON)
+      .content("{\"email\":\"" + email + "\", \"password\":\"" + password + "\"}")
+    )
+      .andExpect(status().isUnauthorized())
+      .andExpect(result -> assertTrue(result.getResponse().getContentAsString().contains("Invalid credentials")));
+
+    verify(userService).validateUserCredentials(email, password);
+    verify(jwtService, never()).generateAccessToken(any());
+    verify(jwtService, never()).generateRefreshToken(any());
+  }
 }

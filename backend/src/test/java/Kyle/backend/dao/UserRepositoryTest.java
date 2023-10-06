@@ -30,7 +30,7 @@ public class UserRepositoryTest {
         user = new User("testUser", "testPassword", "test@email.com");
         entityManager.persistAndFlush(user);
     }
-//shouldFindByEmail
+
     @Test
     public void givenEmail_whenFindByEmail_thenReturnsUser() {
         Optional<User> retrievedUser = userRepository.findByEmail("test@email.com");
