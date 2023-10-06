@@ -6,7 +6,7 @@ on:
       - develop
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,7 +19,8 @@ jobs:
         distribution: 'adopt'
         java-version: '17'
 
-    - name: Build with Maven (in backend directory)
+    - name: Run Maven Tests (in backend directory)
       run: |
         cd backend
-        mvn -B clean package
+        mvn test
+
