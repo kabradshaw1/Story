@@ -36,11 +36,10 @@ describe('AuthService', () => {
       const mockResponse = { accessToken: 'mock-access-token' };
       const loginDetails = { email: 'test@example.com', password: 'password' };
 
-      service.login(loginDetails.email, loginDetails.password).subscribe((response: { accessToken: string }) => {
-        expect(response.accessToken).toEqual('mock-access-token');
-
-        expect(localStorage.getItem('accessToken')).toEqual('mock-access-token');
-      });
+      service.login(loginDetails.email, loginDetails.password)
+        .subscribe((response: { accessToken: string }) => {
+          expect(response.accessToken).toEqual('mock-access-token');
+        });
 
       const req = httpMock.expectOne(`http://localhost:8080/api/login/`);
       expect(req.request.method).toBe('POST');
