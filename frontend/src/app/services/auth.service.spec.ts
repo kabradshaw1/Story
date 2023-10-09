@@ -55,9 +55,13 @@ describe('AuthService', () => {
         status: 401,
         error: 'Invalid credentials'
       };
-      
+
       const loginDetails = { email: 'wrong@example.com', password: 'wrongPassword' };
-      service.login(loginDetails.email, loginDetails.password);
+      
+      service.login(loginDetails.email, loginDetails.password).subscribe(
+        response => fail('Expected an error, but got a successful response.'),
+        error => expect(error.error).toBe('Invalid credentials')
+      );
 
       const req = httpMock.expectOne(`http://localhost:8080/api/login/`);
       expect(req.request.method).toBe('POST');
