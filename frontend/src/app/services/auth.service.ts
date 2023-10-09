@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
-import { Observable, tap } from 'rxjs';
+import { Observable, catchError, tap, throwError } from 'rxjs';
 
 interface SuccessResponse {
   accessToken: string;
@@ -30,18 +30,20 @@ export class AuthService {
     const credentials = { email, password };
 
     return this.http.post<LoginResponse>(this.loginUrl, credentials)
-      .pipe(
-        tap(response => {
-          if (isSuccessResponse(response)) {
-            this.store.dispatch({
-              type: '[Auth] Login Success',
-              payload: response.accessToken
-            });
-          } else {
-            // handle error or dispatch a different action, if necessary
-          }
-        })
-      );
+    .pipe(
+      tap(response => {
+        if (isSuccessResponse(response)) {
+          this.store.dispatch({
+            type: '[Auth] Login Success',
+            payload: response.accessToken
+          });
+        }
+      }),
+      catchError(error => {
+        this.store.dispatch({ type: '[Auth] Login Failure', payload: error.statusText });
+        return throwError(error);
+      })
+    );
   }
 }
 
