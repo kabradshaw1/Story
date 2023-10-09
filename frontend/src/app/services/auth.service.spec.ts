@@ -34,7 +34,7 @@ describe('AuthService', () => {
   });
 
   describe('login', () => {
-    it('givenValidCredentials_whenLogin_thenDispatchLoginSuccess', () => {
+    it('givenCredentials_whenLogin_thenDispatchLoginSuccess', () => {
       const mockResponse = { accessToken: 'mock-access-token' };
       const loginDetails = { email: 'test@example.com', password: 'password' };
 
@@ -49,5 +49,24 @@ describe('AuthService', () => {
         payload: mockResponse.accessToken
       });
     });
+
+    it('givenInvalidCredentials_whenLogin_thenHandleUnauthorizedError', () => {
+      const loginError = {
+        status: 401,
+        error: 'Invalid credentials'
+      };
+      
+      const loginDetails = { email: 'wrong@example.com', password: 'wrongPassword' };
+      service.login(loginDetails.email, loginDetails.password);
+
+      const req = httpMock.expectOne(`http://localhost:8080/api/login/`);
+      expect(req.request.method).toBe('POST');
+
+      // Simulate a server UNAUTHORIZED response
+      req.flush('Invalid credentials', { status: 401, statusText: 'UNAUTHORIZED' });
+    });
+    it('givenMissingCredentials_whenLogin_thenReturnsError', () => {
+
+    })
   });
 });
