@@ -17,7 +17,6 @@ type LoginResponse = SuccessResponse | ErrorResponse;
 @Injectable({
   providedIn: 'root'
 })
-
 export class AuthService {
 
   private readonly loginUrl = 'http://localhost:8080/api/login/';
@@ -30,14 +29,23 @@ export class AuthService {
   login(password: string, email: string): Observable<LoginResponse> {
     const credentials = { email, password };
 
-    return this.http.post(this.loginUrl, credentials)
+    return this.http.post<LoginResponse>(this.loginUrl, credentials)
       .pipe(
         tap(response => {
-          this.store.dispatch({
-            type: '[Auth] Login Success',
-            payload: response.accessToken
-          })
+          if (isSuccessResponse(response)) {
+            this.store.dispatch({
+              type: '[Auth] Login Success',
+              payload: response.accessToken
+            });
+          } else {
+            // handle error or dispatch a different action, if necessary
+          }
         })
-      )
+      );
   }
 }
+
+function isSuccessResponse(response: LoginResponse): response is SuccessResponse {
+  return (response as SuccessResponse).accessToken !== undefined;
+}
+
