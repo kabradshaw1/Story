@@ -35,20 +35,19 @@ describe('LoginComponent', () => {
   })
 
   it('should validate email and password fields', () => {
-    it('should validate email and password fields', () => {
-      component.loginForm.controls['email'].setValue('test');
-      component.loginForm.controls['password'].setValue('');
+    component.loginForm.controls['email'].setValue('test');
+    component.loginForm.controls['password'].setValue('');
 
-      expect(component.loginForm.controls['email'].valid).toBeFalse();
-      expect(component.loginForm.controls['password'].valid).toBeFalse();
+    expect(component.loginForm.controls['email'].valid).toBeFalse();
+    expect(component.loginForm.controls['password'].valid).toBeFalse();
 
-      component.loginForm.controls['email'].setValue('test@example.com');
-      component.loginForm.controls['password'].setValue('password');
+    component.loginForm.controls['email'].setValue('test@example.com');
+    component.loginForm.controls['password'].setValue('password');
 
-      expect(component.loginForm.controls['email'].valid).toBeTrue();
-      expect(component.loginForm.controls['password'].valid).toBeTrue();
-    });
+    expect(component.loginForm.controls['email'].valid).toBeTrue();
+    expect(component.loginForm.controls['password'].valid).toBeTrue();
   });
+
 
   it('should call AuthService login method on valid form submission', () => {
     component.loginForm.controls['email'].setValue('test@example.com');
