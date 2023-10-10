@@ -41,7 +41,7 @@ export class AuthService {
       }),
       catchError(error => {
         this.store.dispatch({ type: '[Auth] Login Failure', payload: error.statusText });
-        return throwError(error);
+        return throwError(() => error);
       })
     );
   }
