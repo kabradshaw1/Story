@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
 import { Observable, catchError, tap, throwError } from 'rxjs';
+import { environment } from '../environment/environment';
 
 interface SuccessResponse {
   accessToken: string;
@@ -19,7 +20,7 @@ type LoginResponse = SuccessResponse | ErrorResponse;
 })
 export class AuthService {
 
-  private readonly loginUrl = 'http://localhost:8080/api/login/';
+  private readonly loginUrl = `${environment.apiUrl}login/`;
 
   constructor(
     private http: HttpClient,
