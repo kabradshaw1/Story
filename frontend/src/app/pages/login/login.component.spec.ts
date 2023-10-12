@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AuthService } from 'src/app/services/auth.service';
 import { LoginComponent } from './login.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { of, throwError } from 'rxjs';
 import { By } from '@angular/platform-browser';
 
@@ -43,13 +43,16 @@ describe('LoginComponent', () => {
       expect(component.loginForm.controls['password'].valid).toBeTrue();
     });
 
-    it('should display an error message on failed login', () => {
+    it('should display an error message on failed login', async () => {
       component.loginForm.controls['email'].setValue('test@example.com');
       component.loginForm.controls['password'].setValue('password');
-      authServiceMock.login.and.returnValue(throwError(() => { error: 'Invalid credentials' }));
+      authServiceMock.login.and.returnValue(throwError( () => { message: 'Invalid credentials' }));
+
 
       component.onSubmit();
+      await fixture.whenStable();
       fixture.detectChanges();
+
       const errorMessage = fixture.debugElement.nativeElement.querySelector('.error-message');
       expect(errorMessage.textContent).toContain('Invalid credentials');
     });
