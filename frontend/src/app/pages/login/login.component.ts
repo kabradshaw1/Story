@@ -33,8 +33,8 @@ export class LoginComponent  {
       next: (response) => {},
       error: (err) => {
         this.loading = false;
-        this.message = err?.error?.message === 'Invalid credentials'
-          ? 'Invalid Credentials'
+        this.message = err?.error?.message === 'Invalid credentials.'
+          ? 'Invalid credentials.'
           : 'An error occurred during login. Please try again.';
       }
     });

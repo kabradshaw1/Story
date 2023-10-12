@@ -43,19 +43,21 @@ describe('LoginComponent', () => {
       expect(component.loginForm.controls['password'].valid).toBeTrue();
     });
 
-    it('should display an error message on failed login', async () => {
+    it('should display invalid credentials when server returns invalid credentials', async () => {
       component.loginForm.controls['email'].setValue('test@example.com');
       component.loginForm.controls['password'].setValue('password');
-      authServiceMock.login.and.returnValue(throwError( () => { message: 'Invalid credentials' }));
 
+      const errorResponse = { error: { message: 'Invalid credentials.' } };
+      authServiceMock.login.and.returnValue(throwError(() => errorResponse));
 
       component.onSubmit();
       await fixture.whenStable();
       fixture.detectChanges();
 
       const errorMessage = fixture.debugElement.nativeElement.querySelector('.error-message');
-      expect(errorMessage.textContent).toContain('Invalid credentials');
+      expect(errorMessage.textContent).toContain('Invalid credentials.');
     });
+
 
     it('should display a required error message when email is empty', () => {
       component.loginForm.controls['email'].setValue('');
