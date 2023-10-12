@@ -27,7 +27,7 @@ describe('LoginComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('Validation', () => {
+  describe('input validation', () => {
 
     it('should validate email and password fields', () => {
       component.loginForm.controls['email'].setValue('test');
@@ -42,22 +42,6 @@ describe('LoginComponent', () => {
       expect(component.loginForm.controls['email'].valid).toBeTrue();
       expect(component.loginForm.controls['password'].valid).toBeTrue();
     });
-
-    it('should display invalid credentials when server returns invalid credentials', async () => {
-      component.loginForm.controls['email'].setValue('test@example.com');
-      component.loginForm.controls['password'].setValue('password');
-
-      const errorResponse = { error: { message: 'Invalid credentials.' } };
-      authServiceMock.login.and.returnValue(throwError(() => errorResponse));
-
-      component.onSubmit();
-      await fixture.whenStable();
-      fixture.detectChanges();
-
-      const errorMessage = fixture.debugElement.nativeElement.querySelector('.error-message');
-      expect(errorMessage.textContent).toContain('Invalid credentials.');
-    });
-
 
     it('should display a required error message when email is empty', () => {
       component.loginForm.controls['email'].setValue('');
@@ -109,28 +93,35 @@ describe('LoginComponent', () => {
   describe('on form submit', () => {
 
     it('should use the input from the form fields when the button is clicked', () => {
-      // Find the input elements using DebugElement
+      // Setup the mock
+      const authServiceMock = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
+
+      // Find and set input elements
       const emailInput = fixture.debugElement.query(By.css('input[type="email"]')).nativeElement;
       const passwordInput = fixture.debugElement.query(By.css('input[type="password"]')).nativeElement;
-
-      // Simulate user typing into the input elements
       emailInput.value = 'test@example.com';
       passwordInput.value = 'testpassword';
-
-      // Dispatch input events to simulate user typing
       emailInput.dispatchEvent(new Event('input'));
       passwordInput.dispatchEvent(new Event('input'));
 
-      // Trigger change detection to process the bindings
+      fixture.detectChanges();
+
+      // Ensure loading is false so button isn't disabled
+      component.loading = false;
       fixture.detectChanges();
 
       // Trigger the button click
       const button = fixture.debugElement.nativeElement.querySelector('button');
       button.click();
 
-      // Assert that AuthService's login method was called with the form field values
+      // Run change detection again
+      fixture.detectChanges();
+
+      // Assert
+      expect(button.disabled).toBeFalse();
       expect(authServiceMock.login).toHaveBeenCalledWith('test@example.com', 'testpassword');
     });
+
 
     it('should show a loading indicator when logging in', () => {
       component.loading = true;
@@ -155,8 +146,37 @@ describe('LoginComponent', () => {
       const spinner = fixture.debugElement.nativeElement.querySelector('.loading-spinner');
       expect(spinner).toBeNull();
       expect(component.loading).toBeFalse(); // If you maintain a 'loading' flag in your component.
-  });
+    });
 
+    it('should display invalid credentials when server returns invalid credentials', async () => {
+      component.loginForm.controls['email'].setValue('test@example.com');
+      component.loginForm.controls['password'].setValue('password');
+
+      const errorResponse = { error: { message: 'Invalid credentials.' } };
+      authServiceMock.login.and.returnValue(throwError(() => errorResponse));
+
+      component.onSubmit();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      const errorMessage = fixture.debugElement.nativeElement.querySelector('.error-message');
+      expect(errorMessage.textContent).toContain('Invalid credentials.');
+    });
+
+    it('should display alternative error message when server response is an error other than invalid credentials', async () => {
+      component.loginForm.controls['email'].setValue('test@example.com');
+      component.loginForm.controls['password'].setValue('password');
+
+      const errorResponse = { error: { message: 'Any other message.' } };
+      authServiceMock.login.and.returnValue(throwError(() => errorResponse));
+
+      component.onSubmit();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      const errorMessage = fixture.debugElement.nativeElement.querySelector('.error-message');
+      expect(errorMessage.textContent).toContain('An error occurred during login. Please try again.');
+    })
   });
 
   describe('Normal state', () => {
