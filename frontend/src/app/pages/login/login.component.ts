@@ -7,22 +7,21 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
-  loginForm!: FormGroup;
+export class LoginComponent  {
+  loginForm: FormGroup;
   message = '';
   loading = false;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService
-  ) {}
-
-  ngOnInit(): void {
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(40)]]
     });
-  }
+    }
+
 
   onSubmit(): void {
     if (this.loginForm.invalid) return;
