@@ -13,18 +13,23 @@ interface ErrorResponse {
   error: string;
 }
 
+interface AppState {
+  auth: { accessToken: string | null }
+}
+
 type LoginResponse = SuccessResponse | ErrorResponse;
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class AuthService {
 
   private readonly loginUrl = `${environment.apiUrl}login/`;
 
   constructor(
     private http: HttpClient,
-    private store: Store
+    private store: Store<AppState>
   ) { }
 
   login(password: string, email: string): Observable<LoginResponse> {
