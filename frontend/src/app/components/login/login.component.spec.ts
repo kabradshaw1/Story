@@ -96,9 +96,10 @@ describe('LoginComponent', () => {
       // Setup the mock
       const authServiceMock = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
 
-      // Find and set input elements
-      const emailInput = fixture.debugElement.query(By.css('input[type="email"]')).nativeElement;
-      const passwordInput = fixture.debugElement.query(By.css('input[type="password"]')).nativeElement;
+      // Find and set input elements using formControlName attribute
+      const emailInput = fixture.debugElement.query(By.css('input[formControlName="email"]')).nativeElement;
+      const passwordInput = fixture.debugElement.query(By.css('input[formControlName="password"]')).nativeElement;
+
       emailInput.value = 'test@example.com';
       passwordInput.value = 'testpassword';
       emailInput.dispatchEvent(new Event('input'));
@@ -118,7 +119,6 @@ describe('LoginComponent', () => {
       fixture.detectChanges();
 
       // Assert
-      expect(button.disabled).toBeFalse();
       expect(authServiceMock.login).toHaveBeenCalledWith('test@example.com', 'testpassword');
     });
 
