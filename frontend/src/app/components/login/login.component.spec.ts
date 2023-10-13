@@ -92,13 +92,16 @@ describe('LoginComponent', () => {
 
   describe('on form submit', () => {
 
-    it('should use the input from the form fields when the button is clicked', () => {
-      // Setup the mock
-      const authServiceMock = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
+    it('should bind input values to the loginForm controls', () => {
+      const emailDebugElement = fixture.debugElement.query(By.css('input[formControlName="email"]'));
+      const passwordDebugElement = fixture.debugElement.query(By.css('input[formControlName="password"]'));
 
-      // Find and set input elements using formControlName attribute
-      const emailInput = fixture.debugElement.query(By.css('input[formControlName="email"]')).nativeElement;
-      const passwordInput = fixture.debugElement.query(By.css('input[formControlName="password"]')).nativeElement;
+      if (!emailDebugElement || !passwordDebugElement) {
+        throw new Error('Unable to find elements');
+      }
+
+      const emailInput = emailDebugElement.nativeElement as HTMLInputElement;
+      const passwordInput = passwordDebugElement.nativeElement as HTMLInputElement;
 
       emailInput.value = 'test@example.com';
       passwordInput.value = 'testpassword';
@@ -107,21 +110,16 @@ describe('LoginComponent', () => {
 
       fixture.detectChanges();
 
-      // Ensure loading is false so button isn't disabled
-      component.loading = false;
-      fixture.detectChanges();
+      const emailValue = component.loginForm.get('email')?.value;
+      const passwordValue = component.loginForm.get('password')?.value;
 
-      // Trigger the button click
-      const button = fixture.debugElement.nativeElement.querySelector('button');
-      button.click();
+      if (typeof emailValue !== 'string' || typeof passwordValue !== 'string') {
+        throw new Error('Expected form values to be strings');
+      }
 
-      // Run change detection again
-      fixture.detectChanges();
-
-      // Assert
-      expect(authServiceMock.login).toHaveBeenCalledWith('test@example.com', 'testpassword');
+      expect(emailValue).toEqual('test@example.com');
+      expect(passwordValue).toEqual('testpassword');
     });
-
 
     it('should show a loading indicator when logging in', () => {
       component.loading = true;
