@@ -13,10 +13,20 @@
             required
           />
           <div
-            *ngIf="loginForm.invalid && loginForm.touched"
+            *ngIf="
+              loginForm.get('email')?.invalid && loginForm.get('email')?.touched
+            "
             class="alert alert-danger"
           >
-            <div *ngIf="loginForm.errors?.['required']">Email is required!</div>
+            <div *ngIf="loginForm.get('email')?.errors?.['required']">
+              Email is required!
+            </div>
+            <div *ngIf="loginForm.get('email')?.errors?.['email']">
+              This email is not a valid format.
+            </div>
+            <div *ngIf="loginForm.get('email')?.errors?.['minlength']">
+              This password is too short
+            </div>
           </div>
         </div>
 
