@@ -31,7 +31,7 @@ public class LoginController {
     User user = userService.validateUserCredentials(loginRequest.getEmail(), loginRequest.getPassword());
 
     if(user == null) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials.");
     }
 
     String accessToken = jwtService.generateAccessToken(user);
