@@ -48,9 +48,10 @@ describe('LoginComponent', () => {
       component.loginForm.controls['email'].markAsTouched();
       fixture.detectChanges();
 
-      const emailError = fixture.debugElement.nativeElement.querySelector('.email-error');
-      expect(emailError.textContent).toContain('Email is required');
-    });
+      const emailError = fixture.debugElement.nativeElement.querySelector('input[formControlName="email"] + .alert');
+      expect(emailError.textContent.trim()).toContain('Email is required!');
+  });
+
 
     it('should display an invalid email format error message when email format is incorrect', () => {
       component.loginForm.controls['email'].setValue('invalidEmailFormat');
