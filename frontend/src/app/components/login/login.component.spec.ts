@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { throwError } from 'rxjs';
 import { By } from '@angular/platform-browser';
 
+
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
@@ -43,17 +44,23 @@ describe('LoginComponent', () => {
       expect(component.loginForm.controls['password'].valid).toBeTrue();
     });
 
-    it('should display a required error message when email is empty or invalid', () => {
+    it('should display a required error message when email is empty', () => {
       component.loginForm.controls['email'].setValue('');
       component.loginForm.controls['email'].markAsTouched();
       fixture.detectChanges();
 
       const emailError = fixture.debugElement.nativeElement.querySelector('input[formControlName="email"] + .alert');
       expect(emailError.textContent).toContain('Email is required!');
-      expect(emailError.textContent).toContain('This email is not a valid format.');
+    });
 
-  });
+    it('given_when_then', () => {
+      component.loginForm.controls['email'].setValue('plainaddress');
+      component.loginForm.controls['email'].markAsTouched();
 
+      fixture.detectChanges();
+      const emailError = fixture.debugElement.nativeElement.querySelector('input[formControlName="email"] + .alert');
+      expect(emailError.textContent).toContain('This email is an invalid format.');
+    })
 
     it('should display an invalid password error message when password is less then 8 characters', () => {
       component.loginForm.controls['password'].setValue('passwor');
@@ -62,8 +69,9 @@ describe('LoginComponent', () => {
 
       const passwordError = fixture.debugElement.nativeElement.querySelector('input[formControlName="password"] + .alert');
       expect(passwordError.textContent).toContain('This password is too short.');
-      expect(passwordError.textContent.trim()).
+
     });
+
 
     it('should reject invalid email formats', () => {
       const invalidEmails = [
@@ -194,3 +202,15 @@ describe('LoginComponent', () => {
     });
   });
 });
+
+// const given = describe;
+// const when = describe;
+// const then = it;
+
+// given('',() => {
+//   when('',() => {
+//     then('', () => {
+
+//     });
+//   });
+// });
