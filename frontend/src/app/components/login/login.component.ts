@@ -23,20 +23,24 @@ export class LoginComponent  {
     }
 
 
-  onSubmit(): void {
-    if (this.loginForm.invalid) return;
+  onSubmit(): Promise<void> {
+    if (this.loginForm.invalid) return Promise.resolve();
 
     this.loading = true;
     const { email, password } = this.loginForm.value;
 
-    this.authService.login(email, password).subscribe({
-      next: (response) => {},
-      error: (err) => {
-        this.loading = false;
-        this.message = err?.error?.message === 'Invalid credentials.'
-          ? 'Invalid credentials.'
-          : 'An error occurred during login. Please try again.';
-      }
+    return new Promise((resolve) => {
+      this.authService.login(email, password).subscribe({
+        next: () => resolve(),
+        error: (err) => {
+          this.loading = false;
+          this.message = err?.error?.message === 'Invalid credentials.'
+            ? 'Invalid credentials.'
+            : 'An error occurred during login. Please try again.';
+          resolve();
+        }
+      });
     });
   }
+
 }

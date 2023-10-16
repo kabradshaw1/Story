@@ -116,24 +116,20 @@ describe('LoginComponent', () => {
     });
 
     it('should hide loading indicator if login fails', fakeAsync(() => {
-      // Given
       authServiceMock.login.and.returnValue(throwError(() => new Error('Invalid credentials')));
 
-      // Assume you have a loading property in your component which shows/hides the spinner.
       component.loading = true;
 
-      // When
       component.onSubmit();
-
-      // Simulate async operations
-      tick();
-
-      // Then
+      tick();  // Simulates passage of time
       fixture.detectChanges();
+
       const spinner = fixture.debugElement.nativeElement.querySelector('.loading-spinner');
       expect(spinner).toBeNull();
       expect(component.loading).toBeFalse();
     }));
+
+
 
     it('should display invalid credentials when server returns invalid credentials', async () => {
       component.loginForm.controls['email'].setValue('test@example.com');
