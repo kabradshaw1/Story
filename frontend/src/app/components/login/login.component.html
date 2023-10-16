@@ -48,7 +48,7 @@
             <div *ngIf="loginForm.get('password')?.errors?.['minlength']">
               This password is too short.
             </div>
-            <div *ngIf="loginForm.get('password')?.errors?.['naxlength']">
+            <div *ngIf="loginForm.get('password')?.errors?.['maxlength']">
               This password is too long.
             </div>
           </div>

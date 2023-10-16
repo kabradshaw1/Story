@@ -21,7 +21,13 @@ describe('LoginComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(LoginComponent);
+    fixture.detectChanges();
     component = fixture.componentInstance;
+  });
+
+  afterEach(() => {
+    component.loading = false; // Reset the loading state
+    component.message = ''; // Reset any messages
   });
 
   it('should create', () => {
@@ -128,8 +134,6 @@ describe('LoginComponent', () => {
       expect(spinner).toBeNull();
       expect(component.loading).toBeFalse();
     }));
-
-
 
     it('should display invalid credentials when server returns invalid credentials', async () => {
       component.loginForm.controls['email'].setValue('test@example.com');

@@ -30,6 +30,10 @@ module.exports = function(config) {
     preprocessors: {
     },
 
+    client: {
+      captureConsole: true
+    },
+
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
