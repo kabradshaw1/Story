@@ -53,8 +53,12 @@
             </div>
           </div>
         </div>
-        <button class="mt-3 btn btn-primary" type="submit" [disabled]="loading">
-          Submit Form
+        <button
+          class="mt-3 btn btn-primary"
+          type="submit"
+          [disabled]="loading || loginForm.invalid"
+        >
+          Submit
         </button>
         <div *ngIf="loading" class="loading-spinner"></div>
         <label class="mr-3 error-message">{{ message }}</label>

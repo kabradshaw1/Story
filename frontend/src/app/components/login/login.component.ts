@@ -33,9 +33,8 @@ export class LoginComponent  {
       this.authService.login(email, password).subscribe({
         next: () => resolve(),
         error: (err) => {
-          console.log('Before setting loading to false');
           this.loading = false;
-          console.log('After setting loading to false');
+
           this.message = err?.error?.message === 'Invalid credentials.'
             ? 'Invalid credentials.'
             : 'An error occurred during login. Please try again.';

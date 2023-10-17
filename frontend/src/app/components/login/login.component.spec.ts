@@ -117,21 +117,32 @@ describe('LoginComponent', () => {
     it('should show a loading indicator when logging in', () => {
       component.loading = true;
       fixture.detectChanges();
-      const spinner = fixture.debugElement.nativeElement.querySelector('.loading-spinner');
+      const spinner = fixture.debugElement.query(By.css('.loading-spinner'));
       expect(spinner).toBeTruthy();
     });
 
-    it('should hide loading indicator if login fails', fakeAsync(() => {
+    it('should hide loading indicator when loading is set to false', () => {
+      component.loading = true;  // Initially set to true
+      fixture.detectChanges();   // Apply changes
+
+      let spinner = fixture.debugElement.query(By.css('.loading-spinner'));
+      expect(spinner).not.toBeNull();  // Check that it's initially there
+
+      component.loading = false; // Now set to false
+      fixture.detectChanges();   // Apply changes
+
+      spinner = fixture.debugElement.query(By.css('.loading-spinner'));
+      expect(spinner).toBeNull();  // It should be gone
+    });
+
+    it('should set loading to false if login fails', fakeAsync(() => {
       authServiceMock.login.and.returnValue(throwError(() => new Error('Invalid credentials')));
 
       component.loading = true;
 
       component.onSubmit();
       tick();  // Simulates passage of time
-      fixture.detectChanges();
 
-      const spinner = fixture.debugElement.nativeElement.querySelector('.loading-spinner');
-      expect(spinner).toBeNull();
       expect(component.loading).toBeFalse();
     }));
 
