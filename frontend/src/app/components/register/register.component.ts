@@ -9,6 +9,9 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class RegisterComponent {
   registerForm: FormGroup;
+  message = '';
+  loading = false;
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService
@@ -17,6 +20,7 @@ export class RegisterComponent {
 
       })
     }
+
   onSubmit(): Promise<void> {
     return new Promise((resolve) => {
 

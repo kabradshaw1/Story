@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RegisterComponent } from './register.component';
-import { LoginComponent } from '../login/login.component';
 import { AuthService } from 'src/app/services/auth.service';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -32,4 +31,6 @@ describe('RegisterComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+
 });
