@@ -131,5 +131,26 @@ describe('RegisterComponent', () => {
       expect(passwordInput.value).toEqual('newtestpassword');
       expect(usernameInput.value).toEqual('testUser');
     });
+
+    it('givenSetToLoading_whenLoading_thenShowLoadingIndicator', () => {
+      component.loading = true;
+      fixture.detectChanges();
+      const spinner = fixture.debugElement.query(By.css('.loading-spinner'));
+      expect(spinner).toBeTruthy();
+    });
+
+    it('given_when_then', () => {
+      component.loading = true;  // Initially set to true
+      fixture.detectChanges();   // Apply changes
+
+      let spinner = fixture.debugElement.query(By.css('.loading-spinner'));
+      expect(spinner).not.toBeNull();  // Check that it's initially there
+
+      component.loading = false; // Now set to false
+      fixture.detectChanges();   // Apply changes
+
+      spinner = fixture.debugElement.query(By.css('.loading-spinner'));
+      expect(spinner).toBeNull();  // It should be gone
+    });
   })
 });
