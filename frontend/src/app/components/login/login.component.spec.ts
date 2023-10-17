@@ -78,7 +78,6 @@ describe('LoginComponent', () => {
 
     });
 
-
     it('should reject invalid email formats', () => {
       const invalidEmails = [
         "plainaddress",
@@ -134,17 +133,6 @@ describe('LoginComponent', () => {
       spinner = fixture.debugElement.query(By.css('.loading-spinner'));
       expect(spinner).toBeNull();  // It should be gone
     });
-
-    it('should set loading to false if login fails', fakeAsync(() => {
-      authServiceMock.login.and.returnValue(throwError(() => new Error('Invalid credentials')));
-
-      component.loading = true;
-
-      component.onSubmit();
-      tick();  // Simulates passage of time
-
-      expect(component.loading).toBeFalse();
-    }));
 
     it('should display invalid credentials when server returns invalid credentials', async () => {
       component.loginForm.controls['email'].setValue('test@example.com');

@@ -1,0 +1,24 @@
+name: Angular Tests
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm install
+
+      - name: Run Angular Tests
+        run: |
+          cd frontend
+          ng test
