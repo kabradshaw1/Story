@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AuthService } from '../../services/auth.service';
 import { LoginComponent } from './login.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -56,26 +56,34 @@ describe('LoginComponent', () => {
       fixture.detectChanges();
 
       const emailError = fixture.debugElement.nativeElement.querySelector('input[formControlName="email"] + .alert');
-      expect(emailError.textContent).toContain('Email is required!');
+      expect(emailError.textContent).toContain('Email is required');
     });
 
-    it('given_when_then', () => {
+    it('givenInvalidEmail_whenEmailIsEntered_thenReturnErrorMessage', () => {
       component.loginForm.controls['email'].setValue('plainaddress');
       component.loginForm.controls['email'].markAsTouched();
 
       fixture.detectChanges();
       const emailError = fixture.debugElement.nativeElement.querySelector('input[formControlName="email"] + .alert');
       expect(emailError.textContent).toContain('This email is not a valid format.');
-    })
+    });
+
+    it('givenNoPassword_whenBlankPasswordIsEntenered_thenReturnErrorMessage', () => {
+      component.loginForm.controls['password'].setValue('');
+      component.loginForm.controls['password'].markAsTouched();
+
+      fixture.detectChanges();
+      const passwordError = fixture.debugElement.query(By.css('input[formControlName="password"] + .alert')).nativeElement;
+      expect(passwordError.textContent).toContain('Password is required')
+    });
 
     it('should display an invalid password error message when password is less then 8 characters', () => {
       component.loginForm.controls['password'].setValue('passwor');
       component.loginForm.controls['password'].markAsTouched();
       fixture.detectChanges();
 
-      const passwordError = fixture.debugElement.nativeElement.querySelector('input[formControlName="password"] + .alert');
+      const passwordError = fixture.debugElement.query(By.css('input[formControlName="password"] + .alert')).nativeElement;
       expect(passwordError.textContent).toContain('This password is too short.');
-
     });
 
     it('should reject invalid email formats', () => {

@@ -45,6 +45,9 @@
             "
             class="alert alert-danger"
           >
+            <div *ngIf="loginForm.get('password')?.errors?.['required']">
+              Password is required!
+            </div>
             <div *ngIf="loginForm.get('password')?.errors?.['minlength']">
               This password is too short.
             </div>
