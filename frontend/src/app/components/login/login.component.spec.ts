@@ -74,7 +74,7 @@ describe('LoginComponent', () => {
 
       fixture.detectChanges();
       const passwordError = fixture.debugElement.query(By.css('input[formControlName="password"] + .alert')).nativeElement;
-      expect(passwordError.textContent).toContain('Password is required')
+      expect(passwordError.textContent).toContain('Password is required');
     });
 
     it('should display an invalid password error message when password is less then 8 characters', () => {
@@ -109,16 +109,29 @@ describe('LoginComponent', () => {
   describe('on form submit', () => {
 
     it('should bind input values to the loginForm controls', () => {
+      // Set values in the HTML inputs
+      const emailInput = fixture.debugElement.query(By.css('input[formControlName="email"]')).nativeElement;
+      const passwordInput = fixture.debugElement.query(By.css('input[formControlName="password"]')).nativeElement;
 
-      component.loginForm.controls['email'].setValue('test@example.com');
-      component.loginForm.controls['password'].setValue('testpassword');
+      emailInput.value = 'test@example.com';
+      emailInput.dispatchEvent(new Event('input'));
+      passwordInput.value = 'testpassword';
+      passwordInput.dispatchEvent(new Event('input'));
+      fixture.detectChanges();
 
-      const emailValue = component.loginForm.get('email')?.value;
-      const passwordValue = component.loginForm.get('password')?.value;
+      // Check that the loginForm controls have the set values
+      expect(component.loginForm.get('email')?.value).toEqual('test@example.com');
+      expect(component.loginForm.get('password')?.value).toEqual('testpassword');
 
-      expect(emailValue).toEqual('test@example.com');
-      expect(passwordValue).toEqual('testpassword');
-    });
+      // Now, do it in reverse: Set the values via the form controls and check the HTML input values
+      component.loginForm.controls['email'].setValue('newtest@example.com');
+      component.loginForm.controls['password'].setValue('newtestpassword');
+      fixture.detectChanges();
+
+      expect(emailInput.value).toEqual('newtest@example.com');
+      expect(passwordInput.value).toEqual('newtestpassword');
+  });
+
 
 
     it('should show a loading indicator when logging in', () => {
