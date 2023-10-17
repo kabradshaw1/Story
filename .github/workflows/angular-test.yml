@@ -13,15 +13,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Cache npm dependencies
+      - name: Cache node modules
         uses: actions/cache@v2
         with:
+          # Cache the entire frontend node_modules directory
           path: frontend/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }}
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('frontend/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-node-
+            ${{ runner.os }}-node-modules-
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: |
           cd frontend
           npm install
@@ -29,4 +30,4 @@ jobs:
       - name: Run Angular Tests
         run: |
           cd frontend
-          ng test
+          npm run test
