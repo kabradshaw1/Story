@@ -32,5 +32,27 @@ describe('RegisterComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  describe('input validation', () => {
+
+    it('givenEmptyForm_whenFormIsChecked_thenReturnsFalse', () => {
+      component.registerForm.controls['email'].setValue('');
+      component.registerForm.controls['password'].setValue('');
+      component.registerForm.controls['username'].setValue('');
+
+      expect(component.registerForm.controls['email'].valid).toBeFalse();
+      expect(component.registerForm.controls['password'].valid).toBeFalse();
+      expect(component.registerForm.controls['username'].valid).toBeFalse();
+    });
+
+    it('given_when_then', () => {
+      component.registerForm.controls['email'].setValue('test@example.com');
+      component.registerForm.controls['password'].setValue('testPassword');
+      component.registerForm.controls['username'].setValue('testUser');
+
+      expect(component.registerForm.controls['email'].valid).toBeTrue();
+      expect(component.registerForm.controls['password'].valid).toBeTrue();
+      expect(component.registerForm.controls['username'].valid).toBeTrue();
+    });
+  });
 
 });
