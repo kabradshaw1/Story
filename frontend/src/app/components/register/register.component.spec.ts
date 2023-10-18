@@ -4,6 +4,7 @@ import { RegisterComponent } from './register.component';
 import { AuthService } from 'src/app/services/auth.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { throwError } from 'rxjs';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
@@ -139,7 +140,7 @@ describe('RegisterComponent', () => {
       expect(spinner).toBeTruthy();
     });
 
-    it('given_when_then', () => {
+    it('givenSetToLoadingFalse_whenLoadingFinished_thenLoadingIndicatorIsRemoved', () => {
       component.loading = true;  // Initially set to true
       fixture.detectChanges();   // Apply changes
 
@@ -151,6 +152,30 @@ describe('RegisterComponent', () => {
 
       spinner = fixture.debugElement.query(By.css('.loading-spinner'));
       expect(spinner).toBeNull();  // It should be gone
+    });
+
+    it('givenExistingEmail_whenServerReturnsError_thenDisplayError', () => {
+      const email = 'test@example.com'
+      component.registerForm.controls['email'].setValue(email);
+      component.registerForm.controls['password'].setValue('password');
+      component.registerForm.controls['username'].setValue('username');
+
+      const errorResponse = { error: { message: `Email already registered: ${email}`}}
+      authServiceMock.register.and.returnValue(throwError(() => errorResponse));
+
+      component.onSubmit();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      const errorMessage =
+    });
+
+    it('givenExistingUsername_whenServerReturnsError_thenDisplayError', () => {
+
+    });
+
+    it('givenOtherServerIssue_whenServerReturnsError_thenDisplayError', () => {
+
     });
   })
 });
