@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AuthService } from '../../services/auth.service';
 import { LoginComponent } from './login.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -56,26 +56,34 @@ describe('LoginComponent', () => {
       fixture.detectChanges();
 
       const emailError = fixture.debugElement.nativeElement.querySelector('input[formControlName="email"] + .alert');
-      expect(emailError.textContent).toContain('Email is required!');
+      expect(emailError.textContent).toContain('Email is required');
     });
 
-    it('given_when_then', () => {
+    it('givenInvalidEmail_whenEmailIsEntered_thenReturnErrorMessage', () => {
       component.loginForm.controls['email'].setValue('plainaddress');
       component.loginForm.controls['email'].markAsTouched();
 
       fixture.detectChanges();
       const emailError = fixture.debugElement.nativeElement.querySelector('input[formControlName="email"] + .alert');
       expect(emailError.textContent).toContain('This email is not a valid format.');
-    })
+    });
+
+    it('givenNoPassword_whenBlankPasswordIsEntenered_thenReturnErrorMessage', () => {
+      component.loginForm.controls['password'].setValue('');
+      component.loginForm.controls['password'].markAsTouched();
+
+      fixture.detectChanges();
+      const passwordError = fixture.debugElement.query(By.css('input[formControlName="password"] + .alert')).nativeElement;
+      expect(passwordError.textContent).toContain('Password is required');
+    });
 
     it('should display an invalid password error message when password is less then 8 characters', () => {
       component.loginForm.controls['password'].setValue('passwor');
       component.loginForm.controls['password'].markAsTouched();
       fixture.detectChanges();
 
-      const passwordError = fixture.debugElement.nativeElement.querySelector('input[formControlName="password"] + .alert');
+      const passwordError = fixture.debugElement.query(By.css('input[formControlName="password"] + .alert')).nativeElement;
       expect(passwordError.textContent).toContain('This password is too short.');
-
     });
 
     it('should reject invalid email formats', () => {
@@ -101,16 +109,29 @@ describe('LoginComponent', () => {
   describe('on form submit', () => {
 
     it('should bind input values to the loginForm controls', () => {
+      // Set values in the HTML inputs
+      const emailInput = fixture.debugElement.query(By.css('input[formControlName="email"]')).nativeElement;
+      const passwordInput = fixture.debugElement.query(By.css('input[formControlName="password"]')).nativeElement;
 
-      component.loginForm.controls['email'].setValue('test@example.com');
-      component.loginForm.controls['password'].setValue('testpassword');
+      emailInput.value = 'test@example.com';
+      emailInput.dispatchEvent(new Event('input'));
+      passwordInput.value = 'testpassword';
+      passwordInput.dispatchEvent(new Event('input'));
+      fixture.detectChanges();
 
-      const emailValue = component.loginForm.get('email')?.value;
-      const passwordValue = component.loginForm.get('password')?.value;
+      // Check that the loginForm controls have the set values
+      expect(component.loginForm.get('email')?.value).toEqual('test@example.com');
+      expect(component.loginForm.get('password')?.value).toEqual('testpassword');
 
-      expect(emailValue).toEqual('test@example.com');
-      expect(passwordValue).toEqual('testpassword');
-    });
+      // Now, do it in reverse: Set the values via the form controls and check the HTML input values
+      component.loginForm.controls['email'].setValue('newtest@example.com');
+      component.loginForm.controls['password'].setValue('newtestpassword');
+      fixture.detectChanges();
+
+      expect(emailInput.value).toEqual('newtest@example.com');
+      expect(passwordInput.value).toEqual('newtestpassword');
+  });
+
 
 
     it('should show a loading indicator when logging in', () => {

@@ -75,4 +75,9 @@ describe('AuthService', () => {
       });
     });
   });
+  describe('register', () => {
+    it('givenValidCredentials_whenRegister_thenDispatchRegisterSuccess', () => {
+
+    });
+  })
 });
