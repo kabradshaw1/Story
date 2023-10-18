@@ -169,14 +169,14 @@ describe('RegisterComponent', () => {
       fixture.detectChanges();
 
       const errorMessage = fixture.debugElement.query(By.css('.error-message')).nativeElement;
-      expect(errorMessage.errorMessage).toContain(`Email already registered: ${email}`);
+      expect(errorMessage.textContent.trim()).toContain(`Email already registered: ${email}`);
     });
 
     it('givenExistingUsername_whenServerReturnsError_thenDisplayError', async () => {
       const username = 'Tester'
-      component.registerForm.controls['username'].setValue(username);
+      component.registerForm.controls['email'].setValue('test@example.com');
       component.registerForm.controls['password'].setValue('password');
-      component.registerForm.controls['username'].setValue('username');
+      component.registerForm.controls['username'].setValue(username);
 
       const errorResponse = { error: { message: `Username already registered: ${username}`}}
       authServiceMock.register.and.returnValue(throwError(() => errorResponse));
@@ -186,7 +186,7 @@ describe('RegisterComponent', () => {
       fixture.detectChanges();
 
       const errorMessage = fixture.debugElement.query(By.css('.error-message')).nativeElement;
-      expect(errorMessage.errorMessage).toContain(`Username already registered: ${username}`);
+      expect(errorMessage.textContent).toContain(`Username already registered: ${username}`);
     });
 
     it('givenOtherServerIssue_whenServerReturnsError_thenDisplayError', async () => {
@@ -202,14 +202,15 @@ describe('RegisterComponent', () => {
       fixture.detectChanges();
 
       const errorMessage = fixture.debugElement.query(By.css('.error-message')).nativeElement;
-      expect(errorMessage.errorMessage).toContain('An error occurred during registeration. Please try again.');
+      expect(errorMessage.textContent).toContain('An error occurred during registration. Please try again.');
     });
   });
 
-  describe('Nomrla state', () => {
+  describe('Normal state', () => {
     it('should enable the submit button if the form is valid', () => {
       component.registerForm.controls['email'].setValue('test@example.com');
       component.registerForm.controls['password'].setValue('password123');
+      component.registerForm.controls['username'].setValue('Tester')
       fixture.detectChanges();
       const button = fixture.debugElement.nativeElement.querySelector('button');
       expect(button.disabled).toBeFalse();

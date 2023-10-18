@@ -24,8 +24,30 @@ export class RegisterComponent {
     }
 
   onSubmit(): Promise<void> {
-    return new Promise((resolve) => {
+    if (this.registerForm.invalid) return Promise.resolve();
 
+    this.loading = true;
+    const { email, password, username } = this.registerForm.value;
+
+    return new Promise((resolve) => {
+      this.authService.register(email, username, password).subscribe({
+        next: () => resolve(),
+        error: (err) => {
+          this.loading = false;
+          if (err && err.error && err.error.message) {
+            if(err.error.message.includes("Email already registered")) {
+              this.message = err.error.message;
+            } else if (err.error.message.includes("Username already registered")) {
+              this.message = err.error.message;
+            } else {
+              this.message = 'An error occurred during registration. Please try again.';
+            }
+          } else {
+            this.message = 'An error occurred during registration. Please try again.';
+          }
+          resolve();
+        }
+      })
     })
   }
 }
