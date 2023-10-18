@@ -37,25 +37,40 @@ export class AuthService {
     const credentials = { email, password };
 
     return this.http.post<AuthResponse>(this.loginUrl, credentials)
-    .pipe(
-      tap(response => {
-        if (isSuccessResponse(response)) {
-          this.store.dispatch({
-            type: '[Auth] Login Success',
-            payload: response.accessToken
-          });
-        }
-      }),
-      catchError(error => {
-        this.store.dispatch({ type: '[Auth] Login Failure', payload: error.statusText });
-        return throwError(() => error);
-      })
-    );
+      .pipe(
+        tap(response => {
+          if (isSuccessResponse(response)) {
+            this.store.dispatch({
+              type: '[Auth] Login Success',
+              payload: response.accessToken
+            });
+          }
+        }),
+        catchError(error => {
+          this.store.dispatch({ type: '[Auth] Login Failure', payload: error.statusText });
+          return throwError(() => error);
+        })
+      );
   };
 
   register(password: string, email: string, username: string): Observable<AuthResponse> {
     const credentials = { email, password, username }
     return this.http.post<AuthResponse>(this.registerUrl, credentials)
+      .pipe(
+        tap(response => {
+          if (isSuccessResponse(response)) {
+            this.store.dispatch({
+              type: '[Auth] Register Success',
+              payload: response.accessToken
+            });
+          }
+        }),
+        catchError(error => {
+          this.store.dispatch({ type: '[Auth] Register Failure', payload: error.statusText });
+          return throwError(() => error);
+        })
+      );
+
   }
 }
 

@@ -92,8 +92,23 @@ describe('AuthService', () => {
       })
     });
 
-    it('givenExistingUser_whenRegister_thenHandleError', () => {
+    it('givenInvalidCredentials_whenRegister_thenHandleError', () => {
+      const registerDetails = { email: 'existing@example.com', username: 'ExistingUser', password: 'password' };
 
+      service.register(registerDetails.username, registerDetails.password, registerDetails.email).subscribe({
+        next: () => fail('Expected an error, but got a successful response.'),
+        error: error => expect(error.error).toBe('An error message')
+      });
+
+      const req = httpMock.expectOne(`http://localhost:8080/api/register/`);
+      expect(req.request.method).toBe('POST');
+
+      req.flush('An error message', { status: 400, statusText: 'BAD REQUEST' });
+
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: '[Auth] Register Failure',
+        payload: 'BAD REQUEST'
+      });
     });
   })
 });
