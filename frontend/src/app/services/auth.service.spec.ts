@@ -77,6 +77,22 @@ describe('AuthService', () => {
   });
   describe('register', () => {
     it('givenValidCredentials_whenRegister_thenDispatchRegisterSuccess', () => {
+      const mockResponse = { accessToken: 'mock-access-token' };
+      const registerDetails = { email: 'test@example.com', password: 'password', username: 'Tester' };
+
+      service.register(registerDetails.username, registerDetails.password, registerDetails.email).subscribe();
+
+      const req = httpMock.expectOne('http://localhost:8080/api/register/');
+      expect(req.request.method).toBe('POST');
+      req.flush(mockResponse);
+
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: '[Auth] Register Success',
+        payload: mockResponse.accessToken
+      })
+    });
+
+    it('givenExistingUser_whenRegister_thenHandleError', () => {
 
     });
   })
