@@ -102,6 +102,7 @@ describe('RegisterComponent', () => {
       }
     });
   });
+
   describe('on form submit', () => {
     it('givenInputs_whenValuesValuesAreFilledInHtml_thenFormContainsTheValues', () => {
       // Set values in the HTML inputs
@@ -154,7 +155,7 @@ describe('RegisterComponent', () => {
       expect(spinner).toBeNull();  // It should be gone
     });
 
-    it('givenExistingEmail_whenServerReturnsError_thenDisplayError', () => {
+    it('givenExistingEmail_whenServerReturnsError_thenDisplayError', async () => {
       const email = 'test@example.com'
       component.registerForm.controls['email'].setValue(email);
       component.registerForm.controls['password'].setValue('password');
@@ -167,15 +168,63 @@ describe('RegisterComponent', () => {
       await fixture.whenStable();
       fixture.detectChanges();
 
-      const errorMessage =
+      const errorMessage = fixture.debugElement.query(By.css('.error-message')).nativeElement;
+      expect(errorMessage.errorMessage).toContain(`Email already registered: ${email}`);
     });
 
-    it('givenExistingUsername_whenServerReturnsError_thenDisplayError', () => {
+    it('givenExistingUsername_whenServerReturnsError_thenDisplayError', async () => {
+      const username = 'Tester'
+      component.registerForm.controls['username'].setValue(username);
+      component.registerForm.controls['password'].setValue('password');
+      component.registerForm.controls['username'].setValue('username');
 
+      const errorResponse = { error: { message: `Username already registered: ${username}`}}
+      authServiceMock.register.and.returnValue(throwError(() => errorResponse));
+
+      component.onSubmit();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      const errorMessage = fixture.debugElement.query(By.css('.error-message')).nativeElement;
+      expect(errorMessage.errorMessage).toContain(`Username already registered: ${username}`);
     });
 
-    it('givenOtherServerIssue_whenServerReturnsError_thenDisplayError', () => {
+    it('givenOtherServerIssue_whenServerReturnsError_thenDisplayError', async () => {
+      component.registerForm.controls['email'].setValue('test@example.com');
+      component.registerForm.controls['password'].setValue('password');
+      component.registerForm.controls['username'].setValue('username');
 
+      const errorResponse = { error: { message: 'Any other message'}}
+      authServiceMock.register.and.returnValue(throwError(() => errorResponse));
+
+      component.onSubmit();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      const errorMessage = fixture.debugElement.query(By.css('.error-message')).nativeElement;
+      expect(errorMessage.errorMessage).toContain('An error occurred during registeration. Please try again.');
     });
-  })
+  });
+
+  describe('Nomrla state', () => {
+    it('should enable the submit button if the form is valid', () => {
+      component.registerForm.controls['email'].setValue('test@example.com');
+      component.registerForm.controls['password'].setValue('password123');
+      fixture.detectChanges();
+      const button = fixture.debugElement.nativeElement.querySelector('button');
+      expect(button.disabled).toBeFalse();
+    });
+
+    it('should have an invalid form on init', () => {
+      expect(component.registerForm.valid).toBeFalse();
+    });
+
+    it('should disable the submit button if the form is invalid', () => {
+      component.registerForm.controls['email'].setValue('');
+      component.registerForm.controls['password'].setValue('');
+      fixture.detectChanges();
+      const button = fixture.debugElement.nativeElement.querySelector('button');
+      expect(button.disabled).toBeTrue();
+    });
+  });
 });
