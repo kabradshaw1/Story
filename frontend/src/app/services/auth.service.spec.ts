@@ -110,5 +110,47 @@ describe('AuthService', () => {
         payload: 'BAD REQUEST'
       });
     });
+
+
+  });
+
+  describe('refresh', () => {
+    it('givenValidRefreshToken_whenCalled_thenHandlesSuccessfulRequest', () => {
+      const mockResponse = { accessToken: 'new-mock-access-token' };
+
+      // Call the refresh method
+      service.refresh().subscribe(response => {
+        expect(response).toEqual(mockResponse);
+      });
+
+      // Expect that the correct request method and URL were used.
+      const req = httpMock.expectOne('http://localhost:8080/api/refresh/');
+      expect(req.request.method).toBe('POST');
+
+      // Respond with mock data
+      req.flush(mockResponse);
+
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: '[Auth] Refresh Success',
+        payload: mockResponse.accessToken
+      });
+    });
+
+    it('givenInvalidRefreshToken_whenCalled_thenHandlesFailedRequest', () => {
+      service.refresh().subscribe({
+        next: () => fail('Expected an error, but got a successful response.'),
+        error: error => expect(error.error).toBe('An error message')
+      });
+
+      const req = httpMock.expectOne(`http://localhost:8080/api/refresh/`);
+      expect(req.request.method).toBe('POST');
+
+      req.flush('An error message', { status: 400, statusText: 'BAD REQUEST' });
+
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: '[Auth] Refresh Failure',
+        payload: 'BAD REQUEST'
+      });
+    })
   })
 });

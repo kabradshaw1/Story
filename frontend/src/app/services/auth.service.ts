@@ -26,8 +26,9 @@ type AuthResponse = SuccessResponse | ErrorResponse;
 export class AuthService {
 
   private readonly loginUrl = `${environment.apiUrl}login/`;
-
   private readonly registerUrl =  `${environment.apiUrl}register/`;
+  private readonly refreshUrl =  `${environment.apiUrl}refresh/`;
+
   constructor(
     private http: HttpClient,
     private store: Store<AppState>
@@ -70,7 +71,23 @@ export class AuthService {
           return throwError(() => error);
         })
       );
+  }
 
+  refresh(): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(this.refreshUrl, {})
+      .pipe(
+        tap(response => {
+          if (isSuccessResponse(response))
+            this.store.dispatch({
+              type: '[Auth] Refresh Success',
+              payload: response.accessToken
+            })
+        }),
+        catchError(error => {
+          this.store.dispatch({ type: '[Auth] Refresh Failure', payload: error.statusText });
+          return throwError(() => error);
+        })
+      )
   }
 }
 
