@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
 import { Observable, catchError, tap, throwError } from 'rxjs';
 import { environment } from '../environment/environment';
+import { AuthState } from '../store/state/auth.state';
 
 interface SuccessResponse {
   accessToken: string;
@@ -11,10 +12,6 @@ interface SuccessResponse {
 interface ErrorResponse {
   status: number;
   error: string;
-}
-
-interface AppState {
-  auth: { accessToken: string | null }
 }
 
 type AuthResponse = SuccessResponse | ErrorResponse;
@@ -31,7 +28,7 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private store: Store<AppState>
+    private store: Store<AuthState>
   ) { }
 
   login(password: string, email: string): Observable<AuthResponse> {
