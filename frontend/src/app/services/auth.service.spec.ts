@@ -45,7 +45,7 @@ describe('AuthService', () => {
       req.flush(mockResponse);
 
       expect(mockDispatch).toHaveBeenCalledWith({
-        type: '[Auth] Login Success',
+        type: '[Auth] Success',
         payload: mockResponse.accessToken
       });
     });
@@ -70,7 +70,7 @@ describe('AuthService', () => {
       req.flush('Invalid credentials', { status: 401, statusText: 'UNAUTHORIZED' });
 
       expect(mockDispatch).toHaveBeenCalledWith({
-        type: '[Auth] Login Failure',
+        type: '[Auth] Failure',
         payload: 'UNAUTHORIZED'
       });
     });
@@ -87,7 +87,7 @@ describe('AuthService', () => {
       req.flush(mockResponse);
 
       expect(mockDispatch).toHaveBeenCalledWith({
-        type: '[Auth] Register Success',
+        type: '[Auth] Success',
         payload: mockResponse.accessToken
       })
     });
@@ -106,7 +106,7 @@ describe('AuthService', () => {
       req.flush('An error message', { status: 400, statusText: 'BAD REQUEST' });
 
       expect(mockDispatch).toHaveBeenCalledWith({
-        type: '[Auth] Register Failure',
+        type: '[Auth] Failure',
         payload: 'BAD REQUEST'
       });
     });
@@ -131,7 +131,7 @@ describe('AuthService', () => {
       req.flush(mockResponse);
 
       expect(mockDispatch).toHaveBeenCalledWith({
-        type: '[Auth] Refresh Success',
+        type: '[Auth] Success',
         payload: mockResponse.accessToken
       });
     });
@@ -148,7 +148,7 @@ describe('AuthService', () => {
       req.flush('An error message', { status: 400, statusText: 'BAD REQUEST' });
 
       expect(mockDispatch).toHaveBeenCalledWith({
-        type: '[Auth] Refresh Failure',
+        type: '[Auth] Failure',
         payload: 'BAD REQUEST'
       });
     })

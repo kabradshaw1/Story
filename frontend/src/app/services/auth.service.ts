@@ -39,13 +39,13 @@ export class AuthService {
         tap(response => {
           if (isSuccessResponse(response)) {
             this.store.dispatch({
-              type: '[Auth] Login Success',
+              type: '[Auth] Success',
               payload: response.accessToken
             });
           }
         }),
         catchError(error => {
-          this.store.dispatch({ type: '[Auth] Login Failure', payload: error.statusText });
+          this.store.dispatch({ type: '[Auth] Failure', payload: error.statusText });
           return throwError(() => error);
         })
       );
@@ -58,13 +58,13 @@ export class AuthService {
         tap(response => {
           if (isSuccessResponse(response)) {
             this.store.dispatch({
-              type: '[Auth] Register Success',
+              type: '[Auth] Success',
               payload: response.accessToken
             });
           }
         }),
         catchError(error => {
-          this.store.dispatch({ type: '[Auth] Register Failure', payload: error.statusText });
+          this.store.dispatch({ type: '[Auth] Failure', payload: error.statusText });
           return throwError(() => error);
         })
       );
@@ -76,12 +76,12 @@ export class AuthService {
         tap(response => {
           if (isSuccessResponse(response))
             this.store.dispatch({
-              type: '[Auth] Refresh Success',
+              type: '[Auth] Success',
               payload: response.accessToken
             })
         }),
         catchError(error => {
-          this.store.dispatch({ type: '[Auth] Refresh Failure', payload: error.statusText });
+          this.store.dispatch({ type: '[Auth] Failure', payload: error.statusText });
           return throwError(() => error);
         })
       )
