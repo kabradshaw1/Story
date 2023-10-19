@@ -1,23 +1,6 @@
-import { TestBed } from '@angular/core/testing';
-import { Store } from '@ngrx/store';
-import { LoginComponent } from 'src/app/components/login/login.component';
+import { AuthState, initialState } from "./auth.reducers";
+import * as AuthActions from '../actions/auth.actions';
 
-// describe('LoginComponent', () => {
-//   let storeMock;
+describe('Auth Reducer', () => {
 
-//   beforeEach(async () => {
-//     storeMock = {
-//       select: jasmine.createSpy('select'),
-//       dispatch: jasmine.createSpy('dispatch')
-//     };
-
-//     await TestBed.configureTestingModule({
-//       declarations: [LoginComponent],
-//       providers: [
-//         { provide: Store, useValue: storeMock }
-//       ]
-//     }).compileComponents();
-//   });
-
-//   // ... other tests ...
-// });
+})
