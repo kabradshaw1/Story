@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/services/auth.service';
 import { Store } from '@ngrx/store';
 import * as AuthActions from '../../store/actions/auth.actions';
 
@@ -16,7 +15,7 @@ export class LoginComponent  {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService
+    private store: Store
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -24,26 +23,10 @@ export class LoginComponent  {
     });
     }
 
+  onSubmit(): void {
+    if (this.loginForm.invalid) return;
 
-  onSubmit(): Promise<void> {
-    if (this.loginForm.invalid) return Promise.resolve();
-
-    this.loading = true;
     const { email, password } = this.loginForm.value;
-
-    return new Promise((resolve) => {
-      this.authService.login(email, password).subscribe({
-        next: () => resolve(),
-        error: (err) => {
-          this.loading = false;
-
-          this.message = err?.error?.message === 'Invalid credentials.'
-            ? 'Invalid credentials.'
-            : 'An error occurred during login. Please try again.';
-          resolve();
-        }
-      });
-    });
+    this.store.dispatch(AuthActions.login({ email, password }));
   }
-
 }

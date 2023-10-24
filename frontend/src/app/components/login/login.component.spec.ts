@@ -1,10 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AuthService } from '../../services/auth.service';
 import { LoginComponent } from './login.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { throwError } from 'rxjs';
 import { By } from '@angular/platform-browser';
-
+import { Store, MemoizedSelector } from '@ngrx/store';
+import { provideMockStore } from '@ngrx/store/testing';
+import * as fromAuth from '../../services/auth.service';
+import * as AuthActions from '../../store/actions/auth.actions';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
