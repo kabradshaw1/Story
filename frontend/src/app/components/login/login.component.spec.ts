@@ -6,19 +6,20 @@ import { Store, MemoizedSelector } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
 import * as fromAuth from '../../services/auth.service';
 import * as AuthActions from '../../store/actions/auth.actions';
+import { AuthState, initialAuthState } from '../../store/state/auth.state';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
-  let authServiceMock: jasmine.SpyObj<AuthService>
+  let store: Store;
+  let mockErrorSelector: MemoizedSelector<AuthState, string | null>
 
   beforeEach(async () => {
-    authServiceMock = jasmine.createSpyObj('AuthService', ['login']);
 
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
       declarations: [LoginComponent],
-      providers: [{ provide: AuthService, useValue: authServiceMock }]
+      providers: [provideMockStore({ initialState: initialAuthState })]
     }).compileComponents();
 
     fixture = TestBed.createComponent(LoginComponent);
