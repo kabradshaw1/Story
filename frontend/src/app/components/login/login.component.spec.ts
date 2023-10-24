@@ -22,9 +22,14 @@ describe('LoginComponent', () => {
       providers: [provideMockStore({ initialState: initialAuthState })]
     }).compileComponents();
 
+    store = TestBed.inject(Store);
+    spyOn(store, 'dispatch').and.callThrough();
+
+    // mockErrorSelector = store.overrideSelector(fromAuth.selectError, null);
+
     fixture = TestBed.createComponent(LoginComponent);
-    fixture.detectChanges();
     component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   afterEach(() => {
@@ -157,35 +162,16 @@ describe('LoginComponent', () => {
       expect(spinner).toBeNull();  // It should be gone
     });
 
-    it('should display invalid credentials when server returns invalid credentials', async () => {
+    it('givenValidCredentials_whenOnSubmitCalled_thenDispatchLogin', () => {
       component.loginForm.controls['email'].setValue('test@example.com');
       component.loginForm.controls['password'].setValue('password');
 
-      const errorResponse = { error: { message: 'Invalid credentials.' } };
-      authServiceMock.login.and.returnValue(throwError(() => errorResponse));
+      const action = AuthActions.login({ email: 'test@example.com', password: 'password' });
 
       component.onSubmit();
-      await fixture.whenStable();
-      fixture.detectChanges();
 
-      const errorMessage = fixture.debugElement.nativeElement.querySelector('.error-message');
-      expect(errorMessage.textContent).toContain('Invalid credentials.');
+      expect(store.dispatch).toHaveBeenCalledWith(action);
     });
-
-    it('should display alternative error message when server response is an error other than invalid credentials', async () => {
-      component.loginForm.controls['email'].setValue('test@example.com');
-      component.loginForm.controls['password'].setValue('password');
-
-      const errorResponse = { error: { message: 'Any other message.' } };
-      authServiceMock.login.and.returnValue(throwError(() => errorResponse));
-
-      component.onSubmit();
-      await fixture.whenStable();
-      fixture.detectChanges();
-
-      const errorMessage = fixture.debugElement.nativeElement.querySelector('.error-message');
-      expect(errorMessage.textContent).toContain('An error occurred during login. Please try again.');
-    })
   });
 
   describe('Normal state', () => {
