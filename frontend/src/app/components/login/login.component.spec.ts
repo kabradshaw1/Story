@@ -2,16 +2,17 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoginComponent } from './login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { Store, MemoizedSelector } from '@ngrx/store';
-import { provideMockStore } from '@ngrx/store/testing';
+
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import * as AuthActions from '../../store/actions/auth.actions';
-import { AuthState, initialAuthState } from '../../store/state/auth.state';
+
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
-  let store: Store;
-  let mockErrorSelector: MemoizedSelector<AuthState, string | null>
+  let store: MockStore;
+  // let mockErrorSelector: MemoizedSelector<AuthState, string | null>
+  const initialAuthState = { error: null }
 
   beforeEach(async () => {
 
@@ -21,7 +22,7 @@ describe('LoginComponent', () => {
       providers: [provideMockStore({ initialState: initialAuthState })]
     }).compileComponents();
 
-    store = TestBed.inject(Store);
+    store = TestBed.inject(MockStore);
     spyOn(store, 'dispatch').and.callThrough();
 
     // mockErrorSelector = store.overrideSelector(fromAuth.selectError, null);
@@ -113,6 +114,33 @@ describe('LoginComponent', () => {
   });
 
   describe('on form submit', () => {
+    describe('error messages', () => {
+
+      it('givenErrorMessage_whenStateChanges_thenDisplayInvalidCredentials', () => {
+        store.setState({ errorMessage: 'Invalid credentials.' });  // Set the state
+        fixture.detectChanges();  // Apply changes
+
+        const errorMessage = fixture.debugElement.nativeElement.querySelector('.error-message');
+        expect(errorMessage.textContent).toContain('Invalid credentials.');
+      });
+//should display a generic error message for other errors
+      it('', () => {
+        store.setState({ errorMessage: 'Some random error.' });  // Set the state
+        fixture.detectChanges();  // Apply changes
+
+        const errorMessage = fixture.debugElement.nativeElement.querySelector('.error-message');
+        expect(errorMessage.textContent).toContain('An error occurred during login. Please try again.');
+      });
+//should not display any error message when errorMessage is null
+      it('', () => {
+        store.setState({ errorMessage: null });  // Set the state
+        fixture.detectChanges();  // Apply changes
+
+        const errorMessage = fixture.debugElement.nativeElement.querySelector('.error-message');
+        expect(errorMessage).toBeNull();
+      });
+    });
+
 
     it('should bind input values to the loginForm controls', () => {
       // Set values in the HTML inputs
@@ -136,9 +164,7 @@ describe('LoginComponent', () => {
 
       expect(emailInput.value).toEqual('newtest@example.com');
       expect(passwordInput.value).toEqual('newtestpassword');
-  });
-
-
+    });
 
     it('should show a loading indicator when logging in', () => {
       component.loading = true;
