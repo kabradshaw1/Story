@@ -4,7 +4,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { Store, MemoizedSelector } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
-import * as fromAuth from '../../services/auth.service';
 import * as AuthActions from '../../store/actions/auth.actions';
 import { AuthState, initialAuthState } from '../../store/state/auth.state';
 
