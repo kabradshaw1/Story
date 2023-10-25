@@ -66,7 +66,7 @@ describe('LoginComponent', () => {
       expect(emailError.textContent).toContain('Email is required');
     });
 
-    it('givenInvalidEmail_whenEmailIsEntered_thenReturnErrorMessage', () => {
+    it('givenInvalidEmail_whenEmailIsEntered_thenReturnerror', () => {
       component.loginForm.controls['email'].setValue('plainaddress');
       component.loginForm.controls['email'].markAsTouched();
 
@@ -75,7 +75,7 @@ describe('LoginComponent', () => {
       expect(emailError.textContent).toContain('This email is not a valid format.');
     });
 
-    it('givenNoPassword_whenBlankPasswordIsEntenered_thenReturnErrorMessage', () => {
+    it('givenNoPassword_whenBlankPasswordIsEntenered_thenReturnerror', () => {
       component.loginForm.controls['password'].setValue('');
       component.loginForm.controls['password'].markAsTouched();
 
@@ -116,28 +116,28 @@ describe('LoginComponent', () => {
   describe('on form submit', () => {
     describe('error messages', () => {
 
-      it('givenErrorMessage_whenStateChanges_thenDisplayInvalidCredentials', () => {
-        store.setState({ errorMessage: 'Invalid credentials.' });  // Set the state
+      it('givenError_whenStateChanges_thenDisplayInvalidCredentials', () => {
+        store.setState({ error: 'Invalid credentials.' });  // Set the state
         fixture.detectChanges();  // Apply changes
 
-        const errorMessage = fixture.debugElement.nativeElement.querySelector('.error-message');
-        expect(errorMessage.textContent).toContain('Invalid credentials.');
+        const error = fixture.debugElement.nativeElement.querySelector('.error-message');
+        expect(error.textContent).toContain('Invalid credentials.');
       });
-//should display a generic error message for other errors
-      it('', () => {
-        store.setState({ errorMessage: 'Some random error.' });  // Set the state
+
+      it('givenError_whenStateChanges_thenThisplayGenericError', () => {
+        store.setState({ error: 'Some random error.' });  // Set the state
         fixture.detectChanges();  // Apply changes
 
-        const errorMessage = fixture.debugElement.nativeElement.querySelector('.error-message');
-        expect(errorMessage.textContent).toContain('An error occurred during login. Please try again.');
+        const error = fixture.debugElement.nativeElement.querySelector('.error-message');
+        expect(error.textContent).toContain('An error occurred during login. Please try again.');
       });
-//should not display any error message when errorMessage is null
-      it('', () => {
-        store.setState({ errorMessage: null });  // Set the state
+
+      it('givenNoError_whenStateChange_thenDoNotDisplayError', () => {
+        store.setState({ error: null });  // Set the state
         fixture.detectChanges();  // Apply changes
 
-        const errorMessage = fixture.debugElement.nativeElement.querySelector('.error-message');
-        expect(errorMessage).toBeNull();
+        const error = fixture.debugElement.nativeElement.querySelector('.error-message');
+        expect(error).toBeNull();
       });
     });
 
