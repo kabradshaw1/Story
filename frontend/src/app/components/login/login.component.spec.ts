@@ -34,7 +34,7 @@ describe('LoginComponent', () => {
 
   afterEach(() => {
     component.loading = false; // Reset the loading state
-    component.message = ''; // Reset any messages
+
   });
 
   it('should create', () => {

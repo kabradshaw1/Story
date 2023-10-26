@@ -1,3 +1,3 @@
-import { AuthState } from "../state/auth.state";
+import AppState from "../state/app.state";
 
-export const selectAuthError = (state: AuthState) => state.error;
+export const selectAuthError = (state: AppState) => state.auth.error;
