@@ -64,7 +64,9 @@
           Submit
         </button>
         <div *ngIf="loading" class="loading-spinner"></div>
-        <label class="mr-3 error-message">{{ message }}</label>
+        <div *ngIf="error$ | async as error">
+          {{ error }}
+        </div>
       </div>
     </form>
   </div>

@@ -1,16 +1,24 @@
-import { Action } from "@ngrx/store";
+import { createReducer, on, Action } from '@ngrx/store';
+import { authSuccess, authFailure } from '../actions/auth.actions';
+import { AuthState, initialAuthState } from '../state/auth.state';
 
-export interface AuthState {
-  accessToken: string | null;
-}
+export const authReducer = createReducer(
+  initialAuthState,
 
-export const initialState: AuthState = {
-  accessToken: null,
-};
+  on(authSuccess, (state, { accessToken }) => ({
+    ...state,
+    accessToken,
+    error: null
+  })),
 
-export function authReducer(state = initialState, action: Action): AuthState {
-  switch (action.type) {
-    default:
-      return state;
-  }
+  on(authFailure, (state, { error }) => ({
+    ...state,
+    accessToken: null,
+    error
+  }))
+);
+
+// To ensure type-safety, use a default exported function to handle the actual reducer call
+export default function reducer(state: AuthState | undefined, action: Action) {
+  return authReducer(state, action);
 }

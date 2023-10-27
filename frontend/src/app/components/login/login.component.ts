@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/services/auth.service';
+import { Store } from '@ngrx/store';
+import * as AuthActions from '../../store/actions/auth.actions';
+import { selectAuthError } from 'src/app/store/selectors/auth.selector';
+import AppState from 'src/app/store/state/app.state';
 
 @Component({
   selector: 'app-login',
@@ -9,12 +12,11 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class LoginComponent  {
   loginForm: FormGroup;
-  message = '';
   loading = false;
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService
+    private store: Store<AppState>
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -22,26 +24,12 @@ export class LoginComponent  {
     });
     }
 
+  error$ = this.store.select(selectAuthError);
 
-  onSubmit(): Promise<void> {
-    if (this.loginForm.invalid) return Promise.resolve();
+  onSubmit(): void {
+    if (this.loginForm.invalid) return;
 
-    this.loading = true;
     const { email, password } = this.loginForm.value;
-
-    return new Promise((resolve) => {
-      this.authService.login(email, password).subscribe({
-        next: () => resolve(),
-        error: (err) => {
-          this.loading = false;
-
-          this.message = err?.error?.message === 'Invalid credentials.'
-            ? 'Invalid credentials.'
-            : 'An error occurred during login. Please try again.';
-          resolve();
-        }
-      });
-    });
+    this.store.dispatch(AuthActions.login({ email, password }));
   }
-
 }

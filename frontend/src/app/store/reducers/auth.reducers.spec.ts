@@ -1,23 +1,43 @@
-import { TestBed } from '@angular/core/testing';
-import { Store } from '@ngrx/store';
-import { LoginComponent } from 'src/app/components/login/login.component';
+import { AuthState, initialAuthState } from "../state/auth.state";
+import * as AuthActions from '../actions/auth.actions';
+import authReducer from "./auth.reducers";
 
-// describe('LoginComponent', () => {
-//   let storeMock;
+describe('Auth Reducer', () => {
+  it('givenUnknownAction_whenReducerCalled_thenNoStateChange', () => {
+    // This also servers to check that the inital state is set to
+    const action = { type: 'UNKNOWN' };
+    const state = authReducer(initialAuthState, action);
 
-//   beforeEach(async () => {
-//     storeMock = {
-//       select: jasmine.createSpy('select'),
-//       dispatch: jasmine.createSpy('dispatch')
-//     };
+    expect(state).toBe(initialAuthState);
+  });
 
-//     await TestBed.configureTestingModule({
-//       declarations: [LoginComponent],
-//       providers: [
-//         { provide: Store, useValue: storeMock }
-//       ]
-//     }).compileComponents();
-//   });
+  it('givenSuccess_whenReducerCalled_thenUpdateState', () => {
+    const initialStateWithError: AuthState = {
+      accessToken: null,
+      error: 'Some initial error'
+    };
 
-//   // ... other tests ...
-// });
+    const action = AuthActions.authSuccess({ accessToken: 'test-access-token' });
+    const state = authReducer(initialStateWithError, action);
+
+    expect(state.accessToken).toBe('test-access-token');
+    expect(state.error).toBe(null); // Check that error is reset to null
+  });
+
+  it('givenFailure_whenReducerCalled_thenUpdateState', () => {
+    const initialStateWithToken: AuthState = {
+      accessToken: 'some-access-token',
+      error: null
+    };
+
+    const action = AuthActions.authFailure({ error: 'Some error message' });
+    // {
+    //   type: '[Auth] Failure',
+    //   payload: { error: 'Some error message' }
+    // };
+    const state = authReducer(initialStateWithToken, action);
+
+    expect(state.accessToken).toBe(null); // Check that token is reset to null
+    expect(state.error).toBe('Some error message');
+  });
+})

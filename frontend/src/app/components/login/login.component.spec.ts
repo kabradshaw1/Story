@@ -1,33 +1,40 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AuthService } from '../../services/auth.service';
 import { LoginComponent } from './login.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { throwError } from 'rxjs';
 import { By } from '@angular/platform-browser';
+
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import * as AuthActions from '../../store/actions/auth.actions';
 
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
-  let authServiceMock: jasmine.SpyObj<AuthService>
+  let store: MockStore;
+  // let mockErrorSelector: MemoizedSelector<AuthState, string | null>
+  const initialAuthState = { error: null }
 
   beforeEach(async () => {
-    authServiceMock = jasmine.createSpyObj('AuthService', ['login']);
 
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
       declarations: [LoginComponent],
-      providers: [{ provide: AuthService, useValue: authServiceMock }]
+      providers: [provideMockStore({ initialState: initialAuthState })]
     }).compileComponents();
 
+    store = TestBed.inject(MockStore);
+    spyOn(store, 'dispatch').and.callThrough();
+
+    // mockErrorSelector = store.overrideSelector(fromAuth.selectError, null);
+
     fixture = TestBed.createComponent(LoginComponent);
-    fixture.detectChanges();
     component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   afterEach(() => {
     component.loading = false; // Reset the loading state
-    component.message = ''; // Reset any messages
+
   });
 
   it('should create', () => {
@@ -59,7 +66,7 @@ describe('LoginComponent', () => {
       expect(emailError.textContent).toContain('Email is required');
     });
 
-    it('givenInvalidEmail_whenEmailIsEntered_thenReturnErrorMessage', () => {
+    it('givenInvalidEmail_whenEmailIsEntered_thenReturnerror', () => {
       component.loginForm.controls['email'].setValue('plainaddress');
       component.loginForm.controls['email'].markAsTouched();
 
@@ -68,7 +75,7 @@ describe('LoginComponent', () => {
       expect(emailError.textContent).toContain('This email is not a valid format.');
     });
 
-    it('givenNoPassword_whenBlankPasswordIsEntenered_thenReturnErrorMessage', () => {
+    it('givenNoPassword_whenBlankPasswordIsEntenered_thenReturnerror', () => {
       component.loginForm.controls['password'].setValue('');
       component.loginForm.controls['password'].markAsTouched();
 
@@ -107,6 +114,33 @@ describe('LoginComponent', () => {
   });
 
   describe('on form submit', () => {
+    describe('error messages', () => {
+
+      it('givenError_whenStateChanges_thenDisplayInvalidCredentials', () => {
+        store.setState({ error: 'Invalid credentials.' });  // Set the state
+        fixture.detectChanges();  // Apply changes
+
+        const error = fixture.debugElement.nativeElement.querySelector('.error-message');
+        expect(error.textContent).toContain('Invalid credentials.');
+      });
+
+      it('givenError_whenStateChanges_thenThisplayGenericError', () => {
+        store.setState({ error: 'Some random error.' });  // Set the state
+        fixture.detectChanges();  // Apply changes
+
+        const error = fixture.debugElement.nativeElement.querySelector('.error-message');
+        expect(error.textContent).toContain('An error occurred during login. Please try again.');
+      });
+
+      it('givenNoError_whenStateChange_thenDoNotDisplayError', () => {
+        store.setState({ error: null });  // Set the state
+        fixture.detectChanges();  // Apply changes
+
+        const error = fixture.debugElement.nativeElement.querySelector('.error-message');
+        expect(error).toBeNull();
+      });
+    });
+
 
     it('should bind input values to the loginForm controls', () => {
       // Set values in the HTML inputs
@@ -130,9 +164,7 @@ describe('LoginComponent', () => {
 
       expect(emailInput.value).toEqual('newtest@example.com');
       expect(passwordInput.value).toEqual('newtestpassword');
-  });
-
-
+    });
 
     it('should show a loading indicator when logging in', () => {
       component.loading = true;
@@ -155,35 +187,16 @@ describe('LoginComponent', () => {
       expect(spinner).toBeNull();  // It should be gone
     });
 
-    it('should display invalid credentials when server returns invalid credentials', async () => {
+    it('givenValidCredentials_whenOnSubmitCalled_thenDispatchLogin', () => {
       component.loginForm.controls['email'].setValue('test@example.com');
       component.loginForm.controls['password'].setValue('password');
 
-      const errorResponse = { error: { message: 'Invalid credentials.' } };
-      authServiceMock.login.and.returnValue(throwError(() => errorResponse));
+      const action = AuthActions.login({ email: 'test@example.com', password: 'password' });
 
       component.onSubmit();
-      await fixture.whenStable();
-      fixture.detectChanges();
 
-      const errorMessage = fixture.debugElement.nativeElement.querySelector('.error-message');
-      expect(errorMessage.textContent).toContain('Invalid credentials.');
+      expect(store.dispatch).toHaveBeenCalledWith(action);
     });
-
-    it('should display alternative error message when server response is an error other than invalid credentials', async () => {
-      component.loginForm.controls['email'].setValue('test@example.com');
-      component.loginForm.controls['password'].setValue('password');
-
-      const errorResponse = { error: { message: 'Any other message.' } };
-      authServiceMock.login.and.returnValue(throwError(() => errorResponse));
-
-      component.onSubmit();
-      await fixture.whenStable();
-      fixture.detectChanges();
-
-      const errorMessage = fixture.debugElement.nativeElement.querySelector('.error-message');
-      expect(errorMessage.textContent).toContain('An error occurred during login. Please try again.');
-    })
   });
 
   describe('Normal state', () => {

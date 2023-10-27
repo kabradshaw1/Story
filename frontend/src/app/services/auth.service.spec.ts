@@ -45,7 +45,7 @@ describe('AuthService', () => {
       req.flush(mockResponse);
 
       expect(mockDispatch).toHaveBeenCalledWith({
-        type: '[Auth] Login Success',
+        type: '[Auth] Success',
         payload: mockResponse.accessToken
       });
     });
@@ -70,14 +70,87 @@ describe('AuthService', () => {
       req.flush('Invalid credentials', { status: 401, statusText: 'UNAUTHORIZED' });
 
       expect(mockDispatch).toHaveBeenCalledWith({
-        type: '[Auth] Login Failure',
+        type: '[Auth] Failure',
         payload: 'UNAUTHORIZED'
       });
     });
   });
   describe('register', () => {
     it('givenValidCredentials_whenRegister_thenDispatchRegisterSuccess', () => {
+      const mockResponse = { accessToken: 'mock-access-token' };
+      const registerDetails = { email: 'test@example.com', password: 'password', username: 'Tester' };
 
+      service.register(registerDetails.username, registerDetails.password, registerDetails.email).subscribe();
+
+      const req = httpMock.expectOne('http://localhost:8080/api/register/');
+      expect(req.request.method).toBe('POST');
+      req.flush(mockResponse);
+
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: '[Auth] Success',
+        payload: mockResponse.accessToken
+      })
     });
+
+    it('givenInvalidCredentials_whenRegister_thenHandleError', () => {
+      const registerDetails = { email: 'existing@example.com', username: 'ExistingUser', password: 'password' };
+
+      service.register(registerDetails.username, registerDetails.password, registerDetails.email).subscribe({
+        next: () => fail('Expected an error, but got a successful response.'),
+        error: error => expect(error.error).toBe('An error message')
+      });
+
+      const req = httpMock.expectOne(`http://localhost:8080/api/register/`);
+      expect(req.request.method).toBe('POST');
+
+      req.flush('An error message', { status: 400, statusText: 'BAD REQUEST' });
+
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: '[Auth] Failure',
+        payload: 'BAD REQUEST'
+      });
+    });
+
+
+  });
+
+  describe('refresh', () => {
+    it('givenValidRefreshToken_whenCalled_thenHandlesSuccessfulRequest', () => {
+      const mockResponse = { accessToken: 'new-mock-access-token' };
+
+      // Call the refresh method
+      service.refresh().subscribe(response => {
+        expect(response).toEqual(mockResponse);
+      });
+
+      // Expect that the correct request method and URL were used.
+      const req = httpMock.expectOne('http://localhost:8080/api/refresh/');
+      expect(req.request.method).toBe('POST');
+
+      // Respond with mock data
+      req.flush(mockResponse);
+
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: '[Auth] Success',
+        payload: mockResponse.accessToken
+      });
+    });
+
+    it('givenInvalidRefreshToken_whenCalled_thenHandlesFailedRequest', () => {
+      service.refresh().subscribe({
+        next: () => fail('Expected an error, but got a successful response.'),
+        error: error => expect(error.error).toBe('An error message')
+      });
+
+      const req = httpMock.expectOne(`http://localhost:8080/api/refresh/`);
+      expect(req.request.method).toBe('POST');
+
+      req.flush('An error message', { status: 400, statusText: 'BAD REQUEST' });
+
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: '[Auth] Failure',
+        payload: 'BAD REQUEST'
+      });
+    })
   })
 });

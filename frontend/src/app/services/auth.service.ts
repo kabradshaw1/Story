@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
 import { Observable, catchError, tap, throwError } from 'rxjs';
 import { environment } from '../environment/environment';
+import { AuthState } from '../store/state/auth.state';
 
 interface SuccessResponse {
   accessToken: string;
@@ -11,10 +12,6 @@ interface SuccessResponse {
 interface ErrorResponse {
   status: number;
   error: string;
-}
-
-interface AppState {
-  auth: { accessToken: string | null }
 }
 
 type AuthResponse = SuccessResponse | ErrorResponse;
@@ -26,36 +23,68 @@ type AuthResponse = SuccessResponse | ErrorResponse;
 export class AuthService {
 
   private readonly loginUrl = `${environment.apiUrl}login/`;
-
   private readonly registerUrl =  `${environment.apiUrl}register/`;
+  private readonly refreshUrl =  `${environment.apiUrl}refresh/`;
+
   constructor(
     private http: HttpClient,
-    private store: Store<AppState>
+    private store: Store<AuthState>
   ) { }
 
   login(password: string, email: string): Observable<AuthResponse> {
     const credentials = { email, password };
 
     return this.http.post<AuthResponse>(this.loginUrl, credentials)
-    .pipe(
-      tap(response => {
-        if (isSuccessResponse(response)) {
-          this.store.dispatch({
-            type: '[Auth] Login Success',
-            payload: response.accessToken
-          });
-        }
-      }),
-      catchError(error => {
-        this.store.dispatch({ type: '[Auth] Login Failure', payload: error.statusText });
-        return throwError(() => error);
-      })
-    );
+      .pipe(
+        tap(response => {
+          if (isSuccessResponse(response)) {
+            this.store.dispatch({
+              type: '[Auth] Success',
+              payload: response.accessToken
+            });
+          }
+        }),
+        catchError(error => {
+          this.store.dispatch({ type: '[Auth] Failure', payload: error.statusText });
+          return throwError(() => error);
+        })
+      );
   };
 
   register(password: string, email: string, username: string): Observable<AuthResponse> {
     const credentials = { email, password, username }
     return this.http.post<AuthResponse>(this.registerUrl, credentials)
+      .pipe(
+        tap(response => {
+          if (isSuccessResponse(response)) {
+            this.store.dispatch({
+              type: '[Auth] Success',
+              payload: response.accessToken
+            });
+          }
+        }),
+        catchError(error => {
+          this.store.dispatch({ type: '[Auth] Failure', payload: error.statusText });
+          return throwError(() => error);
+        })
+      );
+  }
+
+  refresh(): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(this.refreshUrl, {})
+      .pipe(
+        tap(response => {
+          if (isSuccessResponse(response))
+            this.store.dispatch({
+              type: '[Auth] Success',
+              payload: response.accessToken
+            })
+        }),
+        catchError(error => {
+          this.store.dispatch({ type: '[Auth] Failure', payload: error.statusText });
+          return throwError(() => error);
+        })
+      )
   }
 }
 
