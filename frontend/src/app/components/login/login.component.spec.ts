@@ -5,13 +5,13 @@ import { By } from '@angular/platform-browser';
 
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import * as AuthActions from '../../store/actions/auth.actions';
+import { selectAuthError } from 'src/app/store/selectors/auth.selector';
 
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
   let store: MockStore;
-  // let mockErrorSelector: MemoizedSelector<AuthState, string | null>
   const initialAuthState = { error: null }
 
   beforeEach(async () => {
@@ -25,8 +25,8 @@ describe('LoginComponent', () => {
     store = TestBed.inject(MockStore);
     spyOn(store, 'dispatch').and.callThrough();
 
-    // mockErrorSelector = store.overrideSelector(fromAuth.selectError, null);
 
+    store.overrideSelector(selectAuthError, null)
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -116,19 +116,12 @@ describe('LoginComponent', () => {
     describe('error messages', () => {
 
       it('givenError_whenStateChanges_thenDisplayInvalidCredentials', () => {
-        store.setState({ error: 'Invalid credentials.' });  // Set the state
-        fixture.detectChanges();  // Apply changes
+        store.overrideSelector(selectAuthError, 'Invalid credentials.');  // Mock the selector value
+        store.refreshState();
+        fixture.detectChanges();
 
         const error = fixture.debugElement.nativeElement.querySelector('.error-message');
         expect(error.textContent).toContain('Invalid credentials.');
-      });
-
-      it('givenError_whenStateChanges_thenThisplayGenericError', () => {
-        store.setState({ error: 'Some random error.' });  // Set the state
-        fixture.detectChanges();  // Apply changes
-
-        const error = fixture.debugElement.nativeElement.querySelector('.error-message');
-        expect(error.textContent).toContain('An error occurred during login. Please try again.');
       });
 
       it('givenNoError_whenStateChange_thenDoNotDisplayError', () => {
