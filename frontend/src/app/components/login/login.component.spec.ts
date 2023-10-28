@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoginComponent } from './login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import * as AuthActions from '../../store/actions/auth.actions';
 import { selectAuthError } from 'src/app/store/selectors/auth.selector';

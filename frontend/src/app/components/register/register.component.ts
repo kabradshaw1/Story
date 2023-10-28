@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/services/auth.service';
+import { Store } from '@ngrx/store';
+import * as AuthActions from '../../store/actions/auth.actions';
+import AppState from 'src/app/store/state/app.state';
+import { selectAuthError } from 'src/app/store/selectors/auth.selector';
 
 @Component({
   selector: 'app-register',
@@ -9,12 +12,11 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class RegisterComponent {
   registerForm: FormGroup;
-  message = '';
   loading = false;
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService
+    private store: Store<AppState>
   ) {
       this.registerForm = this.fb.group({
         email: ['', [Validators.required, Validators.email]],
@@ -23,31 +25,12 @@ export class RegisterComponent {
       })
     }
 
-  onSubmit(): Promise<void> {
-    if (this.registerForm.invalid) return Promise.resolve();
+  error$ = (this.store.select as any)(selectAuthError);
 
-    this.loading = true;
-    const { email, password, username } = this.registerForm.value;
+  onSubmit(): void {
+    if (this.registerForm.invalid) return;
 
-    return new Promise((resolve) => {
-      this.authService.register(email, username, password).subscribe({
-        next: () => resolve(),
-        error: (err) => {
-          this.loading = false;
-          if (err && err.error && err.error.message) {
-            if(err.error.message.includes("Email already registered")) {
-              this.message = err.error.message;
-            } else if (err.error.message.includes("Username already registered")) {
-              this.message = err.error.message;
-            } else {
-              this.message = 'An error occurred during registration. Please try again.';
-            }
-          } else {
-            this.message = 'An error occurred during registration. Please try again.';
-          }
-          resolve();
-        }
-      })
-    })
+    const { email, password, username } = this.registerForm.value
+    this.store.dispatch(AuthActions.register({ email, password, username }))
   }
 }
