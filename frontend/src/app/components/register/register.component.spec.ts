@@ -1,15 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { RegisterComponent } from './register.component';
 import { AuthService } from 'src/app/services/auth.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { throwError } from 'rxjs';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { selectAuthError } from 'src/app/store/selectors/auth.selector';
+import * as AuthActions from '../../store/actions/auth.actions';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
   let authServiceMock: jasmine.SpyObj<AuthService>;
+  let store: MockStore;
+  const initialAuthState = { error: null }
 
   beforeEach(async () => {
     authServiceMock = jasmine.createSpyObj('AuthService', ['register']);
@@ -17,9 +20,10 @@ describe('RegisterComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
       declarations: [RegisterComponent],
-      providers: [{ provide: AuthService, useValue: authServiceMock }]
+      providers: [provideMockStore({ initialState: initialAuthState })]
     }).compileComponents();
 
+    store.overrideSelector(selectAuthError, null)
     fixture = TestBed.createComponent(RegisterComponent);
     fixture.detectChanges();
     component = fixture.componentInstance;
