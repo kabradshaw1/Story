@@ -24,7 +24,7 @@ export class LoginComponent  {
     });
     }
 
-  error$ = this.store.select(selectAuthError);
+  error$ = (this.store.select as any)(selectAuthError);
 
   onSubmit(): void {
     if (this.loginForm.invalid) return;

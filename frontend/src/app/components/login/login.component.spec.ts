@@ -115,7 +115,7 @@ describe('LoginComponent', () => {
   describe('on form submit', () => {
     describe('error messages', () => {
 
-      it('givenError_whenStateChanges_thenDisplayInvalidCredentials', () => {
+      it('givenError_whenStateChanges_thenDisplayErrorMessage', () => {
         store.overrideSelector(selectAuthError, 'Invalid credentials.');  // Mock the selector value
         store.refreshState();
         fixture.detectChanges();
