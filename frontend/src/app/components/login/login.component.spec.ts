@@ -34,7 +34,6 @@ describe('LoginComponent', () => {
 
   afterEach(() => {
     component.loading = false; // Reset the loading state
-
   });
 
   it('should create', () => {
