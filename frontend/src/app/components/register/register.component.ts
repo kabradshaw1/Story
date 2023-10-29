@@ -25,7 +25,7 @@ export class RegisterComponent {
       })
     }
 
-  error$ = (this.store.select as any)(selectAuthError);
+  error$ = this.store.select(selectAuthError);
 
   onSubmit(): void {
     if (this.registerForm.invalid) return;
