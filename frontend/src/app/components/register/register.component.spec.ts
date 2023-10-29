@@ -21,6 +21,9 @@ describe('RegisterComponent', () => {
       providers: [provideMockStore({ initialState: initialAuthState })]
     }).compileComponents();
 
+    store = TestBed.inject(MockStore)
+    spyOn(store, 'dispatch').and.callThrough();
+
     store.overrideSelector(selectAuthError, null)
     fixture = TestBed.createComponent(RegisterComponent);
     fixture.detectChanges();
@@ -156,55 +159,28 @@ describe('RegisterComponent', () => {
       expect(spinner).toBeNull();  // It should be gone
     });
 
-    it('givenExistingEmail_whenServerReturnsError_thenDisplayError', async () => {
-      // const email = 'test@example.com'
-      // component.registerForm.controls['email'].setValue(email);
-      // component.registerForm.controls['password'].setValue('password');
-      // component.registerForm.controls['username'].setValue('username');
+    describe('error messages', () => {
 
-      // const errorResponse = { error: { message: `Email already registered: ${email}`}}
-      // authServiceMock.register.and.returnValue(throwError(() => errorResponse));
+      it('givenError_whenStateChanges_thenDisplayErrorMessage', () => {
+        store.overrideSelector(selectAuthError, 'Invalid credentials.');  // Mock the selector value
+        store.refreshState();
+        fixture.detectChanges();
 
-      // component.onSubmit();
-      // await fixture.whenStable();
-      // fixture.detectChanges();
+        const error = fixture.debugElement.nativeElement.querySelector('.error-message');
+        expect(error.textContent).toContain('Invalid credentials.');
+      });
 
-      // const errorMessage = fixture.debugElement.query(By.css('.error-message')).nativeElement;
-      // expect(errorMessage.textContent.trim()).toContain(`Email already registered: ${email}`);
+      it('givenNoError_whenStateChange_thenDoNotDisplayError', () => {
+        store.setState({ error: null });  // Set the state
+        fixture.detectChanges();  // Apply changes
+
+        const error = fixture.debugElement.nativeElement.querySelector('.error-message');
+        expect(error).toBeNull();
+      });
     });
 
-    it('givenExistingUsername_whenServerReturnsError_thenDisplayError', async () => {
-      // const username = 'Tester'
-      // component.registerForm.controls['email'].setValue('test@example.com');
-      // component.registerForm.controls['password'].setValue('password');
-      // component.registerForm.controls['username'].setValue(username);
 
-      // const errorResponse = { error: { message: `Username already registered: ${username}`}}
-      // authServiceMock.register.and.returnValue(throwError(() => errorResponse));
 
-      // component.onSubmit();
-      // await fixture.whenStable();
-      // fixture.detectChanges();
-
-      // const errorMessage = fixture.debugElement.query(By.css('.error-message')).nativeElement;
-      // expect(errorMessage.textContent).toContain(`Username already registered: ${username}`);
-    });
-
-    it('givenOtherServerIssue_whenServerReturnsError_thenDisplayError', async () => {
-      // component.registerForm.controls['email'].setValue('test@example.com');
-      // component.registerForm.controls['password'].setValue('password');
-      // component.registerForm.controls['username'].setValue('username');
-
-      // const errorResponse = { error: { message: 'Any other message'}}
-      // authServiceMock.register.and.returnValue(throwError(() => errorResponse));
-
-      // component.onSubmit();
-      // await fixture.whenStable();
-      // fixture.detectChanges();
-
-      // const errorMessage = fixture.debugElement.query(By.css('.error-message')).nativeElement;
-      // expect(errorMessage.textContent).toContain('An error occurred during registration. Please try again.');
-    });
   });
 
   describe('Normal state', () => {
