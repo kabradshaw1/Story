@@ -4,7 +4,7 @@ import { Action } from "@ngrx/store";
 import { Observable, throwError } from "rxjs";
 import { AuthEffects } from "./auth.effects";
 import * as AuthActions from '../actions/auth.actions';
-import { AuthService } from "src/app/services/auth.service";
+import { AuthService } from "../../services/auth.service";
 import { cold, hot } from 'jasmine-marbles';
 
 describe('AuthEffect', () => {
