@@ -1,7 +1,7 @@
 import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from '@ngrx/effects/testing'
 import { Action } from "@ngrx/store";
-import { Observable, of, throwError } from "rxjs";
+import { Observable, throwError } from "rxjs";
 import { AuthEffects } from "./auth.effects";
 import * as AuthActions from '../actions/auth.actions';
 import { AuthService } from "src/app/services/auth.service";
@@ -40,6 +40,22 @@ describe('AuthEffect', () => {
 
       expect(effects.login$).toBeObservable(expected);
     });
+
+    it('givenLoginAction_whenServiceFails_thenDispatchAuthFailure', () => {
+      const credentials = { email: 'test@email.com', password: 'password123' };
+      const action = AuthActions.login(credentials);
+      const completion = AuthActions.authFailure({ error: 'Failed' });
+
+      actions$ = hot('-a', { a: action });
+      authService.login.and.returnValue(throwError(() => new Error('Failed')));
+
+      const expected = cold('--c', { c: completion });
+
+      expect(effects.login$).toBeObservable(expected);
+    });
+  });
+
+  describe('register$', () => {
+
   })
-  // authService.login.and.returnValue(throwError(() => Error('Failed')));
 });

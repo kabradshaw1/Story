@@ -4,17 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable, catchError, tap, throwError } from 'rxjs';
 import { environment } from '../environment/environment';
 import { AuthState } from '../store/state/auth.state';
-
-interface SuccessResponse {
-  accessToken: string;
-}
-
-interface ErrorResponse {
-  status: number;
-  error: string;
-}
-
-type AuthResponse = SuccessResponse | ErrorResponse;
+import { AuthResponse, SuccessResponse } from '../types';
 
 @Injectable({
   providedIn: 'root'
