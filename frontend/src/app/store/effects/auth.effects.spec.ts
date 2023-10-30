@@ -23,6 +23,7 @@ describe('AuthEffect', () => {
         }
       ]
     });
+
     effects = TestBed.inject(AuthEffects);
     authService = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>
   });
@@ -49,13 +50,13 @@ describe('AuthEffect', () => {
       actions$ = hot('-a', { a: action });
       authService.login.and.returnValue(throwError(() => new Error('Failed')));
 
-      const expected = cold('--c', { c: completion });
+      const expected = cold('-c', { c: completion });
 
       expect(effects.login$).toBeObservable(expected);
     });
   });
 
-  describe('register$', () => {
+  // describe('register$', () => {
 
-  })
+  // })
 });

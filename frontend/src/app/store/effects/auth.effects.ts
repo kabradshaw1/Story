@@ -20,7 +20,7 @@ export class AuthEffects {
                 return AuthActions.authFailure({ error: response.error });
               }
             }),
-            catchError(error => of(AuthActions.authFailure({ error: error.message})))
+            catchError(error => of(AuthActions.authFailure({ error: error.message })))
           )
         )
     )
