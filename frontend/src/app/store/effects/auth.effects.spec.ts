@@ -21,7 +21,7 @@ describe('AuthEffect', () => {
         provideMockActions(() => actions$),
         {
           provide: AuthService,
-          useValue: jasmine.createSpyObj('AuthService', ['login'])
+          useValue: jasmine.createSpyObj('AuthService', ['login', 'register'])
         },
         {
           provide: Router,
@@ -106,5 +106,18 @@ describe('AuthEffect', () => {
       expect(effects.register$).toBeObservable(expected);
       expect(router.navigate).toHaveBeenCalledWith(['/home']);
     });
-  })
+
+    it('givenRegisterAction_whenServiceFails_thenDispatchAuthFailure', () => {
+      const credentials = { email: 'test@email.com', password: 'password123', username: 'tester' };
+      const action = AuthActions.register(credentials);
+      const completion = AuthActions.authFailure({ error: 'Failed' });
+
+      actions$ = hot('-a', { a: action });
+      authService.register.and.returnValue(throwError(() => new Error('Failed')));
+
+      const expected = cold('-c', { c: completion });
+
+      expect(effects.register$).toBeObservable(expected);
+    });
+  });
 });
