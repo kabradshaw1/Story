@@ -6,11 +6,13 @@ import { AuthEffects } from "./auth.effects";
 import * as AuthActions from '../actions/auth.actions';
 import { AuthService } from "../../services/auth.service";
 import { cold, hot } from 'jasmine-marbles';
+import { Router } from "@angular/router";
 
 describe('AuthEffect', () => {
   let effects: AuthEffects;
   let actions$: Observable<Action>;
   let authService: jasmine.SpyObj<AuthService>;
+  let router: jasmine.SpyObj<Router>
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -20,12 +22,17 @@ describe('AuthEffect', () => {
         {
           provide: AuthService,
           useValue: jasmine.createSpyObj('AuthService', ['login'])
+        },
+        {
+          provide: Router,
+          useValue: { navigate: jasmine.createSpy('navigate') }
         }
       ]
     });
 
     effects = TestBed.inject(AuthEffects);
     authService = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>
+    router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
   });
 
   describe('login$', () => {
@@ -40,6 +47,7 @@ describe('AuthEffect', () => {
       const expected = cold('--c', { c: completion });
 
       expect(effects.login$).toBeObservable(expected);
+      expect(router.navigate).toHaveBeenCalledWith(['/home']);
     });
 
     it('givenLoginAction_whenServiceFails_thenDispatchAuthFailure', () => {
@@ -54,6 +62,34 @@ describe('AuthEffect', () => {
 
       expect(effects.login$).toBeObservable(expected);
     });
+
+    it('givenLoginAction_whenErrorReturned_thenDispatchAuthService', () => {
+      const credentials = { email: 'test@email.com', password: 'password123' };
+      const action = AuthActions.login(credentials);
+      const completion = AuthActions.authFailure({ error: 'testError' });
+
+      actions$ = hot('-a', { a: action });
+      authService.login.and.returnValue(cold('-b', { b: { error: 'testError' } }));
+
+      const expected = cold('--c', { c: completion });
+
+      expect(effects.login$).toBeObservable(expected);
+    });
+
+    it('givenLoginAction_whenNoErrorOrKeyReturned_thenDispatchUnknownError', () => {
+      const credentials = { email: 'test@email.com', password: 'password123' };
+      const action = AuthActions.login(credentials);
+      const completion = AuthActions.authFailure({ error: "An unknown error occurred. Please try again." });
+
+      actions$ = hot('-a', { a: action });
+      // Simulate a response that has neither accessToken nor error.
+      authService.login.and.returnValue(cold('-b', { b: {} }));
+
+      const expected = cold('--c', { c: completion });
+
+      expect(effects.login$).toBeObservable(expected);
+    });
+
   });
 
   // describe('register$', () => {
