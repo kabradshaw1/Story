@@ -92,7 +92,19 @@ describe('AuthEffect', () => {
 
   });
 
-  // describe('register$', () => {
+  describe('register$', () => {
+    it('givenRegisterAction_whenServiceSucceeds_thenDispatchAuthServiceAndRoute', () => {
+      const credentials = { email: 'test@example.com', password:'testpass', username: 'tester' };
+      const action = AuthActions.register(credentials);
+      const completion = AuthActions.authSuccess({ accessToken: 'testToken' });
 
-  // })
+      actions$ = hot('-a', { a: action });
+      authService.register.and.returnValue(cold('-b', { b: { accessToken: 'testToken' } }));
+
+      const expected = cold('--c', { c: completion });
+
+      expect(effects.register$).toBeObservable(expected);
+      expect(router.navigate).toHaveBeenCalledWith(['/home']);
+    });
+  })
 });
