@@ -21,7 +21,7 @@ describe('AuthEffect', () => {
         provideMockActions(() => actions$),
         {
           provide: AuthService,
-          useValue: jasmine.createSpyObj('AuthService', ['login', 'register'])
+          useValue: jasmine.createSpyObj('AuthService', ['login', 'register', 'refresh'])
         },
         {
           provide: Router,
@@ -50,7 +50,7 @@ describe('AuthEffect', () => {
       expect(router.navigate).toHaveBeenCalledWith(['/home']);
     });
 
-    it('givenLoginAction_whenServiceFails_thenDispatchAuthFailure', () => {
+    it('givenLoginAction_whenServiceFails_thenDispatchError', () => {
       const credentials = { email: 'test@email.com', password: 'password123' };
       const action = AuthActions.login(credentials);
       const completion = AuthActions.authFailure({ error: 'Failed' });
@@ -63,7 +63,7 @@ describe('AuthEffect', () => {
       expect(effects.login$).toBeObservable(expected);
     });
 
-    it('givenLoginAction_whenErrorReturned_thenDispatchAuthService', () => {
+    it('givenLoginAction_whenErrorReturned_thenDispatchError', () => {
       const credentials = { email: 'test@email.com', password: 'password123' };
       const action = AuthActions.login(credentials);
       const completion = AuthActions.authFailure({ error: 'testError' });
@@ -93,7 +93,7 @@ describe('AuthEffect', () => {
   });
 
   describe('register$', () => {
-    it('givenRegisterAction_whenServiceSucceeds_thenDispatchAuthServiceAndRoute', () => {
+    it('givenRegisterAction_whenServiceSucceeds_thenDispatchAccessTokenAndRoute', () => {
       const credentials = { email: 'test@example.com', password:'testpass', username: 'tester' };
       const action = AuthActions.register(credentials);
       const completion = AuthActions.authSuccess({ accessToken: 'testToken' });
@@ -107,7 +107,7 @@ describe('AuthEffect', () => {
       expect(router.navigate).toHaveBeenCalledWith(['/home']);
     });
 
-    it('givenRegisterAction_whenServiceFails_thenDispatchAuthFailure', () => {
+    it('givenRegisterAction_whenServiceFails_thenDispatchError', () => {
       const credentials = { email: 'test@email.com', password: 'password123', username: 'tester' };
       const action = AuthActions.register(credentials);
       const completion = AuthActions.authFailure({ error: 'Failed' });
@@ -120,7 +120,7 @@ describe('AuthEffect', () => {
       expect(effects.register$).toBeObservable(expected);
     });
 
-    it('givenRegisterAction_whenErrorReturned_thenDispatchAuthService', () => {
+    it('givenRegisterAction_whenErrorReturned_thenDispatchError', () => {
       const credentials = { email: 'test@email.com', password: 'password123', username: 'Tester' };
       const action = AuthActions.register(credentials);
       const completion = AuthActions.authFailure({ error: 'testError' });
@@ -147,4 +147,58 @@ describe('AuthEffect', () => {
       expect(effects.register$).toBeObservable(expected);
     });
   });
+
+  describe('refresh$', () => {
+    it('givenRefreshAction_whenServiceSuccessful_thenDispatchAccessToken', () => {
+      const action = AuthActions.refresh();
+      const completion = AuthActions.authSuccess({ accessToken: 'testToken' });
+
+      actions$ = hot('-a', { a: action });
+      authService.refresh.and.returnValue(cold('-b', { b: { accessToken: 'testToken' } }));
+
+      const expected = cold('--c', { c: completion });
+
+      expect(effects.refresh$).toBeObservable(expected);
+    });
+
+    it('givenRefreshAction_whenServiceFails_thenDispatchErrorAndRoute', () => {
+      const action = AuthActions.refresh();
+      const completion = AuthActions.authFailure({ error: 'Failed' });
+
+      actions$ = hot('-a', { a: action });
+      authService.refresh.and.returnValue(throwError(() => new Error('Failed')));
+
+      const expected = cold('-c', { c: completion });
+
+      expect(effects.refresh$).toBeObservable(expected);
+      expect(router.navigate).toHaveBeenCalledWith(['/login']);
+    });
+
+    it('givenRefreshAction_whenErrorReturned_thenDispatchErrorAndRoute', () => {
+      const action = AuthActions.refresh();
+      const completion = AuthActions.authFailure({ error: 'testError' });
+
+      actions$ = hot('-a', { a: action });
+      authService.refresh.and.returnValue(cold('-b', { b: { error: 'testError' } }));
+
+      const expected = cold('--c', { c: completion });
+
+      expect(effects.refresh$).toBeObservable(expected);
+      expect(router.navigate).toHaveBeenCalledWith(['/login']);
+    });
+
+    it('givenRefreshAction_whenNoErrorOrKeyReturned_thenDispatchUnknownErrorAndRoute', () => {
+      const action = AuthActions.refresh();
+      const completion = AuthActions.authFailure({ error: "An unknown error occurred. Please try again." });
+
+      actions$ = hot('-a', { a: action });
+      // Simulate a response that has neither accessToken nor error.
+      authService.refresh.and.returnValue(cold('-b', { b: {} }));
+
+      const expected = cold('--c', { c: completion });
+
+      expect(effects.refresh$).toBeObservable(expected);
+      expect(router.navigate).toHaveBeenCalledWith(['/login']);
+    });
+  })
 });

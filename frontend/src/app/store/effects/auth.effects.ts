@@ -33,6 +33,31 @@ export class AuthEffects {
     )
   );
 
+  refresh$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.refresh),
+      mergeMap(() =>
+        this.authService.refresh().pipe(
+          map((response: AuthResponse) => {
+            if ('accessToken' in response) {
+                return AuthActions.authSuccess({ accessToken: response.accessToken });
+            } else if ('error' in response) {
+                this.router.navigate(['/login']);
+                return AuthActions.authFailure({ error: response.error });
+            } else {
+                this.router.navigate(['/login']);
+                return AuthActions.authFailure({ error: "An unknown error occurred. Please try again." });
+            }
+          }),
+          catchError(error => {
+            this.router.navigate(['/login']);
+            return of(AuthActions.authFailure({ error: error.message || 'Error occurred while refreshing.' }));
+          })
+        )
+      )
+    )
+  )
+
   private handleAuthResponse() {
     return (source$: Observable<AuthResponse>) => source$.pipe(
       map(response => {
