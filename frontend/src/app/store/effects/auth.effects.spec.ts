@@ -36,7 +36,7 @@ describe('AuthEffect', () => {
   });
 
   describe('login$', () => {
-    it('givenLoginAction_whenServiceSucceeds_thenDispatchAuthService', () => {
+    it('givenLoginAction_whenServiceSucceeds_thenDispatchAuthServiceAndRoute', () => {
       const credentials = { email: 'test@email.com', password: 'password123' };
       const action = AuthActions.login(credentials);
       const completion = AuthActions.authSuccess({ accessToken: 'testToken' });
@@ -116,6 +116,33 @@ describe('AuthEffect', () => {
       authService.register.and.returnValue(throwError(() => new Error('Failed')));
 
       const expected = cold('-c', { c: completion });
+
+      expect(effects.register$).toBeObservable(expected);
+    });
+
+    it('givenRegisterAction_whenErrorReturned_thenDispatchAuthService', () => {
+      const credentials = { email: 'test@email.com', password: 'password123', username: 'Tester' };
+      const action = AuthActions.register(credentials);
+      const completion = AuthActions.authFailure({ error: 'testError' });
+
+      actions$ = hot('-a', { a: action });
+      authService.register.and.returnValue(cold('-b', { b: { error: 'testError' } }));
+
+      const expected = cold('--c', { c: completion });
+
+      expect(effects.register$).toBeObservable(expected);
+    });
+
+    it('givenRegisterAction_whenNoErrorOrKeyReturned_thenDispatchUnknownError', () => {
+      const credentials = { email: 'test@email.com', password: 'password123', username: 'Tester' };
+      const action = AuthActions.register(credentials);
+      const completion = AuthActions.authFailure({ error: "An unknown error occurred. Please try again." });
+
+      actions$ = hot('-a', { a: action });
+      // Simulate a response that has neither accessToken nor error.
+      authService.register.and.returnValue(cold('-b', { b: {} }));
+
+      const expected = cold('--c', { c: completion });
 
       expect(effects.register$).toBeObservable(expected);
     });
