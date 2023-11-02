@@ -1,7 +1,9 @@
-import { Component, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
+import { selectAuthToken } from 'src/app/store/selectors/auth.selector';
+import AppState from 'src/app/store/state/app.state';
+
 
 @Component({
   selector: 'app-header',
@@ -9,13 +11,11 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
-  // isLoggedIn: boolean;
-  // subscription: Subscription;
+ username$: Observable<string | null>
 
-  // constructor(private store: Store, private router: Router) {
-  //   this.subscription = this.store.select('auth').subscribe(authState => {
-  //     this.isLoggedIn = authState
-  //   })
-  // }
-
+ constructor(
+  private store: Store<AppState>
+ ) {
+  this.username$ = this.store.select(selectAuthToken);
+ }
 }

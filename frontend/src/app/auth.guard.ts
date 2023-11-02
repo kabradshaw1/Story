@@ -10,13 +10,13 @@ import { Observable, map } from "rxjs";
   providedIn: 'root'
 })
 export class PermissionService {
-  user$: Observable<string | null>;
+  token$: Observable<string | null>;
 
   constructor(
     private router: Router,
     private store: Store<AppState>
   ) {
-    this.user$ = this.store.select(selectAuthToken);
+    this.token$ = this.store.select(selectAuthToken);
   }
 
   decodeToken(token: string): any {
@@ -33,7 +33,7 @@ export class PermissionService {
   }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    return this.user$.pipe(
+    return this.token$.pipe(
       map(token => {
         if (token && !this.isTokenExpired(token)) {
           return true;
