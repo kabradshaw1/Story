@@ -10,12 +10,16 @@ import { Observable, map } from "rxjs";
   providedIn: 'root'
 })
 export class PermissionService {
+  user$: Observable<string | null>;
+
   constructor(
     private router: Router,
     private store: Store<AppState>
-  ) {}
+  ) {
+    this.user$ = this.store.select(selectAuthToken);
+  }
 
-  user$ = this.store.select(selectAuthToken);
+
 
   isTokenExpired(token: string): boolean {
     try {
@@ -32,7 +36,7 @@ export class PermissionService {
         if (token && !this.isTokenExpired(token)) {
           return true;
         } else {
-          this.router.parseUrl("/login");
+          this.router.navigateByUrl("/login");
           return false
         }
       })
