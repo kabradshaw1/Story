@@ -10,6 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
 import { authReducer } from './store/reducers/auth.reducers';
+import { ProtectedComponent } from './components/protected/protected.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { authReducer } from './store/reducers/auth.reducers';
     HeaderComponent,
     LoginComponent,
     RegisterComponent,
-    HomeComponent
+    HomeComponent,
+    ProtectedComponent
   ],
   imports: [
     BrowserModule,

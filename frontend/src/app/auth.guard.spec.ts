@@ -4,7 +4,6 @@ import { Store } from "@ngrx/store";
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
 import { of } from "rxjs";
 import AppState from "./store/state/app.state";
-import { selectAuthToken } from "./store/selectors/auth.selector";
 
 describe('PermissionsService', () => {
   let service: PermissionService;
@@ -14,7 +13,7 @@ describe('PermissionsService', () => {
   beforeEach(() => {
 
     mockStore = jasmine.createSpyObj('Store', ['select']);
-    mockRouter = jasmine.createSpyObj('Router', ['parseUrl']);
+    mockRouter = jasmine.createSpyObj('Router', ['navigateByUrl']);
 
     TestBed.configureTestingModule({
       providers: [
@@ -24,19 +23,22 @@ describe('PermissionsService', () => {
       ]
     });
 
+    const mockToken = 'VALID_MOCK_TOKEN';  // Placeholder since we're mocking decodeToken
+    mockStore.select.and.returnValue(of(mockToken));
+
     service = TestBed.inject(PermissionService);
+
+    // Mock jwtDecode behavior
+    spyOn(service, 'decodeToken').and.returnValue({ exp: Math.floor(Date.now() / 1000) + 3600 }); // Spy on the new decodeToken method
+  });
+
+  afterEach(() => {
+    mockStore.select.calls.reset();
   });
 
   it('givenTokenIsValid_whenCallToCanActivate_thenAllowNavigation', () => {
-    const mockToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0Ijo2MzA3MjAwMDB9.Gndt2aCi_IklJ-F5WugWm2_9e4Kit5nXBDxHDG3FatY';
-
-    // Mock the store's select method to return the mock token only when the specific selector is used
-    mockStore.select.and.callFake((selector: any) => {
-      if (selector === selectAuthToken) {
-        return of(mockToken);
-      }
-      throw new Error("Unexpected selector");
-    });
+    const mockToken = 'VALID_MOCK_TOKEN';  // you can use a placeholder here since we're mocking decodeToken
+    mockStore.select.and.returnValue(of(mockToken));
 
     const mockActivatedRouteSnapshot: ActivatedRouteSnapshot = {} as any;
     const mockRouterStateSnapshot: RouterStateSnapshot = {} as any;
@@ -46,5 +48,37 @@ describe('PermissionsService', () => {
     });
   });
 
+  it('givenNoToken_whenCallToCanActivate_thenDenyNavigation', () => {
+    mockStore.select.and.returnValue(of(null)); // Simulate no token
 
-})
+    const mockActivatedRouteSnapshot: ActivatedRouteSnapshot = {} as any;
+    const mockRouterStateSnapshot: RouterStateSnapshot = {} as any;
+
+    service.canActivate(mockActivatedRouteSnapshot, mockRouterStateSnapshot).subscribe(canActivate => {
+      expect(canActivate).toBe(false);
+    });
+  });
+
+  it('givenExpiredToken_whenCallToCanActivate_thenDenyNavigation', () => {
+    // Decoding will show that the token is expired
+    (service.decodeToken as jasmine.Spy).and.returnValue({ exp: Math.floor(Date.now() / 1000) - 3600 });
+
+    const mockActivatedRouteSnapshot: ActivatedRouteSnapshot = {} as any;
+    const mockRouterStateSnapshot: RouterStateSnapshot = {} as any;
+
+    service.canActivate(mockActivatedRouteSnapshot, mockRouterStateSnapshot).subscribe(canActivate => {
+      expect(canActivate).toBe(false);
+    });
+  });
+
+  it('givenUnauthorizedAccess_whenCallToCanActivate_thenRedirectToLoginPage', () => {
+    mockStore.select.and.returnValue(of(null)); // Simulate no token
+
+    const mockActivatedRouteSnapshot: ActivatedRouteSnapshot = {} as any;
+    const mockRouterStateSnapshot: RouterStateSnapshot = {} as any;
+
+    service.canActivate(mockActivatedRouteSnapshot, mockRouterStateSnapshot).subscribe(() => {
+      expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/login');
+    });
+  });
+});

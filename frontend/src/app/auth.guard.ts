@@ -19,11 +19,13 @@ export class PermissionService {
     this.user$ = this.store.select(selectAuthToken);
   }
 
-
+  decodeToken(token: string): any {
+    return jwtDecode(token); // Simply wrap the jwtDecode call
+  }
 
   isTokenExpired(token: string): boolean {
     try {
-      const decoded: any = jwtDecode(token);
+      const decoded: any = this.decodeToken(token); // Use the new method here
       return decoded.exp < Date.now() / 1000;
     } catch (err) {
       return true; // In case of any error, treat token as expired.
@@ -37,6 +39,7 @@ export class PermissionService {
           return true;
         } else {
           this.router.navigateByUrl("/login");
+          //probably want to add updating state to an error message here
           return false
         }
       })
