@@ -3,7 +3,7 @@ import { CanActivateFn, ActivatedRouteSnapshot, RouterStateSnapshot, Router } fr
 import { selectAuthToken } from "./store/selectors/auth.selector";
 import AppState from 'src/app/store/state/app.state';
 import { Store } from "@ngrx/store";
-import { jwtDecode }from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { Observable, map } from "rxjs";
 
 @Injectable({
