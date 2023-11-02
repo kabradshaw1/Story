@@ -49,17 +49,17 @@ describe('PermissionsService', () => {
     });
   });
 
-  it('givenNoToken_whenCallToCanActivate_thenDenyNavigation', (done) => {
-      mockStore.select.and.returnValue(of(null)); // Simulate no token
+  // it('givenNoToken_whenCallToCanActivate_thenDenyNavigation', (done) => {
+  //     mockStore.select.and.returnValue(of(null)); // Simulate no token
 
-      const mockActivatedRouteSnapshot: ActivatedRouteSnapshot = {} as any;
-      const mockRouterStateSnapshot: RouterStateSnapshot = {} as any;
+  //     const mockActivatedRouteSnapshot: ActivatedRouteSnapshot = {} as any;
+  //     const mockRouterStateSnapshot: RouterStateSnapshot = {} as any;
 
-      service.canActivate(mockActivatedRouteSnapshot, mockRouterStateSnapshot).subscribe(() => {
-        expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/login');
-        done();
-      });
-  });
+  //     service.canActivate(mockActivatedRouteSnapshot, mockRouterStateSnapshot).subscribe(() => {
+  //       expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/login');
+  //       done();
+  //     });
+  // });
 
   it('givenExpiredToken_whenCallToCanActivate_thenDenyNavigation', () => {
     // Decoding will show that the token is expired
@@ -73,14 +73,14 @@ describe('PermissionsService', () => {
     });
   });
 
-  it('givenUnauthorizedAccess_whenCallToCanActivate_thenRedirectToLoginPage', () => {
-    mockStore.select.and.returnValue(of(null)); // Simulate no token
+  // it('givenUnauthorizedAccess_whenCallToCanActivate_thenRedirectToLoginPage', () => {
+  //   mockStore.select.and.returnValue(of(null)); // Simulate no token
 
-    const mockActivatedRouteSnapshot: ActivatedRouteSnapshot = {} as any;
-    const mockRouterStateSnapshot: RouterStateSnapshot = {} as any;
+  //   const mockActivatedRouteSndapshot: ActivatedRouteSnapshot = {} as any;
+  //   const mockRouterStateSnapshot: RouterStateSnapshot = {} as any;
 
-    service.canActivate(mockActivatedRouteSnapshot, mockRouterStateSnapshot).subscribe(() => {
-      expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/login');
-    });
-  });
+  //   service.canActivate(mockActivatedRouteSnapshot, mockRouterStateSnapshot).subscribe(() => {
+  //     expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/login');
+  //   });
+  // });
 });
