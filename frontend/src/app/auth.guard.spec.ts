@@ -33,8 +33,9 @@ describe('PermissionsService', () => {
   });
 
   afterEach(() => {
-    mockStore.select.calls.reset();
+    mockRouter.navigateByUrl.calls.reset();
   });
+
 
   it('givenTokenIsValid_whenCallToCanActivate_thenAllowNavigation', () => {
     const mockToken = 'VALID_MOCK_TOKEN';  // you can use a placeholder here since we're mocking decodeToken
@@ -48,15 +49,16 @@ describe('PermissionsService', () => {
     });
   });
 
-  it('givenNoToken_whenCallToCanActivate_thenDenyNavigation', () => {
-    mockStore.select.and.returnValue(of(null)); // Simulate no token
+  it('givenNoToken_whenCallToCanActivate_thenDenyNavigation', (done) => {
+      mockStore.select.and.returnValue(of(null)); // Simulate no token
 
-    const mockActivatedRouteSnapshot: ActivatedRouteSnapshot = {} as any;
-    const mockRouterStateSnapshot: RouterStateSnapshot = {} as any;
+      const mockActivatedRouteSnapshot: ActivatedRouteSnapshot = {} as any;
+      const mockRouterStateSnapshot: RouterStateSnapshot = {} as any;
 
-    service.canActivate(mockActivatedRouteSnapshot, mockRouterStateSnapshot).subscribe(canActivate => {
-      expect(canActivate).toBe(false);
-    });
+      service.canActivate(mockActivatedRouteSnapshot, mockRouterStateSnapshot).subscribe(() => {
+        expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/login');
+        done();
+      });
   });
 
   it('givenExpiredToken_whenCallToCanActivate_thenDenyNavigation', () => {

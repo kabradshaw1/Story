@@ -27,48 +27,49 @@ public class JwtService {
   public String generateAccessToken(User user) {
 
     return JWT.create()
-      .withClaim("username", user.getUsername())
-      .withClaim("id", user.getId())
-      .withIssuer("backend")
-      .withExpiresAt(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION))
-      .sign(algorithm);
+        .withClaim("username", user.getUsername())
+        .withClaim("id", user.getId())
+        .withIssuer("backend")
+        .withExpiresAt(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION))
+        .sign(algorithm);
   }
 
   public String generateRefreshToken(User user) {
 
     return JWT.create()
-      .withClaim("username", user.getUsername())
-      .withClaim("id", user.getId())
-      .withIssuer("backend")
-      .withExpiresAt(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION))
-      .sign(algorithm);
+        .withClaim("username", user.getUsername())
+        .withClaim("id", user.getId())
+        .withIssuer("backend")
+        .withExpiresAt(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION))
+        .sign(algorithm);
   }
 
   public String refreshAccessToken(String refreshToken) {
     try {
       DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC256(SECRET))
-        .build()
-        .verify(refreshToken);
+          .build()
+          .verify(refreshToken);
 
-        Long id = decodedJWT.getClaim("id").asLong();
+      Long id = decodedJWT.getClaim("id").asLong();
 
-        Optional<User> userOptional = userRepository.findById(id);
-        if(userOptional.isPresent()) {
-          User user = userOptional.get();
-          return JWT.create()
+      Optional<User> userOptional = userRepository.findById(id);
+      if (userOptional.isPresent()) {
+        User user = userOptional.get();
+        return JWT.create()
             .withClaim("username", user.getUsername())
             .withClaim("id", user.getId())
+            .withClaim("isAdmin", user.getIsAdmin())
             .withIssuer("backend")
             .withExpiresAt(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION))
             .sign(algorithm);
-         } else {
-          return "User was not found";
-         }
+      } else {
+        return "User was not found";
+      }
 
     } catch (Exception e) {
-      // Handle various exceptions like TokenExpiredException, SignatureVerificationException, etc.
+      // Handle various exceptions like TokenExpiredException,
+      // SignatureVerificationException, etc.
       throw new RuntimeException("Invalid refresh token", e);
     }
   }
 }
-
