@@ -11,11 +11,13 @@ import AppState from 'src/app/store/state/app.state';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
- username$: Observable<string | null>
 
- constructor(
-  private store: Store<AppState>
- ) {
-  this.username$ = this.store.select(selectAuthToken);
- }
+  token$: Observable<string | null>
+
+  constructor(
+    private store: Store<AppState>
+  ) {
+    this.token$ = this.store.select(selectAuthToken);
+  }
+
 }
