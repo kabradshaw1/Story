@@ -28,4 +28,8 @@ describe('HeaderComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('givenAccessTokenIsPresent_whenPageLoads_thenDisplayUsername', () => {
+
+  });
 });
