@@ -24,7 +24,6 @@ describe('LoginComponent', () => {
     store = TestBed.inject(MockStore);
     spyOn(store, 'dispatch').and.callThrough();
 
-
     store.overrideSelector(selectAuthError, null)
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;

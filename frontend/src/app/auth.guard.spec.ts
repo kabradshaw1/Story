@@ -9,6 +9,8 @@ describe('PermissionsService', () => {
   let service: PermissionService;
   let mockStore: jasmine.SpyObj<Store<AppState>>;
   let mockRouter: jasmine.SpyObj<Router>;
+  const mockActivatedRouteSnapshot: ActivatedRouteSnapshot = {} as any;
+  const mockRouterStateSnapshot: RouterStateSnapshot = {} as any;
 
   beforeEach(() => {
 
@@ -41,9 +43,6 @@ describe('PermissionsService', () => {
     const mockToken = 'VALID_MOCK_TOKEN';  // you can use a placeholder here since we're mocking decodeToken
     mockStore.select.and.returnValue(of(mockToken));
 
-    const mockActivatedRouteSnapshot: ActivatedRouteSnapshot = {} as any;
-    const mockRouterStateSnapshot: RouterStateSnapshot = {} as any;
-
     service.canActivate(mockActivatedRouteSnapshot, mockRouterStateSnapshot).subscribe(canActivate => {
       expect(canActivate).toBe(true);
     });
@@ -65,9 +64,6 @@ describe('PermissionsService', () => {
     // Decoding will show that the token is expired
     (service.decodeToken as jasmine.Spy).and.returnValue({ exp: Math.floor(Date.now() / 1000) - 3600 });
 
-    const mockActivatedRouteSnapshot: ActivatedRouteSnapshot = {} as any;
-    const mockRouterStateSnapshot: RouterStateSnapshot = {} as any;
-
     service.canActivate(mockActivatedRouteSnapshot, mockRouterStateSnapshot).subscribe(canActivate => {
       expect(canActivate).toBe(false);
     });
@@ -84,3 +80,29 @@ describe('PermissionsService', () => {
   //   });
   // });
 });
+
+// describe('AuthGuard', () => {
+//   let guard: typeof AuthGuard;
+//   let mockPermissionService: jasmine.SpyObj<PermissionService>;
+
+//   const mockActivatedRouteSnapshot: ActivatedRouteSnapshot = {} as any;
+//   const mockRouterStateSnapshot: RouterStateSnapshot = {} as any;
+//   beforeEach(() => {
+//     mockPermissionService = jasmine.createSpyObj('PermissionService', ['canActivate']);
+//     guard = AuthGuard;
+
+//     TestBed.configureTestingModule({
+//       providers: [
+//         { provide: PermissionService, useValue: mockPermissionService }
+//       ]
+//     });
+//   });
+
+//   it('should call PermissionService canActivate method', () => {
+//     mockPermissionService.canActivate.and.returnValue(of(true));
+//     guard(mockActivatedRouteSnapshot, mockRouterStateSnapshot).subscribe(canActivate => {
+//       expect(canActivate).toBe(true);
+//       expect(mockPermissionService.canActivate).toHaveBeenCalled();
+//     });
+//   });
+// })
