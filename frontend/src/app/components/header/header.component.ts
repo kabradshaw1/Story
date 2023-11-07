@@ -16,7 +16,7 @@ export class HeaderComponent {
   token$: Observable<string | null>
 
   constructor(
-    private store: Store<AppState>
+    private store: Store<AppState>,
   ) {
     this.token$ = this.store.select(selectAuthToken);
   }
