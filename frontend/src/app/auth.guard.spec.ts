@@ -31,6 +31,7 @@ describe('PermissionsService', () => {
     service = TestBed.inject(PermissionService);
 
     // Mock jwtDecode behavior
+    //@ts-ignore because I don't need to define the other properties of a decoded token in this test
     spyOn(service, 'decodeToken').and.returnValue({ exp: Math.floor(Date.now() / 1000) + 3600 }); // Spy on the new decodeToken method
   });
 
