@@ -4,10 +4,20 @@
       <a class="navbar-brand" [routerLink]="['/']">Story App</a>
       <ul class="navbar-nav">
         <div class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" role="button" id="navbarDropdown" data-bs-toggle="dropdown">Welcome</a>
+          <a
+            class="nav-link dropdown-toggle"
+            role="button"
+            id="navbarDropdown"
+            data-bs-toggle="dropdown"
+            >{{ username$ | async }}</a
+          >
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" [routerLink]="['/register']">Register</a></li>
-            <li><a class="dropdown-item" [routerLink]="['/login']">Login</a></li>
+            <li>
+              <a class="dropdown-item" [routerLink]="['/register']">Register</a>
+            </li>
+            <li>
+              <a class="dropdown-item" [routerLink]="['/login']">Login</a>
+            </li>
           </ul>
         </div>
       </ul>

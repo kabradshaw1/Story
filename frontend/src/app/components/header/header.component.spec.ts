@@ -7,19 +7,29 @@ import { selectAuthToken } from 'src/app/store/selectors/auth.selector';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { DecodedJwt } from 'src/app/types';
 import { By } from '@angular/platform-browser';
+import { JwtService } from 'src/app/services/jwt.service';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
   let store: MockStore<AppState>;
   let mockSelectAuthToken: MemoizedSelector<AppState, string | null>
+  const expectedDecodedToken: DecodedJwt = {
+    username: 'testUser',
+    id: 1,
+    isAdmin: false,
+    exp: 123456789,
+    iat: 123456789,
+    iss: 'TestIssuer'
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [HeaderComponent],
       imports: [RouterTestingModule],
       providers: [
-        provideMockStore()
+        provideMockStore(),
+        { provide: JwtService, useValue: { decodeToken: () => expectedDecodedToken } }
       ]
     });
 
@@ -37,20 +47,8 @@ describe('HeaderComponent', () => {
 
   it('givenAccessTokenIsPresent_whenPageLoads_thenDisplayUsername', () => {
     const mockToken = 'VALID_MOCK_TOKEN';
-    const expectedDecodedToken: DecodedJwt = {
-      username: 'testUser',
-      id: 1,
-      isAdmin: false,
-      exp: 123456789,
-      iat: 123456789,
-      iss: 'TestIssuer'
-    };
 
-    // Override the selector to return the mock token
     mockSelectAuthToken.setResult(mockToken);
-
-    // Decode the token and set the result
-    spyOn(component, 'decodeToken').and.returnValue(expectedDecodedToken);
 
     // Refresh the state to emit the new mock token
     store.refreshState();

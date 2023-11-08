@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { selectAuthToken } from 'src/app/store/selectors/auth.selector';
 import AppState from 'src/app/store/state/app.state';
 import { DecodedJwt } from 'src/app/types';
-import { jwtDecode } from 'jwt-decode';
-
+import { JwtService } from 'src/app/services/jwt.service';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -14,14 +13,16 @@ import { jwtDecode } from 'jwt-decode';
 export class HeaderComponent {
 
   token$: Observable<string | null>
+  username$: Observable<string>
 
   constructor(
     private store: Store<AppState>,
+    private jwtService: JwtService
   ) {
     this.token$ = this.store.select(selectAuthToken);
+    this.username$ = this.token$.pipe(
+      map(token => token ? this.jwtService.decodeToken<DecodedJwt>(token).username : 'Welcome')
+    );
   };
 
-  decodeToken(token: string): DecodedJwt {
-    return jwtDecode(token); // Simply wrap the jwtDecode call
-  }
 }
