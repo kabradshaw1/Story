@@ -5,6 +5,7 @@ import { selectAuthToken } from 'src/app/store/selectors/auth.selector';
 import AppState from 'src/app/store/state/app.state';
 import { DecodedJwt } from 'src/app/types';
 import { JwtService } from 'src/app/services/jwt.service';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',

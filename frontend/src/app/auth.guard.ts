@@ -6,6 +6,7 @@ import { Store } from "@ngrx/store";
 import { jwtDecode } from 'jwt-decode';
 import { Observable, map } from "rxjs";
 import { DecodedJwt } from "./types";
+import { JwtService } from "./services/jwt.service";
 
 @Injectable({
   providedIn: 'root'
@@ -15,18 +16,15 @@ export class PermissionService {
 
   constructor(
     private router: Router,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private jwtService: JwtService
   ) {
     this.token$ = this.store.select(selectAuthToken);
   }
 
-  decodeToken(token: string): DecodedJwt {
-    return jwtDecode(token); // Simply wrap the jwtDecode call
-  }
-
   isTokenExpired(token: string): boolean {
     try {
-      const decoded: DecodedJwt = this.decodeToken(token); // Use the new method here
+      const decoded: DecodedJwt = this.jwtService.decodeToken(token); // Use the new method here
       return decoded.exp < Date.now() / 1000;
     } catch (err) {
       return true; // In case of any error, treat token as expired.
