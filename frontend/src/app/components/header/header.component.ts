@@ -19,6 +19,9 @@ export class HeaderComponent {
     private store: Store<AppState>,
   ) {
     this.token$ = this.store.select(selectAuthToken);
-  }
+  };
 
+  decodeToken(token: string): DecodedJwt {
+    return jwtDecode(token); // Simply wrap the jwtDecode call
+  }
 }
