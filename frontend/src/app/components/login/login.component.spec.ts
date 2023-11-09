@@ -211,15 +211,3 @@ describe('LoginComponent', () => {
     });
   });
 });
-
-// const given = describe;
-// const when = describe;
-// const then = it;
-
-// given('',() => {
-//   when('',() => {
-//     then('', () => {
-
-//     });
-//   });
-// });

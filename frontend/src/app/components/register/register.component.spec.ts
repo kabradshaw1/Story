@@ -105,9 +105,30 @@ describe('RegisterComponent', () => {
         expect(component.registerForm.controls['email'].valid).toBeFalse();
       }
     });
+    it('givenNotMatchingPasswords_whenFormIsChecked_thenDisableSubmit', () => {
+      component.registerForm.controls['email'].setValue('test@example.com');
+      component.registerForm.controls['password'].setValue('password123');
+      component.registerForm.controls['confirmPassword'].setValue('different');
+      fixture.detectChanges();
+
+      const submitButton = fixture.debugElement.nativeElement.querySelector('button[type="submit"]');
+      expect(submitButton.disabled).toBeTrue();
+    });
   });
 
   describe('on form submit', () => {
+
+    it('givenConfirmPasswordDoesNotMatch_whenSubmittingForm_thenDisplayError', () => {
+      component.registerForm.controls['password'].setValue('password123');
+      component.registerForm.controls['confirmPassword'].setValue('different');
+      fixture.detectChanges();
+
+      const confirmPasswordError = fixture.debugElement.query(By.css('.confirm-password-error')).nativeElement;
+      expect(confirmPasswordError).toBeTruthy();
+      expect(confirmPasswordError.textContent).toContain('Passwords must match');
+    });
+
+
     it('givenInputs_whenValuesValuesAreFilledInHtml_thenFormContainsTheValues', () => {
       // Set values in the HTML inputs
       const emailInput = fixture.debugElement.query(By.css('input[formControlName="email"]')).nativeElement;
