@@ -117,15 +117,17 @@ describe('RegisterComponent', () => {
   });
 
   describe('on form submit', () => {
-
     it('givenConfirmPasswordDoesNotMatch_whenSubmittingForm_thenDisplayError', () => {
       component.registerForm.controls['password'].setValue('password123');
       component.registerForm.controls['confirmPassword'].setValue('different');
+      component.registerForm.controls['password'].markAsTouched();
+      component.registerForm.controls['confirmPassword'].markAsTouched();
+
       fixture.detectChanges();
 
       const confirmPasswordError = fixture.debugElement.query(By.css('.confirm-password-error')).nativeElement;
       expect(confirmPasswordError).toBeTruthy();
-      expect(confirmPasswordError.textContent).toContain('Passwords must match');
+      expect(confirmPasswordError.textContent).toContain('Passwords do not match.');
     });
 
 
@@ -208,7 +210,8 @@ describe('RegisterComponent', () => {
     it('should enable the submit button if the form is valid', () => {
       component.registerForm.controls['email'].setValue('test@example.com');
       component.registerForm.controls['password'].setValue('password123');
-      component.registerForm.controls['username'].setValue('Tester')
+      component.registerForm.controls['username'].setValue('Tester');
+      component.registerForm.controls['confirmPassword'].setValue('password123');
       fixture.detectChanges();
       const button = fixture.debugElement.nativeElement.querySelector('button');
       expect(button.disabled).toBeFalse();

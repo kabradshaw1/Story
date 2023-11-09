@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import * as AuthActions from '../../store/actions/auth.actions';
 import AppState from 'src/app/store/state/app.state';
@@ -21,9 +21,16 @@ export class RegisterComponent {
       this.registerForm = this.fb.group({
         email: ['', [Validators.required, Validators.email]],
         password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(40)]],
+        confirmPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(40)]],
         username: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(40)]]
-      })
+      }, { validators: this.passwordMatchValidator });
     }
+
+    passwordMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+      const password = control.get('password')?.value;
+      const confirmPassword = control.get('confirmPassword')?.value;
+      return password === confirmPassword ? null : { mismatch: true };
+    };
 
   error$ = this.store.select(selectAuthError);
 
