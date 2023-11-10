@@ -21,9 +21,8 @@ export class AuthService {
     private store: Store<AuthState>
   ) { }
 
-  login(password: string, email: string): Observable<AuthResponse> {
+  login(email: string, password: string): Observable<AuthResponse> {
     const credentials = { email, password };
-
     return this.http.post<AuthResponse>(this.loginUrl, credentials)
       .pipe(
         tap(response => {
@@ -41,11 +40,13 @@ export class AuthService {
       );
   };
 
-  register(password: string, email: string, username: string): Observable<AuthResponse> {
-    const credentials = { email, password, username }
+  register(email: string, password: string, username: string): Observable<AuthResponse> {
+    const credentials = { email, password, username };
+
     return this.http.post<AuthResponse>(this.registerUrl, credentials)
       .pipe(
         tap(response => {
+          console.log(credentials)
           if (isSuccessResponse(response)) {
             this.store.dispatch({
               type: '[Auth] Success',

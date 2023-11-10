@@ -38,6 +38,7 @@ export class RegisterComponent {
     if (this.registerForm.invalid) return;
 
     const { email, password, username } = this.registerForm.value
+    console.log(email, password, username)
     this.store.dispatch(AuthActions.register({ email, password, username }))
   }
 }
