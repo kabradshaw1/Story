@@ -69,7 +69,7 @@ export class AuthEffects {
     return (source$: Observable<AuthResponse>) => source$.pipe(
       map(response => {
         if ('accessToken' in response) {
-          this.router.navigate(['/home']);
+          this.router.navigate(['/']);
           return AuthActions.authSuccess({ accessToken: response.accessToken });
         } else if ('error' in response) {
           return AuthActions.authFailure({ error: response.error });
