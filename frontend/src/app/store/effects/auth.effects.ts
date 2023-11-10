@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as AuthActions from '../actions/auth.actions';
-import { Observable, catchError, map, mergeMap, of } from "rxjs";
+import { Observable, catchError, map, mergeMap, of, tap } from "rxjs";
 import { AuthService } from "src/app/services/auth.service";
 import { AuthResponse } from "src/app/types";
 import { Router } from "@angular/router";
@@ -16,22 +16,23 @@ export class AuthEffects {
   ) {}
 
   login$ = createEffect(() =>
-  this.actions$.pipe(
-    ofType(AuthActions.login),
-    mergeMap(action =>
-      this.authService.login(action.email, action.password).pipe(
-        this.handleAuthResponse(),
-        catchError(this.handleError())
+    this.actions$.pipe(
+      ofType(AuthActions.login),
+      mergeMap(action =>
+        this.authService.login(action.email, action.password).pipe(
+          this.handleAuthResponse(),
+          catchError(this.handleError())
+        )
       )
     )
-  )
-);
+  );
 
   register$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.register),
       mergeMap(action =>
         this.authService.register(action.email, action.password, action.username).pipe(
+          tap(response=> console.log('Register response:', response)),
           this.handleAuthResponse(),
           catchError(this.handleError())
         )
@@ -84,7 +85,4 @@ export class AuthEffects {
         return of(AuthActions.authFailure({ error: error.message || "An unknown error occurred." }));
     };
   }
-
-
-
 }
