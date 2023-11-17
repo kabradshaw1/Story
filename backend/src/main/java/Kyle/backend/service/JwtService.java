@@ -2,16 +2,23 @@ package Kyle.backend.service;
 
 import java.util.Date;
 import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
+import java.util.List;
+import java.util.ArrayList;
 
 import Kyle.backend.dao.UserRepository;
 import Kyle.backend.entity.User;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Service;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 
 @Service
 public class JwtService {
@@ -71,5 +78,37 @@ public class JwtService {
       // SignatureVerificationException, etc.
       throw new RuntimeException("Invalid refresh token", e);
     }
+  }
+
+  private JWTVerifier verifier = JWT.require(algorithm)
+      .withIssuer("backend")
+      .build();
+
+  public boolean validateToken(String token) {
+    try {
+      verifier.verify(token);
+      return true;
+    } catch (JWTVerificationException e) {
+      return false;
+    }
+  }
+
+  public Authentication getAuthentication(String token) {
+    DecodedJWT jwt = JWT.decode(token);
+
+    String username = jwt.getClaim("username").asString();
+    boolean isAdmin = jwt.getClaim("isAmin").asBoolean();
+
+    List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+    if (isAdmin) {
+      authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+    } else {
+      authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+    // Using fully qualified name for Spring Security's User
+    org.springframework.security.core.userdetails.User principal = new org.springframework.security.core.userdetails.User(
+        username, "", authorities);
+
+    return new UsernamePasswordAuthenticationToken(principal, null, authorities);
   }
 }
