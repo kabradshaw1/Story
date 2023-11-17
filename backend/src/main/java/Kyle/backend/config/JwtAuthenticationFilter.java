@@ -18,7 +18,7 @@ public class JwtAuthenticationFilter {
   private JwtService jwtService;
 
   @Override
-  protected void doFilterInteral(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
     String token = extractToken(request);
     if (token != null && jwtService.validateToken(token)) {
