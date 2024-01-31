@@ -16,7 +16,7 @@ public class SecurityConfig {
     http
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-            .requestMatchers("/api/users/").access("isAdmin()")
+            // .requestMatchers("/api/users/").access("isAdmin()")
             .anyRequest().permitAll());
     return http.build();
   }
