@@ -12,6 +12,5 @@ public class TokenResponse {
 
   public TokenResponse(String accessToken) {
     this.accessToken = accessToken;
-
   }
 }
