@@ -2,6 +2,7 @@ package Kyle.backend.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 import java.util.HashSet;
@@ -9,6 +10,7 @@ import java.util.HashSet;
 @Entity
 @Table(name = "chartacter")
 @Data
+@NoArgsConstructor
 public class Character {
 
   @Id
