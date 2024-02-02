@@ -28,9 +28,6 @@ public class Character {
     joinColumns = @JoinColumn(name = "character_id"),
     inverseJoinColumns = @JoinColumn(name = "scene_id")
   )
-  private Set<Scene> scenes;
+  private Set<Scene> scenes = new HashSet<>();
 
-  public Character() {
-    scenes = new HashSet<>();
-  }
 }
