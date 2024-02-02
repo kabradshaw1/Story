@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Entity
 @Table(name = "character")
-@Data
+// @Data
 public class Character {
 
   @Id
@@ -26,7 +26,9 @@ public class Character {
   //   joinColumns = @JoinColumn(name = "character_id"),
   //   inverseJoinColumns = @JoinColumn(name = "scene_id")
   // )
-  public Character() {
+  // private Set<Scene> scenes;
 
-  }
+  // public Character() {
+  //   scenes = new HashSet<>();
+  // }
 }

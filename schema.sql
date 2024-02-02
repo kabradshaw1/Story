@@ -13,6 +13,14 @@ CREATE TABLE `users` (
   `date_modified` TIMESTAMP NULL
 );
 
+CREATE TABLE `character` (
+  `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(255) NOT NULL,
+
+  `date_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` TIMESTAMP NULL
+)
+
 ALTER TABLE `users`
 ADD UNIQUE (`username`),
 ADD UNIQUE (`email`);
