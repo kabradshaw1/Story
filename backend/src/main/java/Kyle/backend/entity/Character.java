@@ -3,9 +3,11 @@ package Kyle.backend.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Set;
+import java.util.HashSet;
 
 @Entity
-@Table(name = "character")
+@Table(name = "chartacter")
 @Data
 public class Character {
 
