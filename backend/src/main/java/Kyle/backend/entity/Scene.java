@@ -5,6 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Set;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import java.util.Date;
 import java.util.HashSet;
 
 @Entity
@@ -22,6 +27,14 @@ public class Scene {
 
   @Column(name = "text")
   private String text;
+
+  @Column(name = "date_created")
+  @CreationTimestamp
+    private Date dateCreated;
+
+  @Column(name = "date_modified")
+  @LastModifiedDate
+    private Date dateModified;
 
   @ManyToMany
   @JoinTable(
