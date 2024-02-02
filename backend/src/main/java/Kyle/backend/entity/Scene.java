@@ -11,6 +11,7 @@ public class Scene {
   @Column(name = "id")
   private Long id;
 
+
   // @ManyToMany(mappedBy = "scenes")
   // private Set<Character> characters;
 }

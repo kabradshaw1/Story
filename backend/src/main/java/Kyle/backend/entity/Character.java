@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Entity
 @Table(name = "character")
-// @Data
+@Data
 public class Character {
 
   @Id
@@ -20,15 +20,15 @@ public class Character {
   @Column(name = "bio")
   private String bio;
 
-  // @ManyToMany
-  // @JoinTable(
-  //   name = "charact_scene",
-  //   joinColumns = @JoinColumn(name = "character_id"),
-  //   inverseJoinColumns = @JoinColumn(name = "scene_id")
-  // )
-  // private Set<Scene> scenes;
+  @ManyToMany
+  @JoinTable(
+    name = "charact_scene",
+    joinColumns = @JoinColumn(name = "character_id"),
+    inverseJoinColumns = @JoinColumn(name = "scene_id")
+  )
+  private Set<Scene> scenes;
 
-  // public Character() {
-  //   scenes = new HashSet<>();
-  // }
+  public Character() {
+    scenes = new HashSet<>();
+  }
 }
