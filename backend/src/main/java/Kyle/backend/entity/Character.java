@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.HashSet;
 
 @Entity
-@Table(name = "chartacter")
+@Table(name = "character")
 @Data
 @NoArgsConstructor
 public class Character {
@@ -45,7 +45,9 @@ public class Character {
   )
   private Set<Scene> scenes = new HashSet<>();
 
-  public Character(Long id, String name, String Bio) {
-
+  public Character(Long id, String name, String bio) {
+    this.id = id;
+    this.name = name;
+    this.bio = bio;
   }
 }
