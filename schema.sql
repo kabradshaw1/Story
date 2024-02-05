@@ -40,3 +40,9 @@ CREATE TABLE `character_scene` (
 ALTER TABLE `users`
 ADD UNIQUE (`username`),
 ADD UNIQUE (`email`);
+
+ALTER TABLE `character`
+ADD UNIQUE (`name`);
+
+ALTER TABLE `scene`
+ADD UNIQUE (`title`);
