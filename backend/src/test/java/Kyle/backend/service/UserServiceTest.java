@@ -51,6 +51,7 @@ public class UserServiceTest {
     user = new User("testUser", "testPassword", "test@example.com");
   }
 
+  @SuppressWarnings("null")
   @Test
   public void givenAcceptableCredentials_whenRegisterUser_thenCreateUser() {
       // Given
@@ -141,6 +142,7 @@ public class UserServiceTest {
     }
   }
 
+  @SuppressWarnings("null")
   @Test
   public void givenShortPassword_whenRegisterUser_thenThrowException() {
     // Given

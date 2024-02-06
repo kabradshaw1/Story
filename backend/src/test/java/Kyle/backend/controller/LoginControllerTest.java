@@ -57,6 +57,7 @@ public class LoginControllerTest {
     when(jwtService.generateRefreshToken(user)).thenReturn(dummyRefreshToken);
 
     // When & Then
+    @SuppressWarnings("null")
     MvcResult result = mockMvc.perform(
       MockMvcRequestBuilders.post("/api/login/")
       .contentType(MediaType.APPLICATION_JSON)
@@ -75,6 +76,7 @@ public class LoginControllerTest {
     verify(jwtService).generateRefreshToken(user);
   }
 
+  @SuppressWarnings("null")
   @Test
   public void givenInvalidEmail_whenLogin_thenReturnsError() throws Exception {
     // Given
@@ -97,6 +99,7 @@ public class LoginControllerTest {
     verify(jwtService, never()).generateRefreshToken(any());
   }
 
+  @SuppressWarnings("null")
   @Test
   public void givenInvalidPassword_whenLogin_thenReturnError() throws Exception {
     // Given

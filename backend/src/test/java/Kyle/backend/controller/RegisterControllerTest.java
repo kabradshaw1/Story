@@ -53,6 +53,7 @@ public class RegisterControllerTest {
     when(jwtService.generateRefreshToken(user)).thenReturn(dummyRefreshToken);
 
     // When & Then
+    @SuppressWarnings("null")
     MvcResult result = mockMvc.perform(
       MockMvcRequestBuilders.post("/api/register/")
       .contentType(MediaType.APPLICATION_JSON)
@@ -67,6 +68,7 @@ public class RegisterControllerTest {
     assertEquals("dummyRefreshToken", responseCookie.getValue());
   }
 
+  @SuppressWarnings("null")
   @Test
   public void givenInvalidDetails_whenRegister_thenReturnError() throws Exception {
     // Given
