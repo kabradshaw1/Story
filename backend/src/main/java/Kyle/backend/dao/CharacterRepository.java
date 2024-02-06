@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 @CrossOrigin("http://localhost:4200")
 public interface CharacterRepository extends JpaRepository<Character, Long> {
-  Optional<Character> findByName(Long name);
+  Optional<Character> findByName(String name);
 }
