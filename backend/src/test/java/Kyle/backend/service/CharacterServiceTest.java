@@ -33,7 +33,7 @@ public class CharacterServiceTest {
     String name = "testName";
 
     // When
-    when(null)
+    when(null);
     // Then
   }
 }
