@@ -26,11 +26,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import Kyle.backend.dao.UserRepository;
 import Kyle.backend.entity.User;
-import Kyle.backend.exception.EmailAlreadyExistsException;
-import Kyle.backend.exception.InvalidEmailException;
-import Kyle.backend.exception.InvalidLoginException;
-import Kyle.backend.exception.PasswordTooShortException;
-import Kyle.backend.exception.UsernameAlreadyExistsException;
+import Kyle.backend.exception.user.EmailAlreadyExistsException;
+import Kyle.backend.exception.user.InvalidEmailException;
+import Kyle.backend.exception.user.InvalidLoginException;
+import Kyle.backend.exception.user.PasswordTooShortException;
+import Kyle.backend.exception.user.UsernameAlreadyExistsException;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
