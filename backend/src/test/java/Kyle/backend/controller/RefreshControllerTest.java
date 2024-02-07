@@ -14,7 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import Kyle.backend.exception.InvalidTokenException;
+import Kyle.backend.exception.user.InvalidTokenException;
 import Kyle.backend.service.JwtService;
 import jakarta.servlet.http.Cookie;
 

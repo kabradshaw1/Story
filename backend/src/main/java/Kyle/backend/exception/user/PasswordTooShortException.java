@@ -1,4 +1,4 @@
-package Kyle.backend.exception;
+package Kyle.backend.exception.user;
 
 public class PasswordTooShortException extends RuntimeException {
   public PasswordTooShortException(String message) {

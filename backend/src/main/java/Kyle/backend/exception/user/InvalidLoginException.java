@@ -1,4 +1,4 @@
-package Kyle.backend.exception;
+package Kyle.backend.exception.user;
 
 public class InvalidLoginException extends RuntimeException {
   public InvalidLoginException() {
