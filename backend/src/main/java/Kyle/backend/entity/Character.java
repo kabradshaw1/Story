@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.HashSet;
 
 @Entity
-@Table(name = "character")
+@Table(name = "characters")
 @Data
 @NoArgsConstructor
 public class Character {
