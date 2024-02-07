@@ -41,6 +41,13 @@ public class CharacterServiceTest {
   }
 
   @Test
+  public void given_whenCharactersSearched_thenReturnCharacters() {
+    // Given
+    // When
+    // Then
+  }
+
+  @Test
   public void givenCharacterExists_whenCharacterSearched_thenReturnCharacter() {
     // Given
     String name = "testName";
@@ -54,5 +61,12 @@ public class CharacterServiceTest {
     assertEquals(name, foundCharacter.getName(), "The name of the found character should match the search query.");
     assertNotNull(foundCharacter.getScenes(), "The character should have associated scenes.");
     assertEquals(1, foundCharacter.getScenes().size(), "The character should have one associated scene.");
+  }
+
+  @Test
+  public void givenCharacterDoesNotExist_whenCharacterSearched_thenThrowException() {
+    // Given
+    // When
+    // Then
   }
 }
