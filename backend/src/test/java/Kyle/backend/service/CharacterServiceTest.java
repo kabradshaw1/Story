@@ -51,7 +51,7 @@ public class CharacterServiceTest {
   public void givenCharacterExists_whenCharacterSearched_thenReturnCharacter() {
     // Given
     String name = "testName";
-    when(characterRepository.findByName(name)).thenReturn(Optional.of(character));
+    // when(characterRepository.findByName(name)).thenReturn(Optional.of(character));
 
     // When
     Character foundCharacter = characterService.findByName(name);
