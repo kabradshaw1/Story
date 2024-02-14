@@ -16,7 +16,6 @@ public class SecurityConfig {
     http
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-            // .requestMatchers("/api/users/").access("isAdmin()")
             .anyRequest().permitAll());
     return http.build();
   }
@@ -25,5 +24,4 @@ public class SecurityConfig {
   public BCryptPasswordEncoder bCryptPasswordEncoder() {
     return new BCryptPasswordEncoder();
   }
-
 }
