@@ -20,3 +20,4 @@ public interface CharacterRepository extends JpaRepository<Character, Long> {
   
   Optional<Character> name(String name);
 }
+  
