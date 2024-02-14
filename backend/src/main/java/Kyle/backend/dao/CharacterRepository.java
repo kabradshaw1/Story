@@ -19,4 +19,4 @@ public interface CharacterRepository extends JpaRepository<Character, Long> {
   <S extends Character> S save(S entity);
   
   Optional<Character> name(String name);
-}
+} 
