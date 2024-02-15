@@ -29,6 +29,9 @@ public class Character {
   @Column(name = "bio")
   private String bio;
 
+  @Column(name = "user_id")
+  private Long user_id;
+  
   @Column(name = "date_created")
   @CreationTimestamp
     private Date dateCreated;
