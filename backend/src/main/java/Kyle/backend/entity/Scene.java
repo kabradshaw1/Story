@@ -17,6 +17,7 @@ import java.util.HashSet;
 @Data
 @NoArgsConstructor
 public class Scene {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
@@ -27,6 +28,9 @@ public class Scene {
 
   @Column(name = "text")
   private String text;
+
+  @Column(name = "timeline")
+  private String timeline;
 
   @Column(name = "user_id")
   private Long user_id;

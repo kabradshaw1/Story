@@ -31,7 +31,7 @@ public class Character {
 
   @Column(name = "user_id")
   private Long user_id;
-  
+
   @Column(name = "date_created")
   @CreationTimestamp
     private Date dateCreated;
@@ -48,8 +48,4 @@ public class Character {
   )
   private Set<Scene> scenes = new HashSet<>();
 
-  public Character(String name, String bio) {
-    this.name = name;
-    this.bio = bio;
-  }
 }

@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @TestPropertySource(locations = "classpath:test.properties")
-public class UserRepositoryTest {
+class UserRepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
@@ -26,13 +26,13 @@ public class UserRepositoryTest {
     private User user;
 
     @BeforeEach
-    private void setup() {
+    void setup() {
         user = new User("testUser", "testPassword", "test@email.com");
         entityManager.persistAndFlush(user);
     }
 
     @Test
-    public void givenEmail_whenFindByEmail_thenReturnsUser() {
+    void givenEmail_whenFindByEmail_thenReturnsUser() {
         Optional<User> retrievedUser = userRepository.findByEmail("test@email.com");
         assertTrue(retrievedUser.isPresent(), "User should be present");
         assertEquals("test@email.com", retrievedUser.get().getEmail(), "Emails should match");
@@ -46,26 +46,26 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void givenInvalidEmail_whenFindByEmail_thenReturnsEmptyOptional() {
+    void givenInvalidEmail_whenFindByEmail_thenReturnsEmptyOptional() {
         Optional<User> retrievedUser = userRepository.findByEmail("nonexistent@email.com");
         assertFalse(retrievedUser.isPresent(), "User should not be present");
     }
 
     @Test
-    public void givenInvalidId_whenFindById_thenReturnsEmptyOptional() {
+    void givenInvalidId_whenFindById_thenReturnsEmptyOptional() {
         Optional<User> retrievedUser = userRepository.findById(-1L); // or any non-existent ID
         assertFalse(retrievedUser.isPresent(), "User should not be present");
     }
 
     @Test
-    public void giveUsername_whenFindByUsername_thenReturnUser() {
+    void giveUsername_whenFindByUsername_thenReturnUser() {
         Optional<User> retrievedUser = userRepository.findByUsername(user.getUsername()); // Use the Id assigned by the database
         assertTrue(retrievedUser.isPresent(), "User should be present");
         assertEquals(user.getUsername(), retrievedUser.get().getUsername(), "IDs should match");
     }
 
     @Test
-    public void givenInvalidUsername_whenFindByUsername_thenReturnEmptyOptional() {
+    void givenInvalidUsername_whenFindByUsername_thenReturnEmptyOptional() {
         Optional<User> retrievedUser = userRepository.findByUsername("noUser"); // or any non-existent ID
         assertFalse(retrievedUser.isPresent(), "User should not be present");
     }
