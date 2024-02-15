@@ -28,6 +28,9 @@ public class Scene {
   @Column(name = "text")
   private String text;
 
+  @Column(name = "user_id")
+  private Long user_id;
+
   @Column(name = "date_created")
   @CreationTimestamp
     private Date dateCreated;
