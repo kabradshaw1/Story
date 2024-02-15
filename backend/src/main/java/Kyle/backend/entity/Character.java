@@ -45,8 +45,9 @@ public class Character {
   )
   private Set<Scene> scenes = new HashSet<>();
 
-  public Character(String name, String bio) {
+  public Character(String name, String bio, Long id) {
     this.name = name;
     this.bio = bio;
+    this.id = id;
   }
 }
