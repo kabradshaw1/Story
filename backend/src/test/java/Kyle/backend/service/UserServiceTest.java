@@ -33,7 +33,7 @@ import Kyle.backend.exception.user.PasswordTooShortException;
 import Kyle.backend.exception.user.UsernameAlreadyExistsException;
 
 @ExtendWith(MockitoExtension.class)
-class UserServiceTest {
+public class UserServiceTest {
 
   @Mock
   private UserRepository userRepository;
@@ -46,14 +46,14 @@ class UserServiceTest {
 
   private User user;
 
-    @BeforeEach
-    void setup() {
-        user = new User("testUser", "testPassword", "test@example.com");
-    }
+  @BeforeEach
+  private void setup() {
+    user = new User("testUser", "testPassword", "test@example.com");
+  }
 
-    @SuppressWarnings("null")
-    @Test
-    void givenAcceptableCredentials_whenRegisterUser_thenCreateUser() {
+  @SuppressWarnings("null")
+  @Test
+  public void givenAcceptableCredentials_whenRegisterUser_thenCreateUser() {
       // Given
       String username = "testUser1";
       String password = "testPassword";
@@ -78,8 +78,8 @@ class UserServiceTest {
       assertNotEquals(password, savedUser.getPassword(), "The saved password should not be in plaintext");
   }
 
-    @Test
-    void givenExistingEmail_whenRegisterUser_thenThrowException() {
+  @Test
+  public void givenExistingEmail_whenRegisterUser_thenThrowException() {
       // Given
       String username = "testUser";
       String password = "testPassword";
@@ -96,8 +96,8 @@ class UserServiceTest {
       assertEquals("Email already registered: " + email, exception.getMessage());
   }
 
-    @Test
-    void givenExistingUsername_whenRegisterUser_thenThrowException() {
+  @Test
+  public void givenExistingUsername_whenRegisterUser_thenThrowException() {
     // Given
     String username = "testUser1";
     String password = "testPassword";
@@ -115,8 +115,8 @@ class UserServiceTest {
   }
 
 
-    @Test
-    void givenInvalidEmail_whenRegisterUser_thenThrowException() {
+  @Test
+  public void givenInvalidEmail_whenRegisterUser_thenThrowException() {
     // Given
     String username = "testUser1";
     String password = "testPassword";
@@ -142,9 +142,9 @@ class UserServiceTest {
     }
   }
 
-    @SuppressWarnings("null")
-    @Test
-    void givenShortPassword_whenRegisterUser_thenThrowException() {
+  @SuppressWarnings("null")
+  @Test
+  public void givenShortPassword_whenRegisterUser_thenThrowException() {
     // Given
     String password = "test123";
     String username = "testUser1";
@@ -161,8 +161,8 @@ class UserServiceTest {
     verify(userRepository, never()).save(any(User.class));
   }
 
-    @Test
-    void givenValidUserCredentials_whenValidateUserCredentials_thenReturnUser() {
+  @Test
+  public void givenValidUserCredentials_whenValidateUserCredentials_thenReturnUser() {
     // Given
     String password = "testPassword";
     String email = "test@example.com";
@@ -185,8 +185,8 @@ class UserServiceTest {
     verifyNoMoreInteractions(userRepository);  // Ensure that no other methods like save() were called on the userRepository
   }
 
-    @Test
-    void givenInvalidEmail_whenValidateUserCredentials_thenThrowException() {
+  @Test
+  public void givenInvalidEmail_whenValidateUserCredentials_thenThrowException() {
     // Given
     String email = "invalid@example.com";
     String password = "testPassword";
@@ -204,8 +204,8 @@ class UserServiceTest {
     verifyNoMoreInteractions(userRepository);
   }
 
-    @Test
-    void givenInvalidPassword_whenValidateUserCredentials_thenThrowException() {
+  @Test
+  public void givenInvalidPassword_whenValidateUserCredentials_thenThrowException() {
     // Given
     String email = "test@example.com";
     String invalidPassword = "wrongPassword";
