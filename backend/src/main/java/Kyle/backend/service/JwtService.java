@@ -97,7 +97,7 @@ public class JwtService {
     DecodedJWT jwt = JWT.decode(token);
 
     String username = jwt.getClaim("username").asString();
-    boolean isAdmin = jwt.getClaim("isAmin").asBoolean();
+    boolean isAdmin = jwt.getClaim("isAdmin").asBoolean();
 
     List<SimpleGrantedAuthority> authorities = new ArrayList<>();
     if (isAdmin) {
