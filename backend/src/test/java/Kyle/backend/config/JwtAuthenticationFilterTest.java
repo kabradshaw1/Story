@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+// @WebMvcTest(controllers = TestController.class)
 public class JwtAuthenticationFilterTest {
 
     private MockMvc mockMvc;
@@ -28,11 +29,25 @@ public class JwtAuthenticationFilterTest {
     }
 
     @Test
-    public void whenNoJwtProvided_thenAccessDenied() throws Exception {
+    public void giveNoToken_whenAccessingEndpoint_thenAccessDenied() throws Exception {
         mockMvc.perform(get("/test/protected"))
                 .andExpect(status().isForbidden()); // or isUnauthorized(), depending on your filter's behavior
     }
 
+    @Test
+    public void givenInvlidToken_whenAccessingRestrictedEndPoint_thenAccessDenied() throws Exception {
+
+    }
+
+    @Test
+    public void givenValidToken_whenAccessingRestrictedEndPoint_thenAccessApproved() {
+
+    }
+
+    @Test
+    public void givenNoToken_whenAcessingUnrestrictedEndPoint_thenAccessAppoved() {
+
+    }
     // Implement similar tests for valid/invalid JWT scenarios
 
     // Minimal controller for handling test requests
