@@ -2,60 +2,77 @@ package Kyle.backend.config;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockFilterChain;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.core.context.SecurityContextHolder;
 
+import Kyle.backend.service.JwtService;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
-// @WebMvcTest(controllers = TestController.class)
+@ExtendWith(MockitoExtension.class)
 public class JwtAuthenticationFilterTest {
 
-    private MockMvc mockMvc;
+    @Mock
+    private JwtService jwtService;
 
+    @InjectMocks
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    private MockHttpServletRequest request;
+    private MockHttpServletResponse response;
+    private MockFilterChain filterChain;
+
     @BeforeEach
-    public void setup() {
-        jwtAuthenticationFilter = new JwtAuthenticationFilter(); // Initialize with mock JwtService if necessary
-        mockMvc = MockMvcBuilders
-                    .standaloneSetup(new TestController()) // Use a minimal controller for testing
-                    .addFilters(jwtAuthenticationFilter) // Add your JwtAuthenticationFilter
-                    .build();
+    void setUp() {
+        request = new MockHttpServletRequest();
+        response = new MockHttpServletResponse();
+        filterChain = new MockFilterChain();
+
+        // Assume jwtService.validateToken returns true for "valid.token"
+        when(jwtService.validateToken(anyString())).thenReturn(true);
     }
 
     @Test
-    public void giveNoToken_whenAccessingEndpoint_thenAccessDenied() throws Exception {
-        mockMvc.perform(get("/test/protected"))
-                .andExpect(status().isForbidden()); // or isUnauthorized(), depending on your filter's behavior
+    void whenValidJwtProvided_thenSecurityContextShouldBeUpdated() throws Exception {
+        // Simulate a request with a valid JWT
+        request.addHeader("Authorization", "Bearer valid.token");
+
+        jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
+
+        // Verify that the security context has been updated
+        assertThat(SecurityContextHolder.getContext().getAuthentication()).isNotNull();
+        assertThat(SecurityContextHolder.getContext().getAuthentication().isAuthenticated()).isTrue();
+
+        // Reset the SecurityContext for next tests
+        SecurityContextHolder.clearContext();
     }
 
     @Test
-    public void givenInvlidToken_whenAccessingRestrictedEndPoint_thenAccessDenied() throws Exception {
+    void whenInvalidJwtProvided_thenSecurityContextShouldNotBeUpdated() throws Exception {
+        // Assume jwtService.validateToken returns false for "invalid.token"
+        when(jwtService.validateToken("invalid.token")).thenReturn(false);
 
+        // Simulate a request with an invalid JWT
+        request.addHeader("Authorization", "Bearer invalid.token");
+
+        jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
+
+        // Verify that the security context has not been updated
+        assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
     }
 
     @Test
-    public void givenValidToken_whenAccessingRestrictedEndPoint_thenAccessApproved() {
+    void whenNoJwtProvided_thenSecurityContextShouldNotBeUpdated() throws Exception {
+        jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
 
-    }
-
-    @Test
-    public void givenNoToken_whenAcessingUnrestrictedEndPoint_thenAccessAppoved() {
-
-    }
-    // Implement similar tests for valid/invalid JWT scenarios
-
-    // Minimal controller for handling test requests
-    @RestController
-    public static class TestController {
-        @GetMapping("/test/protected")
-        public ResponseEntity<String> protectedEndpoint() {
-            return ResponseEntity.ok("Access Granted");
-        }
+        // Verify that the security context has not been updated
+        assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
     }
 }

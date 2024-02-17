@@ -19,6 +19,6 @@ public class SecurityConfigTest {
   @Test
   public void postMethodWithoutAuthTokenShouldBeDenied() throws Exception {
     mockMvc.perform(post("/api/resource"))
-            .andExpect(status().isForbidden());
+      .andExpect(status().isForbidden());
   }
 }
