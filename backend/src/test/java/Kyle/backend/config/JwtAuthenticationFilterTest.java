@@ -2,13 +2,15 @@ package Kyle.backend.config;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import Kyle.backend.service.JwtService;
@@ -18,7 +20,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
+@ExtendWith(MockitoExtension.class)
 public class JwtAuthenticationFilterTest {
 
   private MockMvc mockMvc;
@@ -35,8 +37,8 @@ public class JwtAuthenticationFilterTest {
     when(jwtService.validateToken("invalid.token")).thenReturn(false);
 
     mockMvc = MockMvcBuilders
-      .standaloneSetup(new TestController()) // Use a minimal controller for testing
-      .addFilters(jwtAuthenticationFilter) // Add your JwtAuthenticationFilter
+      .standaloneSetup(new TestController())
+      .addFilters(jwtAuthenticationFilter)
       .build();
   }
 
@@ -50,15 +52,17 @@ public class JwtAuthenticationFilterTest {
 
   @Test
   public void giveNoToken_whenAccessingRestrictedEndpoint_thenAccessDenied() throws Exception {
-    MockHttpServletRequest request = new MockHttpServletRequest();
-    request.addHeader("Authorization", "Bearer invalid.token");
+
     mockMvc.perform(post("/test/protected"))
-      .andExpect(status().isForbidden()); // or isUnauthorized(), depending on your filter's behavior
-  }
+      .andExpect(status().isForbidden());
 
   @Test
   public void givenInvlidToken_whenAccessingRestrictedEndPoint_thenAccessDenied() throws Exception {
+    MockHttpServletRequest request = new MockHttpServletRequest();
+    request.addHeader("Authorization", "Bearer invalid.token");
 
+    mockMvc.perform(post("/test/protected"))
+      .andExpect(status().isForbidden());
   }
 
   @Test
@@ -73,7 +77,7 @@ public class JwtAuthenticationFilterTest {
 
   @RestController
   public static class TestController {
-    @GetMapping("/test/protected")
+    @PostMapping("/test/protected")
     public ResponseEntity<String> protectedEndpoint() {
       return ResponseEntity.ok("Access Granted");
     }
