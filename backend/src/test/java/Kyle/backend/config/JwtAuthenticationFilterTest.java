@@ -6,6 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.web.servlet.MockMvc;
@@ -34,7 +36,7 @@ public class JwtAuthenticationFilterTest {
   @BeforeEach
   public void setup() {
     when(jwtService.validateToken("valid.token")).thenReturn(true);
-    when(jwtService.validateToken("invalid.token")).thenReturn(false);
+    // when(jwtService.validateToken("invalid.token")).thenReturn(false);
 
     mockMvc = MockMvcBuilders
       .standaloneSetup(new TestController())
@@ -43,12 +45,12 @@ public class JwtAuthenticationFilterTest {
   }
 
   @Test
-  public void shouldCallJwtServiceToValidateToken() throws Exception {
-      mockMvc.perform(post("/test/protected")
-          .header("Authorization", "Bearer valid.token"))
-          .andExpect(status().isOk()); // Assuming that a valid token leads to a successful response
+  public void givenValidToken_whenAccessingRestrictedEndPoint_thenAccessApproved() throws Exception {
+    mockMvc.perform(post("/test/protected")
+      .header("Authorization", "Bearer valid.token"))
+      .andExpect(status().isOk());
 
-      verify(jwtService).validateToken("valid.token");
+    verify(jwtService).validateToken("valid.token");
   }
 
 
@@ -68,10 +70,6 @@ public class JwtAuthenticationFilterTest {
       .andExpect(status().isForbidden());
   }
 
-  @Test
-  public void givenValidToken_whenAccessingRestrictedEndPoint_thenAccessApproved() {
-
-  }
 
   @Test
   public void givenNoToken_whenAcessingUnrestrictedEndPoint_thenAccessAppoved() {
