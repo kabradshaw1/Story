@@ -7,6 +7,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +22,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Collections;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -56,6 +60,8 @@ public class JwtAuthenticationFilterTest {
   public void givenValidToken_whenAccessingRestrictedEndPoint_thenAccessApproved() throws Exception {
     when(jwtService.validateToken("valid.token")).thenReturn(true);
 
+    Authentication authentication = new UsernamePasswordAuthenticationToken("user", null, Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
+    when(jwtService.getAuthentication("valid.token")).thenReturn(authentication);
 
     mockMvc.perform(post("/api/test/protected")
       .header("Authorization", "Bearer valid.token"))
