@@ -123,4 +123,19 @@ public class JwtServiceTest {
 
     assertTrue(exception.getMessage().contains("Invalid refresh token"));
   }
+
+  @Test
+  public void givenValidToken_whenGetAuthentication_thenReturnAuthentication() {
+
+  }
+
+  @Test
+  public void givenIsAdmin_whenSetAuthentication_thenReturnIsAdmin() {
+
+  }
+
+  @Test
+  public void givenIsNotAdmin_whenSetAuthentication_thenReturnIsNotAdmin() {
+
+  }
 }

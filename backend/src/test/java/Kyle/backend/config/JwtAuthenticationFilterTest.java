@@ -6,10 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,7 +33,7 @@ public class JwtAuthenticationFilterTest {
   @BeforeEach
   public void setup() {
     when(jwtService.validateToken("valid.token")).thenReturn(true);
-    // when(jwtService.validateToken("invalid.token")).thenReturn(false);
+    when(jwtService.validateToken("invalid.token")).thenReturn(false);
 
     mockMvc = MockMvcBuilders
       .standaloneSetup(new TestController())
@@ -63,10 +60,8 @@ public class JwtAuthenticationFilterTest {
 
   @Test
   public void givenInvlidToken_whenAccessingRestrictedEndPoint_thenAccessDenied() throws Exception {
-    MockHttpServletRequest request = new MockHttpServletRequest();
-    request.addHeader("Authorization", "Bearer invalid.token");
-
-    mockMvc.perform(post("/test/protected"))
+    mockMvc.perform(post("/test/protected")
+      .header("Authorization", "Bearer invalid.token"))
       .andExpect(status().isForbidden());
   }
 
