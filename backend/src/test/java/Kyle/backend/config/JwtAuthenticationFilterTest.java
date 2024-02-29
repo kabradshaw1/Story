@@ -44,17 +44,20 @@ public class JwtAuthenticationFilterTest {
 
   @Test
   public void shouldCallJwtServiceToValidateToken() throws Exception {
-    // Execute the filter (as in previous examples)
+      mockMvc.perform(post("/test/protected")
+          .header("Authorization", "Bearer valid.token"))
+          .andExpect(status().isOk()); // Assuming that a valid token leads to a successful response
 
-    // Verify that JwtService.validateToken was called with the expected token
-    verify(jwtService).validateToken("valid.token");
+      verify(jwtService).validateToken("valid.token");
   }
+
 
   @Test
   public void giveNoToken_whenAccessingRestrictedEndpoint_thenAccessDenied() throws Exception {
 
     mockMvc.perform(post("/test/protected"))
       .andExpect(status().isForbidden());
+  }
 
   @Test
   public void givenInvlidToken_whenAccessingRestrictedEndPoint_thenAccessDenied() throws Exception {

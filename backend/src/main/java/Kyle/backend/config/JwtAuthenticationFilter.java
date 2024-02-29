@@ -12,6 +12,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -24,10 +26,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       throws ServletException, IOException {
     String token = extractToken(request);
     if (token != null && jwtService.validateToken(token)) {
-      Authentication authentication = jwtService.getAuthentication(token);
-      SecurityContextHolder.getContext().setAuthentication(authentication);
+      if(jwtService.validateToken(token)) {
+        Authentication authentication = jwtService.getAuthentication(token);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+      }
     }
-
     filterChain.doFilter(request, response);
   }
 
