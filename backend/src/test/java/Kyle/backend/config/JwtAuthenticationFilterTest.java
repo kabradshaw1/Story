@@ -1,14 +1,14 @@
 package Kyle.backend.config;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,56 +19,49 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
+
+@SpringBootTest
+@AutoConfigureMockMvc
+@ExtendWith(SpringExtension.class)
 public class JwtAuthenticationFilterTest {
 
+  @Autowired
   private MockMvc mockMvc;
 
-  @Mock
+  @MockBean
   private JwtService jwtService;
-
-  @InjectMocks
-  private JwtAuthenticationFilter jwtAuthenticationFilter;
-
-  @BeforeEach
-  public void setup() {
-    when(jwtService.validateToken("valid.token")).thenReturn(true);
-    when(jwtService.validateToken("invalid.token")).thenReturn(false);
-
-    mockMvc = MockMvcBuilders
-      .standaloneSetup(new TestController())
-      .addFilters(jwtAuthenticationFilter)
-      .build();
-  }
-
-  @Test
-  public void givenValidToken_whenAccessingRestrictedEndPoint_thenAccessApproved() throws Exception {
-    mockMvc.perform(post("/test/protected")
-      .header("Authorization", "Bearer valid.token"))
-      .andExpect(status().isOk());
-
-    verify(jwtService).validateToken("valid.token");
-  }
-
-
-  @Test
-  public void giveNoToken_whenAccessingRestrictedEndpoint_thenAccessDenied() throws Exception {
-
-    mockMvc.perform(post("/test/protected"))
-      .andExpect(status().isForbidden());
-  }
 
   @Test
   public void givenInvlidToken_whenAccessingRestrictedEndPoint_thenAccessDenied() throws Exception {
-    mockMvc.perform(post("/test/protected")
+    when(jwtService.validateToken("invalid.token")).thenReturn(false);
+
+    mockMvc.perform(post("/api/test/protected")
       .header("Authorization", "Bearer invalid.token"))
       .andExpect(status().isForbidden());
   }
 
+  @Test
+  public void giveNoToken_whenAccessingRestrictedEndpoint_thenAccessDenied() throws Exception {
+
+    mockMvc.perform(post("/api/test/protected"))
+      .andExpect(status().isForbidden());
+  }
 
   @Test
   public void givenNoToken_whenAcessingUnrestrictedEndPoint_thenAccessAppoved() {
 
+  }
+
+  @Test
+  public void givenValidToken_whenAccessingRestrictedEndPoint_thenAccessApproved() throws Exception {
+    when(jwtService.validateToken("valid.token")).thenReturn(true);
+
+
+    mockMvc.perform(post("/api/test/protected")
+      .header("Authorization", "Bearer valid.token"))
+      .andExpect(status().isOk());
+
+    verify(jwtService).validateToken("valid.token");
   }
 
   @RestController
@@ -79,3 +72,25 @@ public class JwtAuthenticationFilterTest {
     }
   }
 }
+
+// @Test
+// public void giveNoToken_whenAccessingRestrictedEndpoint_thenAccessDenied() throws Exception {
+
+//   mockMvc.perform(post("/test/protected"))
+//     .andExpect(status().isForbidden());
+// }
+
+// @Test
+// public void givenNoToken_whenAcessingUnrestrictedEndPoint_thenAccessAppoved() {
+
+// }
+// @Test
+// public void givenValidToken_whenAccessingRestrictedEndPoint_thenAccessApproved() throws Exception {
+//   when(jwtService.validateToken("valid.token")).thenReturn(true);
+
+//   mockMvc.perform(post("/test/protected")
+//     .header("Authorization", "Bearer valid.token"))
+//     .andExpect(status().isOk());
+
+//   verify(jwtService).validateToken("valid.token");
+// }
