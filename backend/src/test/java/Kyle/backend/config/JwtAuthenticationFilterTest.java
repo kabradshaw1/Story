@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,7 @@ import java.util.Collections;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 public class JwtAuthenticationFilterTest {
 
   @Autowired
@@ -70,7 +72,7 @@ public class JwtAuthenticationFilterTest {
 
   @RestController
   public static class TestController {
-    @PostMapping("/test/protected")
+    @PostMapping("/api/test/protected")
     public ResponseEntity<String> protectedEndpoint() {
       return ResponseEntity.ok("Access Granted");
     }
