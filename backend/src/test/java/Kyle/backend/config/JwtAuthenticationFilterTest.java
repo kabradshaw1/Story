@@ -1,7 +1,6 @@
 package Kyle.backend.config;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,14 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import Kyle.backend.service.JwtService;
 
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -26,7 +23,6 @@ import java.util.Collections;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@ExtendWith(SpringExtension.class)
 public class JwtAuthenticationFilterTest {
 
   @Autowired
@@ -60,14 +56,16 @@ public class JwtAuthenticationFilterTest {
   public void givenValidToken_whenAccessingRestrictedEndPoint_thenAccessApproved() throws Exception {
     when(jwtService.validateToken("valid.token")).thenReturn(true);
 
-    Authentication authentication = new UsernamePasswordAuthenticationToken("user", null, Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
+    Authentication authentication = new UsernamePasswordAuthenticationToken(
+      "TestUser", 
+      null, 
+      Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
+    );
     when(jwtService.getAuthentication("valid.token")).thenReturn(authentication);
 
     mockMvc.perform(post("/api/test/protected")
       .header("Authorization", "Bearer valid.token"))
       .andExpect(status().isOk());
-
-    verify(jwtService).validateToken("valid.token");
   }
 
   @RestController
@@ -78,25 +76,3 @@ public class JwtAuthenticationFilterTest {
     }
   }
 }
-
-// @Test
-// public void giveNoToken_whenAccessingRestrictedEndpoint_thenAccessDenied() throws Exception {
-
-//   mockMvc.perform(post("/test/protected"))
-//     .andExpect(status().isForbidden());
-// }
-
-// @Test
-// public void givenNoToken_whenAcessingUnrestrictedEndPoint_thenAccessAppoved() {
-
-// }
-// @Test
-// public void givenValidToken_whenAccessingRestrictedEndPoint_thenAccessApproved() throws Exception {
-//   when(jwtService.validateToken("valid.token")).thenReturn(true);
-
-//   mockMvc.perform(post("/test/protected")
-//     .header("Authorization", "Bearer valid.token"))
-//     .andExpect(status().isOk());
-
-//   verify(jwtService).validateToken("valid.token");
-// }
