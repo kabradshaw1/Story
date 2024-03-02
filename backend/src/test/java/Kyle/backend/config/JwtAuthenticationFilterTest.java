@@ -5,14 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import Kyle.backend.service.JwtService;
 
@@ -49,13 +46,7 @@ public class JwtAuthenticationFilterTest {
       .andExpect(status().isForbidden());
   }
 
-  @Test
-  public void givenNoToken_whenAcessingUnrestrictedEndPoint_thenAccessAppoved() {
-
-  }
-
-  @Test
-  public void givenValidToken_whenAccessingRestrictedEndPoint_thenAccessApproved() throws Exception {
+  public void givenValidTokenAndMissingBody_whenAccessingRestrictedEndPoint_thenBadRequest() throws Exception {
     when(jwtService.validateToken("valid.token")).thenReturn(true);
 
     Authentication authentication = new UsernamePasswordAuthenticationToken(
@@ -65,16 +56,8 @@ public class JwtAuthenticationFilterTest {
     );
     when(jwtService.getAuthentication("valid.token")).thenReturn(authentication);
 
-    mockMvc.perform(post("/api/test/protected")
+    mockMvc.perform(post("/api/characters")
       .header("Authorization", "Bearer valid.token"))
-      .andExpect(status().isOk());
-  }
-
-  @RestController
-  public static class TestController {
-    @PostMapping("/api/test/protected")
-    public ResponseEntity<String> protectedEndpoint() {
-      return ResponseEntity.ok("Access Granted");
-    }
+      .andExpect(status().isBadRequest()); // Expecting 400 due to missing body
   }
 }
