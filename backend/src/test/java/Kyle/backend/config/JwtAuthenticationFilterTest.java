@@ -78,25 +78,3 @@ public class JwtAuthenticationFilterTest {
     }
   }
 }
-
-// @Test
-// public void giveNoToken_whenAccessingRestrictedEndpoint_thenAccessDenied() throws Exception {
-
-//   mockMvc.perform(post("/test/protected"))
-//     .andExpect(status().isForbidden());
-// }
-
-// @Test
-// public void givenNoToken_whenAcessingUnrestrictedEndPoint_thenAccessAppoved() {
-
-// }
-// @Test
-// public void givenValidToken_whenAccessingRestrictedEndPoint_thenAccessApproved() throws Exception {
-//   when(jwtService.validateToken("valid.token")).thenReturn(true);
-
-//   mockMvc.perform(post("/test/protected")
-//     .header("Authorization", "Bearer valid.token"))
-//     .andExpect(status().isOk());
-
-//   verify(jwtService).validateToken("valid.token");
-// }
