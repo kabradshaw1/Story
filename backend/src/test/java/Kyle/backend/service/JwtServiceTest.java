@@ -1,6 +1,7 @@
 package Kyle.backend.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -45,7 +46,7 @@ public class JwtServiceTest {
     user = new User();
     user.setUsername("testUser");
     user.setId(1L);
-
+    jwtService.setTokenDecoder(tokenDecoder);
   }
 
   @Test
@@ -133,8 +134,8 @@ public class JwtServiceTest {
   }
 
   @Test
-  public void givenValidToken_whenGetAuthentication_thenReturnAuthentication() {
-    jwtService.setTokenDecoder(tokenDecoder);
+  public void givenValidAdminToken_whenGetAuthentication_thenReturnAmdinAuthentication() {
+
     String token = "dummyTokenForTest";
     DecodedJWT mockedDecodedJWT = Mockito.mock(DecodedJWT.class);
 
@@ -142,14 +143,32 @@ public class JwtServiceTest {
     Mockito.when(mockedDecodedJWT.getClaim("username")).thenReturn(new ClaimMock("testUser"));
     Mockito.when(mockedDecodedJWT.getClaim("isAdmin")).thenReturn(new ClaimMock(true));
 
+    // Perform the action
+    Authentication authentication = jwtService.getAuthentication(token);
+
+    // Verify the results
+    assertNotNull(authentication);
+    assertEquals(user.getUsername(), authentication.getName());
+    assertTrue(authentication.getAuthorities().stream()
+      .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN")));
+  }
+
+  @Test
+  public void givenValidNonAdminToken_whenGetAuthentication_thenReturNonAmdinAuthentication() {
+    String token = "dummyTokenForTest";
+    DecodedJWT mockedDecodedJWT = Mockito.mock(DecodedJWT.class);
+
+    Mockito.when(tokenDecoder.decode(token)).thenReturn(mockedDecodedJWT); // Mock the behavior of decode
+    Mockito.when(mockedDecodedJWT.getClaim("username")).thenReturn(new ClaimMock("testUser"));
+    Mockito.when(mockedDecodedJWT.getClaim("isAdmin")).thenReturn(new ClaimMock(false));
 
     // Perform the action
     Authentication authentication = jwtService.getAuthentication(token);
 
     // Verify the results
     assertNotNull(authentication);
-    // assertEquals(user, authentication.getName());
-    assertTrue(authentication.getAuthorities().stream()
+    assertEquals(user.getUsername(), authentication.getName());
+    assertFalse(authentication.getAuthorities().stream()
       .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN")));
   }
 
