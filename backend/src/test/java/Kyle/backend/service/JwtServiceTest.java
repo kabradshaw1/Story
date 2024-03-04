@@ -15,10 +15,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.Authentication;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
-
 import Kyle.backend.dao.UserRepository;
 import Kyle.backend.entity.User;
 
@@ -126,6 +126,30 @@ public class JwtServiceTest {
 
   @Test
   public void givenValidToken_whenGetAuthentication_thenReturnAuthentication() {
+    // Assume a valid token that would nominally yield the following claims
+    String expectedUsername = "testUser";
+    boolean expectedIsAdmin = true; // Assuming this user is an admin for this test
 
+    // Mock the userRepository to return your test user
+    Mockito.when(userRepository.findByUsername(expectedUsername))
+          .thenReturn(Optional.of(user)); // Assuming you have a findByUsername method
+
+    // Since we can't mock JWT.decode directly, we'll need to ensure our token is correctly formatted
+    // and contains the expected claims. This is where the abstraction or a utility method would come in handy.
+    // For this example, let's skip directly mocking JWT.decode and focus on the result.
+
+    // Assuming your JwtService.getAuthentication method looks up the user and checks their roles
+    // to grant authorities, you'll want to set up your user object accordingly.
+    user.setUsername(expectedUsername);
+    user.setIsAdmin(expectedIsAdmin);
+
+    // Perform the action
+    Authentication authentication = jwtService.getAuthentication("dummyTokenForTest");
+
+    // Verify the results
+    assertNotNull(authentication);
+    assertEquals(expectedUsername, authentication.getName());
+    assertTrue(authentication.getAuthorities().stream()
+      .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN")));
   }
 }
