@@ -10,6 +10,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+// These packages could end up being moved out of that service if I need to.
+import Kyle.backend.service.JwtService.JWTTokenDecoder;
+import Kyle.backend.service.JwtService.TokenDecoder;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
@@ -28,6 +32,11 @@ public class SecurityConfig {
         .anyRequest().permitAll())
         .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     return http.build();
+  }
+
+  @Bean
+  public TokenDecoder tokenDecoder() {
+    return new JWTTokenDecoder();
   }
 
   @Bean

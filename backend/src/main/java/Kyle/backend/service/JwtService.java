@@ -30,6 +30,12 @@ public class JwtService {
   private final int ACCESS_TOKEN_EXPIRATION = 15 * 60 * 1000; // 15 minutes in milliseconds
   private final int REFRESH_TOKEN_EXPIRATION = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
   private Algorithm algorithm = Algorithm.HMAC256(SECRET);
+  private TokenDecoder tokenDecoder = new JWTTokenDecoder();
+
+  // This is needed for the test
+  public void setTokenDecoder(TokenDecoder tokenDecoder) {
+    this.tokenDecoder = tokenDecoder;
+  }
 
   public String generateAccessToken(User user) {
 
@@ -94,7 +100,7 @@ public class JwtService {
   }
 
   public Authentication getAuthentication(String token) {
-    DecodedJWT jwt = JWT.decode(token);
+    DecodedJWT jwt = tokenDecoder.decode(token);
 
     String username = jwt.getClaim("username").asString();
     boolean isAdmin = jwt.getClaim("isAdmin").asBoolean();
@@ -110,5 +116,17 @@ public class JwtService {
         username, "", authorities);
 
     return new UsernamePasswordAuthenticationToken(principal, null, authorities);
+  }
+
+  // Added this so I could mock this in the test
+  public interface TokenDecoder {
+    DecodedJWT decode(String token);
+  }
+
+  public static class JWTTokenDecoder implements TokenDecoder {
+    @Override
+    public DecodedJWT decode(String token) {
+      return JWT.decode(token);
+    }
   }
 }
