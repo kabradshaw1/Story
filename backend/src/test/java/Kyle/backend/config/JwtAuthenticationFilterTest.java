@@ -49,6 +49,7 @@ public class JwtAuthenticationFilterTest {
   // it here in the JwtAuthFilterTest class.  I decided to avoid using an actual endpoint, even though they load
   // with the way this test is setup.  I worry that testing with an actual endpoint will cause issues when I change
   // end points as I work on the app.
+  @Test
   public void givenValidTokenAndMissingBody_whenAccessingRestrictedEndPoint_thenBadRequest() throws Exception {
     when(jwtService.validateToken("valid.token")).thenReturn(true);
 
