@@ -142,6 +142,7 @@ public class JwtServiceTest {
     Mockito.when(tokenDecoder.decode(token)).thenReturn(mockedDecodedJWT); // Mock the behavior of decode
     Mockito.when(mockedDecodedJWT.getClaim("username")).thenReturn(new ClaimMock("testUser"));
     Mockito.when(mockedDecodedJWT.getClaim("isAdmin")).thenReturn(new ClaimMock(true));
+    Mockito.when(mockedDecodedJWT.getClaim("user_id")).thenReturn(new ClaimMock(1L));
 
     // Perform the action
     Authentication authentication = jwtService.getAuthentication(token);
@@ -161,6 +162,7 @@ public class JwtServiceTest {
     Mockito.when(tokenDecoder.decode(token)).thenReturn(mockedDecodedJWT); // Mock the behavior of decode
     Mockito.when(mockedDecodedJWT.getClaim("username")).thenReturn(new ClaimMock("testUser"));
     Mockito.when(mockedDecodedJWT.getClaim("isAdmin")).thenReturn(new ClaimMock(false));
+    Mockito.when(mockedDecodedJWT.getClaim("user_id")).thenReturn(new ClaimMock(1L));
 
     // Perform the action
     Authentication authentication = jwtService.getAuthentication(token);

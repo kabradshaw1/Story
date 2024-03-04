@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.List;
 import java.util.ArrayList;
 
+import Kyle.backend.config.CustomUserPrincipal;
 import Kyle.backend.dao.UserRepository;
 import Kyle.backend.entity.User;
 
@@ -104,6 +105,7 @@ public class JwtService {
 
     String username = jwt.getClaim("username").asString();
     boolean isAdmin = jwt.getClaim("isAdmin").asBoolean();
+    Long userId = jwt.getClaim("user_id").asLong();
 
     List<SimpleGrantedAuthority> authorities = new ArrayList<>();
     if (isAdmin) {
@@ -112,8 +114,8 @@ public class JwtService {
       authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
     }
     // Using fully qualified name for Spring Security's User
-    org.springframework.security.core.userdetails.User principal = new org.springframework.security.core.userdetails.User(
-        username, "", authorities);
+    CustomUserPrincipal principal = new CustomUserPrincipal(
+        username, userId, authorities);
 
     return new UsernamePasswordAuthenticationToken(principal, null, authorities);
   }
