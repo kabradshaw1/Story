@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import java.util.Set;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.util.Date;
@@ -30,19 +31,20 @@ public class Character {
   private String bio;
 
   @Column(name = "user_id")
-  private Long user_id;
+  @CreatedBy
+  private Long userId;
 
   @Column(name = "date_created")
   @CreationTimestamp
-    private Date dateCreated;
+  private Date dateCreated;
 
   @Column(name = "date_modified")
   @LastModifiedDate
-    private Date dateModified;
+  private Date dateModified;
 
   @ManyToMany
   @JoinTable(
-    name = "charact_scene",
+    name = "character_scene",
     joinColumns = @JoinColumn(name = "character_id"),
     inverseJoinColumns = @JoinColumn(name = "scene_id")
   )

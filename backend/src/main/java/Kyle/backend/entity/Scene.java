@@ -7,8 +7,10 @@ import lombok.NoArgsConstructor;
 import java.util.Set;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashSet;
 
@@ -33,15 +35,16 @@ public class Scene {
   private String timeline;
 
   @Column(name = "user_id")
-  private Long user_id;
+  @CreatedBy
+  private Long userId;
 
   @Column(name = "date_created")
   @CreationTimestamp
-    private Date dateCreated;
+  private Instant dateCreated;
 
   @Column(name = "date_modified")
   @LastModifiedDate
-    private Date dateModified;
+  private Instant dateModified;
 
   @ManyToMany
   @JoinTable(
