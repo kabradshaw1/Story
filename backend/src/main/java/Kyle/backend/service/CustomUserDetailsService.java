@@ -13,7 +13,7 @@ import Kyle.backend.config.CustomUserPrincipal;
 import Kyle.backend.dao.UserRepository;
 import Kyle.backend.entity.User;
 
-public class CustomUserDetailsService  implements UserDetailsService{
+public class CustomUserDetailsService  implements UserDetailsService {
 
   @Autowired
   private UserRepository userRepository;
@@ -29,5 +29,4 @@ public class CustomUserDetailsService  implements UserDetailsService{
 
     return new CustomUserPrincipal(user.getUsername(), user.getId(), Collections.singletonList(authority));
   }
-
 }
