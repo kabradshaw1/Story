@@ -1,5 +1,6 @@
 package Kyle.backend.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import Kyle.backend.service.CustomUserDetailsService;
 // These packages could end up being moved out of that service if I need to.
 import Kyle.backend.service.JwtService.JWTTokenDecoder;
 import Kyle.backend.service.JwtService.TokenDecoder;
@@ -18,6 +20,10 @@ import Kyle.backend.service.JwtService.TokenDecoder;
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
+
+  @SuppressWarnings("unused")
+  @Autowired
+  private CustomUserDetailsService customUserDetailsService;
 
   @Bean
   public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -30,7 +36,7 @@ public class SecurityConfig {
         .requestMatchers(HttpMethod.DELETE, "/api/**").authenticated()
         .requestMatchers(HttpMethod.PATCH, "/api/**").authenticated()
         .anyRequest().permitAll())
-        .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+      .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     return http.build();
   }
 

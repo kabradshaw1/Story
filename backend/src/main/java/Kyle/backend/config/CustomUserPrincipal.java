@@ -5,7 +5,7 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class CustomUserPrincipal implements UserDetails{
+public class CustomUserPrincipal implements UserDetails {
 
   private String username;
   private Long userId;
