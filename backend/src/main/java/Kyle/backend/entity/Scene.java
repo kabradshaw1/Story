@@ -10,7 +10,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import java.time.Instant;
 import java.util.Date;
 import java.util.HashSet;
 
@@ -40,11 +39,11 @@ public class Scene {
 
   @Column(name = "date_created")
   @CreationTimestamp
-  private Instant dateCreated;
+  private Date dateCreated;
 
   @Column(name = "date_modified")
   @LastModifiedDate
-  private Instant dateModified;
+  private Date dateModified;
 
   @ManyToMany
   @JoinTable(
