@@ -17,7 +17,7 @@ CREATE TABLE `characters` (
   `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
   `name` VARCHAR(255) NOT NULL,
   `bio` MEDIUMTEXT NOT NULL,
-  `user_id` BIGINT NOT NULL,
+  `username` VARCHAR(255) NOT NULL,
   `date_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `date_modified` TIMESTAMP NULL
 );
@@ -27,7 +27,7 @@ CREATE TABLE `scene` (
   `title` VARCHAR(255) NOT NULL,
   `body` MEDIUMTEXT NOT NULL,
   `timeline` VARCHAR(255) NOT NULL,
-  `user_id` BIGINT NOT NULL,
+  `username` VARCHAR(255) NOT NULL,
   `date_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `date_modified` TIMESTAMP NULL
 );

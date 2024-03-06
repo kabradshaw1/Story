@@ -30,9 +30,9 @@ public class Character {
   @Column(name = "bio")
   private String bio;
 
-  @Column(name = "user_id")
+  @Column(name = "username")
   @CreatedBy
-  private Long userId;
+  private String username;
 
   @Column(name = "date_created")
   @CreationTimestamp

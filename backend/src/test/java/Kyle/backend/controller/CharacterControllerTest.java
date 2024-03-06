@@ -75,6 +75,6 @@ public class CharacterControllerTest {
     Optional<Kyle.backend.entity.Character> optionalCharacter = characterRepository.name("string");
     assertTrue(optionalCharacter.isPresent());
     assertEquals("string", optionalCharacter.get().getBio());
-    assertEquals(1L, optionalCharacter.get().getUserId());
+    assertEquals("username", optionalCharacter.get().getUsername());
   }
 }
