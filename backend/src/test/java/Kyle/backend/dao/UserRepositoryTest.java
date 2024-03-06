@@ -14,7 +14,7 @@ import Kyle.backend.entity.User;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@TestPropertySource(locations = "classpath:test.properties")
+@TestPropertySource(locations = "classpath:application-test.properties")
 class UserRepositoryTest {
 
     @Autowired
