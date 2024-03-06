@@ -1,10 +1,13 @@
 package Kyle.backend.dao;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Collections;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,9 @@ public class CharacterRepositoryTest {
   @Autowired
   private MockMvc mockMvc;
 
+  @Autowired
+  private CharacterRepository characterRepository;
+
   @MockBean
   private JwtService jwtService;
 
@@ -44,7 +50,7 @@ public class CharacterRepositoryTest {
       """;
 
     Authentication authentication = new UsernamePasswordAuthenticationToken(
-      "TestUser",
+      "",
       null,
       Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
     );
@@ -54,6 +60,12 @@ public class CharacterRepositoryTest {
       .contentType(MediaType.APPLICATION_JSON)
       .header("Authorization", "Bearer valid.token")
       .content(body))
-      .andExpect(status().isOk());
+      .andExpect(status().isCreated());
+
+    // Verify the character is in the database
+    Optional<Kyle.backend.entity.Character> optionalCharacter = characterRepository.name("string");
+    assertTrue(optionalCharacter.isPresent(), "Character not found in database");
+    assertEquals(1L, optionalCharacter.get().getId(), "id doesn't match");
+    assertEquals("string", optionalCharacter.get().getBio(), "Bio does not match");
   }
 }
