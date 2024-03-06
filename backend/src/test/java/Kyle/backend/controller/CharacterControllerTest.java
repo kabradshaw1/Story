@@ -1,4 +1,4 @@
-package Kyle.backend.dao;
+package Kyle.backend.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -21,12 +21,14 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
+import Kyle.backend.config.CustomUserPrincipal;
+import Kyle.backend.dao.CharacterRepository;
 import Kyle.backend.service.JwtService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application-test.properties")
-public class CharacterRepositoryTest {
+public class CharacterControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
@@ -49,11 +51,18 @@ public class CharacterRepositoryTest {
       }
       """;
 
+    CustomUserPrincipal principal = new CustomUserPrincipal(
+      "username",
+      1L,
+      Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
+    );
+
     Authentication authentication = new UsernamePasswordAuthenticationToken(
-      "",
+      principal,
       null,
       Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
     );
+
     when(jwtService.getAuthentication("valid.token")).thenReturn(authentication);
 
     mockMvc.perform(post("/api/characters")
@@ -65,7 +74,7 @@ public class CharacterRepositoryTest {
     // Verify the character is in the database
     Optional<Kyle.backend.entity.Character> optionalCharacter = characterRepository.name("string");
     assertTrue(optionalCharacter.isPresent(), "Character not found in database");
-    assertEquals(1L, optionalCharacter.get().getId(), "id doesn't match");
     assertEquals("string", optionalCharacter.get().getBio(), "Bio does not match");
+    assertEquals(1L, optionalCharacter.get().getUserId());
   }
 }
