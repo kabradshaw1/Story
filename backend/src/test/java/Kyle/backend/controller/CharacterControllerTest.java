@@ -73,8 +73,8 @@ public class CharacterControllerTest {
 
     // Verify the character is in the database
     Optional<Kyle.backend.entity.Character> optionalCharacter = characterRepository.name("string");
-    assertTrue(optionalCharacter.isPresent(), "Character not found in database");
-    assertEquals("string", optionalCharacter.get().getBio(), "Bio does not match");
+    assertTrue(optionalCharacter.isPresent());
+    assertEquals("string", optionalCharacter.get().getBio());
     assertEquals(1L, optionalCharacter.get().getUserId());
   }
 }
