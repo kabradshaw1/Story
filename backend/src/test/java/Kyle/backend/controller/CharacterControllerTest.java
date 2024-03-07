@@ -83,7 +83,7 @@ public class CharacterControllerTest {
   }
 
   @Nested
-  class DeleteTests {
+  class DeletePutPatchTests {
 
     @BeforeEach
     public void setUpForDelete() throws Exception {
@@ -101,34 +101,67 @@ public class CharacterControllerTest {
         .content(body))
         .andExpect(status().isCreated());
     }
+
     @Test
     public void givenWrongAuthUser_whenDeletingPost_thenReturnError() throws Exception {
   
-      // Mocks use of JwtService.getAuth()
-      CustomUserPrincipal principalWrong = new CustomUserPrincipal(
+      CustomUserPrincipal principal = new CustomUserPrincipal(
         "WrongUsername",
         1L,
         Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
       );
-      Authentication authenticationWrong = new UsernamePasswordAuthenticationToken(
-        principalWrong,
+      Authentication authentication = new UsernamePasswordAuthenticationToken(
+        principal,
         null,
         Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
       );
-      when(jwtService.getAuthentication("valid.token")).thenReturn(authenticationWrong);
+      when(jwtService.getAuthentication("valid.token")).thenReturn(authentication);
   
       // Test that delete doesn't work
       mockMvc.perform(delete("/api/characters/1")
         .header("Authorization", "Bearer valid.token"))
         .andExpect(status().isForbidden());
     }
-  }
 
+    @Test
+    public void givenAdminUser_whenDeletingCharacter_thenDeleteCharacter() throws Exception{
+      // This test is checking that the SimpleGrantedAuthority("ADMIN_USER") allows
+      // the deleting of posts due to @PreAuthorize("hasRole('Admin') or #entity.username == authentication.principal.username")
+      // in the characterRepository
+      CustomUserPrincipal principal = new CustomUserPrincipal(
+        "AdminUser", 
+        1L, 
+        Collections.singletonList(new SimpleGrantedAuthority("ADMIN_USER"))
+      );
+      Authentication authentication = new UsernamePasswordAuthenticationToken(
+        principal, 
+        null, 
+        Collections.singletonList(new SimpleGrantedAuthority("ADMIN_USER"))
+      );
+      when(jwtService.getAuthentication("valid.token")).thenReturn(authentication);
 
+      mockMvc.perform(delete("/api/characters/1")
+        .header("Authorization", "Bearer valid.token"))
+        .andExpect(status().isForbidden());
+    }
 
-  
-  @Test
-  public void givenAdminUser_whenDeletingCharacter_thenDeleteCharacter() {
-    
+    @Test
+    public void givenCurrectAuthUser_whenDeletingCharacter_thenDeleteCharacter() throws Exception {
+      CustomUserPrincipal principal = new CustomUserPrincipal(
+        "username", 
+        1L, 
+        Collections.singletonList(new SimpleGrantedAuthority("ADMIN_USER"))
+      );
+      Authentication authentication = new UsernamePasswordAuthenticationToken(
+        principal, 
+        null, 
+        Collections.singletonList(new SimpleGrantedAuthority("ADMIN_USER"))
+      );
+      when(jwtService.getAuthentication("valid.token")).thenReturn(authentication);
+
+      mockMvc.perform(delete("/api/characters/1")
+        .header("Authorization", "Bearer valid.token"))
+        .andExpect(status().isNoContent());
+    }
   }
 }
