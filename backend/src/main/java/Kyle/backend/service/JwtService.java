@@ -101,6 +101,9 @@ public class JwtService {
   }
 
   public Authentication getAuthentication(String token) {
+    // For now this method is only setup to deal with authenticated tokens
+    // because the only thing accessing it is JwtAuthFilter, and it's doing
+    // so right after validating the token.  
     DecodedJWT jwt = tokenDecoder.decode(token);
 
     String username = jwt.getClaim("username").asString();

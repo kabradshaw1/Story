@@ -11,12 +11,12 @@ import java.util.Collections;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -43,7 +43,10 @@ public class CharacterControllerTest {
 
   @BeforeEach
   public void setup() {
+    // Mocks making it past the token validation in JwtAuthFilter
     when(jwtService.validateToken("valid.token")).thenReturn(true);
+    // Mock authenticating a user and so that JwtAuthFilter will set a valid user
+    // when it calls jwtService.getAuthentiation()
     CustomUserPrincipal principal = new CustomUserPrincipal(
       "username",
       1L,
@@ -57,7 +60,6 @@ public class CharacterControllerTest {
     when(jwtService.getAuthentication("valid.token")).thenReturn(authentication);
   }
 
-  @SuppressWarnings("null")
   @Test
   public void givenAuthUser_whenCharacterPost_thenCreatePost() throws Exception {
 
@@ -69,7 +71,6 @@ public class CharacterControllerTest {
       """;
 
     mockMvc.perform(post("/api/characters")
-      .contentType(MediaType.APPLICATION_JSON)
       .header("Authorization", "Bearer valid.token")
       .content(body))
       .andExpect(status().isCreated());
@@ -81,58 +82,50 @@ public class CharacterControllerTest {
     assertEquals("username", optionalCharacter.get().getUsername());
   }
 
-  @SuppressWarnings("null")
-  @Test
-  public void givenWrongAuthUser_whenDeletingPost_thenReturnError() throws Exception {
-    // Mocks making it past the JwtAuthFilter
-    when(jwtService.validateToken("valid.token")).thenReturn(true);
+  @Nested
+  class DeleteTests {
 
-    // Create a character in the mocked database.  This is all I need to locate a character
-    // and verify that it was made by the person that is authenticated
-    String body = """
-      {
-        "name": "string",
-        "bio": "string"
-      }
-      """;
-
-    CustomUserPrincipal principal = new CustomUserPrincipal(
-      "username",
-      1L,
-      Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
-    );
-
-    Authentication authentication = new UsernamePasswordAuthenticationToken(
-      principal,
-      null,
-      Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
-    );
-    when(jwtService.getAuthentication("valid.token")).thenReturn(authentication);
-
-    mockMvc.perform(post("/api/characters")
-      .contentType(MediaType.APPLICATION_JSON)
-      .header("Authorization", "Bearer valid.token")
-      .content(body))
-      .andExpect(status().isCreated());
-
-    // Mocks use of JwtService.getAuth()
-    CustomUserPrincipal principalWrong = new CustomUserPrincipal(
-      "WrongUsername",
-      1L,
-      Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
-    );
-    Authentication authenticationWrong = new UsernamePasswordAuthenticationToken(
-      principalWrong,
-      null,
-      Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
-    );
-    when(jwtService.getAuthentication("valid.token")).thenReturn(authenticationWrong);
-
-    // Test that delete doesn't work
-    mockMvc.perform(delete("/api/characters/1")
-      .header("Authorization", "Bearer valid.token"))
-      .andExpect(status().isForbidden());
+    @BeforeEach
+    public void setUpForDelete() throws Exception {
+      // Create a character in the mocked database.  This is all I need to locate a character
+      // and verify that it was made by the person that is authenticated
+      String body = """
+        {
+          "name": "string",
+          "bio": "string"
+        }
+        """;
+        
+      mockMvc.perform(post("/api/characters")
+        .header("Authorization", "Bearer valid.token")
+        .content(body))
+        .andExpect(status().isCreated());
+    }
+    @Test
+    public void givenWrongAuthUser_whenDeletingPost_thenReturnError() throws Exception {
+  
+      // Mocks use of JwtService.getAuth()
+      CustomUserPrincipal principalWrong = new CustomUserPrincipal(
+        "WrongUsername",
+        1L,
+        Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
+      );
+      Authentication authenticationWrong = new UsernamePasswordAuthenticationToken(
+        principalWrong,
+        null,
+        Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
+      );
+      when(jwtService.getAuthentication("valid.token")).thenReturn(authenticationWrong);
+  
+      // Test that delete doesn't work
+      mockMvc.perform(delete("/api/characters/1")
+        .header("Authorization", "Bearer valid.token"))
+        .andExpect(status().isForbidden());
+    }
   }
+
+
+
   
   @Test
   public void givenAdminUser_whenDeletingCharacter_thenDeleteCharacter() {
