@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Collections;
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -40,10 +41,25 @@ public class CharacterControllerTest {
   @MockBean
   private JwtService jwtService;
 
+  @BeforeEach
+  public void setup() {
+    when(jwtService.validateToken("valid.token")).thenReturn(true);
+    CustomUserPrincipal principal = new CustomUserPrincipal(
+      "username",
+      1L,
+      Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
+    );
+    Authentication authentication = new UsernamePasswordAuthenticationToken(
+      principal,
+      null,
+      Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
+    );
+    when(jwtService.getAuthentication("valid.token")).thenReturn(authentication);
+  }
+
   @SuppressWarnings("null")
   @Test
   public void givenAuthUser_whenCharacterPost_thenCreatePost() throws Exception {
-    when(jwtService.validateToken("valid.token")).thenReturn(true);
 
     String body = """
       {
@@ -51,19 +67,6 @@ public class CharacterControllerTest {
         "bio": "string"
       }
       """;
-
-    CustomUserPrincipal principal = new CustomUserPrincipal(
-      "username",
-      1L,
-      Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
-    );
-
-    Authentication authentication = new UsernamePasswordAuthenticationToken(
-      principal,
-      null,
-      Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
-    );
-    when(jwtService.getAuthentication("valid.token")).thenReturn(authentication);
 
     mockMvc.perform(post("/api/characters")
       .contentType(MediaType.APPLICATION_JSON)
@@ -129,5 +132,10 @@ public class CharacterControllerTest {
     mockMvc.perform(delete("/api/characters/1")
       .header("Authorization", "Bearer valid.token"))
       .andExpect(status().isForbidden());
+  }
+  
+  @Test
+  public void givenAdminUser_whenDeletingCharacter_thenDeleteCharacter() {
+    
   }
 }
