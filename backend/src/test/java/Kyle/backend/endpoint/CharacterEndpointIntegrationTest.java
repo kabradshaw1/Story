@@ -32,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application-test.properties")
-public class CharacterPostIntegrationTest {
+public class CharacterEndpointIntegrationTest {
 
   @Autowired
   private MockMvc mockMvc;
@@ -61,11 +61,6 @@ public class CharacterPostIntegrationTest {
     );
     when(jwtService.getAuthentication("valid.token")).thenReturn(authentication);
   }
-
-  // @AfterEach
-  // public void cleanUpForDelete() {
-  //   characterRepository.deleteAll();
-  // }
 
   @Test
   public void givenAuthUser_whenCharacterPost_thenCreatePost() throws Exception {
