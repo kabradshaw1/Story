@@ -1,9 +1,10 @@
-package Kyle.backend.controller;
+package Kyle.backend.endpoint;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -26,11 +27,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import Kyle.backend.config.CustomUserPrincipal;
 import Kyle.backend.dao.CharacterRepository;
 import Kyle.backend.service.JwtService;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application-test.properties")
-public class CharacterControllerTest {
+public class CharacterPostIntegrationTest {
 
   @Autowired
   private MockMvc mockMvc;
@@ -60,6 +62,11 @@ public class CharacterControllerTest {
     when(jwtService.getAuthentication("valid.token")).thenReturn(authentication);
   }
 
+  // @AfterEach
+  // public void cleanUpForDelete() {
+  //   characterRepository.deleteAll();
+  // }
+
   @Test
   public void givenAuthUser_whenCharacterPost_thenCreatePost() throws Exception {
 
@@ -83,12 +90,13 @@ public class CharacterControllerTest {
   }
 
   @Nested
-  class DeletePutPatchTests {
+  class DeleteAndPatchTests {
 
     @BeforeEach
     public void setUpForDelete() throws Exception {
-      // Create a character in the mocked database.  This is all I need to locate a character
+         // Create a character in the mocked database.  This is all I need to locate a character
       // and verify that it was made by the person that is authenticated
+      
       String body = """
         {
           "name": "string",
@@ -102,6 +110,8 @@ public class CharacterControllerTest {
         .andExpect(status().isCreated());
     }
 
+ 
+    @Transactional
     @Test
     public void givenWrongAuthUser_whenDeletingPost_thenReturnError() throws Exception {
   
@@ -123,6 +133,7 @@ public class CharacterControllerTest {
         .andExpect(status().isForbidden());
     }
 
+    @Transactional
     @Test
     public void givenAdminUser_whenDeletingCharacter_thenDeleteCharacter() throws Exception{
       // This test is checking that the SimpleGrantedAuthority("ADMIN_USER") allows
@@ -145,8 +156,9 @@ public class CharacterControllerTest {
         .andExpect(status().isForbidden());
     }
 
+    @Transactional
     @Test
-    public void givenCurrectAuthUser_whenDeletingCharacter_thenDeleteCharacter() throws Exception {
+    public void givenCorrectAuthUser_whenDeletingCharacter_thenDeleteCharacter() throws Exception {
       CustomUserPrincipal principal = new CustomUserPrincipal(
         "username", 
         1L, 
@@ -162,6 +174,28 @@ public class CharacterControllerTest {
       mockMvc.perform(delete("/api/characters/1")
         .header("Authorization", "Bearer valid.token"))
         .andExpect(status().isNoContent());
+    }
+   
+    @Transactional
+    @Test
+    public void givenCorrectAuthUser_whenPatchCharacter_thenPatchCharacter() throws Exception {
+      String updatedBody = """
+        {
+          "name": "updatedName",
+          "bio": "updatedBio"
+        }
+        """;
+
+      mockMvc.perform(patch("/api/characters/1")
+          .header("Authorization", "Bearer valid.token")
+          .content(updatedBody))
+          .andExpect(status().isNoContent());
+
+      // Verify the character has been updated in the database
+      Optional<Kyle.backend.entity.Character> optionalCharacter = characterRepository.findById(1L);
+      assertTrue(optionalCharacter.isPresent());
+      assertEquals("updatedName", optionalCharacter.get().getName());
+      assertEquals("updatedBio", optionalCharacter.get().getBio());
     }
   }
 }
