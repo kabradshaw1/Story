@@ -132,7 +132,7 @@ public class JwtServiceTest {
 
     assertTrue(exception.getMessage().contains("Invalid refresh token"));
   }
-
+  // I have skipped writing tests for an invalid token being pass to the getAuthentication method for now
   @Test
   public void givenValidAdminToken_whenGetAuthentication_thenReturnAmdinAuthentication() {
 
