@@ -1,24 +1,23 @@
 package Kyle.backend.entity;
 
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.hibernate.annotations.CreationTimestamp;
+
+import org.springframework.data.annotation.LastModifiedDate;
+
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import java.util.Date;
-import java.util.HashSet;
-
 @Entity
-@Table(name = "scene")
+@Table(name = "scenes")
 @Data
 @NoArgsConstructor
 public class Scene {
-
+    
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
@@ -27,15 +26,11 @@ public class Scene {
   @Column(name = "title")
   private String title;
 
-  @Column(name = "text")
-  private String text;
+  @Column(name = "body")
+  private String body;
 
-  @Column(name = "timeline")
-  private String timeline;
-
-  @Column(name = "user_id")
-  @CreatedBy
-  private Long userId;
+  @Column(name = "username")
+  private String username;
 
   @Column(name = "date_created")
   @CreationTimestamp
@@ -51,5 +46,5 @@ public class Scene {
     joinColumns = @JoinColumn(name = "scene_id"),
     inverseJoinColumns = @JoinColumn(name = "character_id")
   )
-  private Set<Character> characters = new HashSet<>();
+  private Set<Scene> scenes = new HashSet<>();
 }
