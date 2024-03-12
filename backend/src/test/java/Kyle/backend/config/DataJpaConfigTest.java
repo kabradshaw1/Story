@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Collections;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -23,10 +22,6 @@ import Kyle.backend.entity.User;
 @Import(DataJpaConfig.class)
 public class DataJpaConfigTest {
 
-  @BeforeEach
-  void setUp() {
-
-  }
 
   @Autowired
   private TestEntityManager entityManager;
@@ -53,8 +48,8 @@ public class DataJpaConfigTest {
     SecurityContextHolder.setContext(securityContext);
 
     Character newCharacter = new Character();
-    newCharacter.setBio("test bio");
-    newCharacter.setName("Test");
+    newCharacter.setBody("test bio");
+    newCharacter.setTitle("Test");
 
     Character savedCharacter = entityManager.persistFlushFind(newCharacter);
 

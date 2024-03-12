@@ -24,11 +24,11 @@ public class Character {
   @Column(name = "id")
   private Long id;
 
-  @Column(name = "name")
-  private String name;
+  @Column(name = "title")
+  private String title;
 
-  @Column(name = "bio")
-  private String bio;
+  @Column(name = "body")
+  private String body;
 
   @Column(name = "username")
   @CreatedBy
