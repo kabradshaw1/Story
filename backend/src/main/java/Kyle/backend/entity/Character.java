@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import java.util.Set;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -33,7 +32,6 @@ public class Character {
   private String body;
 
   @Column(name = "username")
-  @CreatedBy
   private String username;
 
   @Column(name = "date_created")

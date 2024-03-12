@@ -1,5 +1,9 @@
 package Kyle.backend.entity;
 
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +12,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,7 +20,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 public class Scene {
-
+    
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
@@ -26,8 +29,8 @@ public class Scene {
   @Column(name = "title")
   private String title;
 
-  @Column(name = "body")
-  private String body;
+  @Column(name = "text")
+  private String text;
 
   @Column(name = "username")
   @CreatedBy
