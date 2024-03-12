@@ -67,8 +67,8 @@ public class CharacterEndpointIntegrationTest {
 
     String body = """
       {
-        "name": "string",
-        "bio": "string"
+        "title": "string",
+        "body": "string"
       }
       """;
 
@@ -78,9 +78,9 @@ public class CharacterEndpointIntegrationTest {
       .andExpect(status().isCreated());
 
     // Verify the character is in the database
-    Optional<Kyle.backend.entity.Character> optionalCharacter = characterRepository.name("string");
+    Optional<Kyle.backend.entity.Character> optionalCharacter = characterRepository.title("string");
     assertTrue(optionalCharacter.isPresent());
-    assertEquals("string", optionalCharacter.get().getBio());
+    assertEquals("string", optionalCharacter.get().getBody());
     assertEquals("username", optionalCharacter.get().getUsername());
   }
 
@@ -91,25 +91,25 @@ public class CharacterEndpointIntegrationTest {
     public void setUpForDelete() throws Exception {
          // Create a character in the mocked database.  This is all I need to locate a character
       // and verify that it was made by the person that is authenticated
-      
+
       String body = """
         {
-          "name": "string",
-          "bio": "string"
+          "title": "string",
+          "body": "string"
         }
         """;
-        
+
       mockMvc.perform(post("/api/characters")
         .header("Authorization", "Bearer valid.token")
         .content(body))
         .andExpect(status().isCreated());
     }
 
- 
+
     @Transactional
     @Test
     public void givenWrongAuthUser_whenDeletingPost_thenReturnError() throws Exception {
-  
+
       CustomUserPrincipal principal = new CustomUserPrincipal(
         "WrongUsername",
         1L,
@@ -121,7 +121,7 @@ public class CharacterEndpointIntegrationTest {
         Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
       );
       when(jwtService.getAuthentication("valid.token")).thenReturn(authentication);
-  
+
       // Test that delete doesn't work
       mockMvc.perform(delete("/api/characters/1")
         .header("Authorization", "Bearer valid.token"))
@@ -135,13 +135,13 @@ public class CharacterEndpointIntegrationTest {
       // the deleting of posts due to @PreAuthorize("hasRole('Admin') or #entity.username == authentication.principal.username")
       // in the characterRepository
       CustomUserPrincipal principal = new CustomUserPrincipal(
-        "AdminUser", 
-        1L, 
+        "AdminUser",
+        1L,
         Collections.singletonList(new SimpleGrantedAuthority("ADMIN_USER"))
       );
       Authentication authentication = new UsernamePasswordAuthenticationToken(
-        principal, 
-        null, 
+        principal,
+        null,
         Collections.singletonList(new SimpleGrantedAuthority("ADMIN_USER"))
       );
       when(jwtService.getAuthentication("valid.token")).thenReturn(authentication);
@@ -155,13 +155,13 @@ public class CharacterEndpointIntegrationTest {
     @Test
     public void givenCorrectAuthUser_whenDeletingCharacter_thenDeleteCharacter() throws Exception {
       CustomUserPrincipal principal = new CustomUserPrincipal(
-        "username", 
-        1L, 
+        "username",
+        1L,
         Collections.singletonList(new SimpleGrantedAuthority("ADMIN_USER"))
       );
       Authentication authentication = new UsernamePasswordAuthenticationToken(
-        principal, 
-        null, 
+        principal,
+        null,
         Collections.singletonList(new SimpleGrantedAuthority("ADMIN_USER"))
       );
       when(jwtService.getAuthentication("valid.token")).thenReturn(authentication);
@@ -170,14 +170,14 @@ public class CharacterEndpointIntegrationTest {
         .header("Authorization", "Bearer valid.token"))
         .andExpect(status().isNoContent());
     }
-   
+
     @Transactional
     @Test
     public void givenCorrectAuthUser_whenPatchCharacter_thenPatchCharacter() throws Exception {
       String updatedBody = """
         {
-          "name": "updatedName",
-          "bio": "updatedBio"
+          "title": "updatedName",
+          "body": "updatedBio"
         }
         """;
 
@@ -187,10 +187,10 @@ public class CharacterEndpointIntegrationTest {
           .andExpect(status().isNoContent());
 
       // Verify the character has been updated in the database
-      Optional<Kyle.backend.entity.Character> optionalCharacter = characterRepository.findById(1L);
+      Optional<Kyle.backend.entity.Character> optionalCharacter = characterRepository.title("updatedName");
       assertTrue(optionalCharacter.isPresent());
-      assertEquals("updatedName", optionalCharacter.get().getName());
-      assertEquals("updatedBio", optionalCharacter.get().getBio());
+      assertEquals("updatedName", optionalCharacter.get().getTitle());
+      assertEquals("updatedBio", optionalCharacter.get().getBody());
     }
   }
 }
