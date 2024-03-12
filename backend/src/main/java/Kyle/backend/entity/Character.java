@@ -9,6 +9,7 @@ import java.util.Set;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -17,6 +18,7 @@ import java.util.HashSet;
 @Table(name = "characters")
 @Data
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Character {
 
   @Id
@@ -42,6 +44,18 @@ public class Character {
   @LastModifiedDate
   private Date dateModified;
 
+  // @ManyToOne
+  // @JoinColumn(name = "timeline_birth_id")
+  // private Timeline birthTimeline;
+
+  // @ManyToOne
+  // @JoinColumn(name = "timeline_death_id")
+  // private Timeline deathTimeline;
+
+  // @ManyToOne
+  // @JoinColumn(name = "death_scene_id")
+  // private Scene deathScene;
+
   @ManyToMany
   @JoinTable(
     name = "character_scene",
@@ -50,4 +64,11 @@ public class Character {
   )
   private Set<Scene> scenes = new HashSet<>();
 
+  // @ManyToMany
+  // @JoinTable(
+  //   name = "character_organization",
+  //   joinColumns = @JoinColumn(name = "character_id"),
+  //   inverseJoinColumns = @JoinColumn(name = "organization_id")
+  // )
+  // private Set<Organization> organizations = new HashSet<>();
 }
