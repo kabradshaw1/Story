@@ -1,85 +1,83 @@
-// package Kyle.backend.entity;
+package Kyle.backend.entity;
 
-// import java.util.Date;
-// import java.util.HashSet;
-// import java.util.Set;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
-// import org.hibernate.annotations.CreationTimestamp;
-// import org.springframework.data.annotation.CreatedBy;
-// import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
-// import jakarta.persistence.*;
-// import lombok.Data;
-// import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-// @Entity
-// @Table(name = "locations")
-// @Data
-// @NoArgsConstructor
-// public class Location {
+@Entity
+@Table(name = "locations")
+@Data
+@NoArgsConstructor
+public class Location {
 
-//   @Id
-//   @GeneratedValue(strategy = GenerationType.IDENTITY)
-//   @Column(name = "id")
-//   private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private Long id;
 
-//   @Column(name = "name")
-//   private String name;
+  @Column(name = "title")
+  private String title;
 
-//   @Column(name = "description")
-//   private String description;
+  @Column(name = "body")
+  private String body;
 
-//   @Column(name = "username")
-//   @CreatedBy
-//   private String username;
+  @Column(name = "username")
+  @CreatedBy
+  private String username;
 
-//   @Column(name = "date_created")
-//   @CreationTimestamp
-//   private Date dateCreated;
+  @Column(name = "date_created")
+  @CreationTimestamp
+  private Date dateCreated;
 
-//   @Column(name = "date_modified")
-//   @LastModifiedDate
-//   private Date dateModified;
+  @Column(name = "date_modified")
+  @LastModifiedDate
+  private Date dateModified;
 
-//   @ManyToOne
-//   @JoinColumn(name = "region")
-//   private Region region;
+  @ManyToOne
+  @JoinColumn(name = "region")
+  private Region region;
 
-//   @ManyToOne
-//   @JoinColumn(name = "timeline_start_id")
-//   private Timeline timelineStart;
+  @ManyToOne
+  @JoinColumn(name = "timeline_start_id")
+  private Timeline timelineStart;
 
-//   @ManyToOne
-//   @JoinColumn(name = "timeline_end_id")
-//   private Timeline timelineEnd;
+  @ManyToOne
+  @JoinColumn(name = "timeline_end_id")
+  private Timeline timelineEnd;
 
-//   @OneToMany(mappedBy = "starting_location", cascade = CascadeType.ALL)
-//   private Set<Scene> startingScenes = new HashSet<>();
+  @OneToMany(mappedBy = "starting_location", cascade = CascadeType.ALL)
+  private Set<Scene> startingScenes = new HashSet<>();
 
-//   @OneToMany(mappedBy = "endinging_location", cascade = CascadeType.ALL)
-//   private Set<Scene> endingScenes = new HashSet<>();
+  @OneToMany(mappedBy = "endinging_location", cascade = CascadeType.ALL)
+  private Set<Scene> endingScenes = new HashSet<>();
 
-//   // Utility methods to add scenes
-//   public void addStartingScene(Scene scene) {
-//     if (scene != null) {
-//       startingScenes.add(scene);
-//       scene.setStartingLocation(this);
-//     }
-//   }
+  public void addStartingScene(Scene scene) {
+    if (scene != null) {
+      startingScenes.add(scene);
+      scene.setStartingLocation(this);
+    }
+  }
 
-//   public void addEndingScene(Scene scene) {
-//     if (scene != null) {
-//       endingScenes.add(scene);
-//       scene.setEndingLocation(this);
-//     }
-//   }
+  public void addEndingScene(Scene scene) {
+    if (scene != null) {
+      endingScenes.add(scene);
+      scene.setEndingLocation(this);
+    }
+  }
 
-//   @ManyToMany
-//   @JoinTable(
-//     name = "organization_location",
-//     joinColumns = @JoinColumn(name = "location_id"),
-//     inverseJoinColumns = @JoinColumn(name = "organization")
-//   )
-
-//   private Set<Organization> organizations = new HashSet<>();
-// }
+  @ManyToMany
+  @JoinTable(
+    name = "organization_location",
+    joinColumns = @JoinColumn(name = "location_id"),
+    inverseJoinColumns = @JoinColumn(name = "organization")
+  )
+  private Set<Organization> organizations = new HashSet<>();
+}

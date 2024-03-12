@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import java.util.Set;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -32,6 +33,7 @@ public class Character {
   private String body;
 
   @Column(name = "username")
+  @CreatedBy
   private String username;
 
   @Column(name = "date_created")
@@ -42,17 +44,29 @@ public class Character {
   @LastModifiedDate
   private Date dateModified;
 
-  // @ManyToOne
-  // @JoinColumn(name = "timeline_birth_id")
-  // private Timeline birthTimeline;
+  @ManyToMany
+  @JoinTable(
+    name = "character_conflict",
+    joinColumns = @JoinColumn(name = "character_id"),
+    inverseJoinColumns = @JoinColumn(name = "conflict_id")
+  )
+  private Set<Conflict> conflicts = new HashSet<>();
 
-  // @ManyToOne
-  // @JoinColumn(name = "timeline_death_id")
-  // private Timeline deathTimeline;
+  @ManyToMany
+  @JoinTable(
+    name = "character_organization",
+    joinColumns = @JoinColumn(name = "character_id"),
+    inverseJoinColumns = @JoinColumn(name = "organization_id")
+  )
+  private Set<Organization> organizations = new HashSet<>();
 
-  // @ManyToOne
-  // @JoinColumn(name = "death_scene_id")
-  // private Scene deathScene;
+  @ManyToOne
+  @JoinColumn(name = "scene_birth_id")
+  private Scene birthScene;
+
+  @ManyToOne
+  @JoinColumn(name = "scene_death_id")
+  private Scene deathScene;
 
   @ManyToMany
   @JoinTable(
@@ -62,11 +76,11 @@ public class Character {
   )
   private Set<Scene> scenes = new HashSet<>();
 
-  // @ManyToMany
-  // @JoinTable(
-  //   name = "character_organization",
-  //   joinColumns = @JoinColumn(name = "character_id"),
-  //   inverseJoinColumns = @JoinColumn(name = "organization_id")
-  // )
-  // private Set<Organization> organizations = new HashSet<>();
+  @ManyToOne
+  @JoinColumn(name = "timeline_birth_id")
+  private Timeline birthTimeline;
+
+  @ManyToOne
+  @JoinColumn(name = "timeline_death_id")
+  private Timeline deathTimeline;
 }
