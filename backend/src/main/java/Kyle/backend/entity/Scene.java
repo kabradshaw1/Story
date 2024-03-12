@@ -50,48 +50,48 @@ public class Scene {
   )
   private Set<Character> characters = new HashSet<>();
 
-  @ManyToOne
-  @JoinColumn(name = "starting_location_id")
-  private Location startingLocation;
+  // @ManyToOne
+  // @JoinColumn(name = "starting_location_id")
+  // private Location startingLocation;
 
-  @ManyToOne
-  @JoinColumn(name = "ending_location_id")
-  private Location endingLocation;
+  // @ManyToOne
+  // @JoinColumn(name = "ending_location_id")
+  // private Location endingLocation;
 
-  @ManyToOne
-  @JoinColumn(name = "organization_start_id")
-  private Organization organizationStart;
+  // @ManyToOne
+  // @JoinColumn(name = "organization_start_id")
+  // private Organization organizationStart;
 
-  @ManyToOne
-  @JoinColumn(name = "organization_end_id")
-  private Organization organizationEnd;
+  // @ManyToOne
+  // @JoinColumn(name = "organization_end_id")
+  // private Organization organizationEnd;
 
-  @ManyToOne
-  @JoinColumn(name = "character_death_id")
-  private Character characterDeath;
+  // @ManyToOne
+  // @JoinColumn(name = "character_death_id")
+  // private Character characterDeath;
 
-  @OneToOne
-  @JoinColumn(name = "location_creation_id")
-  private Location locationCreation;
+  // @OneToOne
+  // @JoinColumn(name = "location_creation_id")
+  // private Location locationCreation;
 
-  @ManyToOne
-  @JoinColumn(name = "location_end_id")
-  private Location locationEnd;
+  // @ManyToOne
+  // @JoinColumn(name = "location_end_id")
+  // private Location locationEnd;
 
-  @ManyToMany
-  @JoinTable(
-    name = "scene_organization",
-    joinColumns = @JoinColumn(name = "scene_id"),
-    inverseJoinColumns = @JoinColumn(name = "organization")
-  )
-  private Set<Organization> organizationCreation = new HashSet<>();
+  // @ManyToMany
+  // @JoinTable(
+  //   name = "scene_organization",
+  //   joinColumns = @JoinColumn(name = "scene_id"),
+  //   inverseJoinColumns = @JoinColumn(name = "organization")
+  // )
+  // private Set<Organization> organizationCreation = new HashSet<>();
 
-  @ManyToOne
-  @JoinColumn(name = "timeline_start_id")
-  private Timeline timelineStart;
+  // @ManyToOne
+  // @JoinColumn(name = "timeline_start_id")
+  // private Timeline timelineStart;
 
-  @ManyToOne
-  @JoinColumn(name = "timeline_end_id")
-  private Timeline timelineEnd;
+  // @ManyToOne
+  // @JoinColumn(name = "timeline_end_id")
+  // private Timeline timelineEnd;
 
 }

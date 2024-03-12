@@ -44,29 +44,29 @@ public class Character {
   @LastModifiedDate
   private Date dateModified;
 
-  @ManyToMany
-  @JoinTable(
-    name = "character_conflict",
-    joinColumns = @JoinColumn(name = "character_id"),
-    inverseJoinColumns = @JoinColumn(name = "conflict_id")
-  )
-  private Set<Conflict> conflicts = new HashSet<>();
+  // @ManyToMany
+  // @JoinTable(
+  //   name = "character_conflict",
+  //   joinColumns = @JoinColumn(name = "character_id"),
+  //   inverseJoinColumns = @JoinColumn(name = "conflict_id")
+  // )
+  // private Set<Conflict> conflicts = new HashSet<>();
 
-  @ManyToMany
-  @JoinTable(
-    name = "character_organization",
-    joinColumns = @JoinColumn(name = "character_id"),
-    inverseJoinColumns = @JoinColumn(name = "organization_id")
-  )
-  private Set<Organization> organizations = new HashSet<>();
+  // @ManyToMany
+  // @JoinTable(
+  //   name = "character_organization",
+  //   joinColumns = @JoinColumn(name = "character_id"),
+  //   inverseJoinColumns = @JoinColumn(name = "organization_id")
+  // )
+  // private Set<Organization> organizations = new HashSet<>();
 
-  @ManyToOne
-  @JoinColumn(name = "scene_birth_id")
-  private Scene birthScene;
+  // @ManyToOne
+  // @JoinColumn(name = "scene_birth_id")
+  // private Scene birthScene;
 
-  @ManyToOne
-  @JoinColumn(name = "scene_death_id")
-  private Scene deathScene;
+  // @ManyToOne
+  // @JoinColumn(name = "scene_death_id")
+  // private Scene deathScene;
 
   @ManyToMany
   @JoinTable(
@@ -76,11 +76,11 @@ public class Character {
   )
   private Set<Scene> scenes = new HashSet<>();
 
-  @ManyToOne
-  @JoinColumn(name = "timeline_birth_id")
-  private Timeline birthTimeline;
+  // @ManyToOne
+  // @JoinColumn(name = "timeline_birth_id")
+  // private Timeline birthTimeline;
 
-  @ManyToOne
-  @JoinColumn(name = "timeline_death_id")
-  private Timeline deathTimeline;
+  // @ManyToOne
+  // @JoinColumn(name = "timeline_death_id")
+  // private Timeline deathTimeline;
 }

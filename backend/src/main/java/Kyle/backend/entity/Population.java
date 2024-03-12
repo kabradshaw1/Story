@@ -1,44 +1,44 @@
-package Kyle.backend.entity;
+// package Kyle.backend.entity;
 
-import java.util.Date;
+// import java.util.Date;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.LastModifiedDate;
+// import org.hibernate.annotations.CreationTimestamp;
+// import org.springframework.data.annotation.CreatedBy;
+// import org.springframework.data.annotation.LastModifiedDate;
 
-import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+// import jakarta.persistence.*;
+// import lombok.Data;
+// import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "population")
-@Data
-@NoArgsConstructor
-public class Population {
+// @Entity
+// @Table(name = "population")
+// @Data
+// @NoArgsConstructor
+// public class Population {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+//   @Id
+//   @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-  @Column(name = "id")
-  private Long id;
+//   @Column(name = "id")
+//   private Long id;
 
-  private Integer population;
+//   private Integer population;
 
-  private Region region;
+//   private Region region;
 
-  @Column(name = "username")
-  @CreatedBy
-  private String username;
+//   @Column(name = "username")
+//   @CreatedBy
+//   private String username;
 
-  @Column(name = "date_created")
-  @CreationTimestamp
-  private Date dateCreated;
+//   @Column(name = "date_created")
+//   @CreationTimestamp
+//   private Date dateCreated;
 
-  @Column(name = "date_modified")
-  @LastModifiedDate
-  private Date dateModified;
+//   @Column(name = "date_modified")
+//   @LastModifiedDate
+//   private Date dateModified;
 
-  private Timeline timeline;
+//   private Timeline timeline;
 
-  private Scene scene;
-}
+//   private Scene scene;
+// }
