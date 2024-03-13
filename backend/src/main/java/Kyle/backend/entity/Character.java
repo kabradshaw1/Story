@@ -19,7 +19,7 @@ import java.util.HashSet;
 @Data
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Character {
+public class Character implements Ownable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

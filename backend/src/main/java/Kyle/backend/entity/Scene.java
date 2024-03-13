@@ -16,7 +16,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Table(name = "scenes")
 @Data
 @NoArgsConstructor
-public class Scene {
+public class Scene implements Ownable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
