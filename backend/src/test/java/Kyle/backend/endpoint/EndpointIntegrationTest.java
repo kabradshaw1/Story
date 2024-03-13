@@ -11,7 +11,6 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +78,7 @@ public class EndpointIntegrationTest {
       .content(body))
       .andExpect(status().isCreated());
   }
-
+  @SuppressWarnings("null")
   @Nested
   class DeleteAndPatchTests {
 
@@ -87,9 +86,12 @@ public class EndpointIntegrationTest {
       return Stream.of("/api/characters", "/api/scenes"); // Add more endpoints as needed
     }
 
-    @BeforeEach
-    public void setUpForDelete() throws Exception {
-         // Create a character in the mocked database.  This is all I need to locate a character
+    @Transactional
+    @ParameterizedTest
+    @MethodSource("endpointProvider")
+    public void givenWrongAuthUser_whenDeletingPost_thenReturnError(String endpoint) throws Exception {
+
+      // Create a character in the mocked database.  This is all I need to locate a character
       // and verify that it was made by the person that is authenticated
 
       String body = """
@@ -99,16 +101,10 @@ public class EndpointIntegrationTest {
         }
         """;
 
-      mockMvc.perform(post("/api/characters")
+      mockMvc.perform(post(endpoint)
         .header("Authorization", "Bearer valid.token")
         .content(body))
         .andExpect(status().isCreated());
-    }
-
-    @Transactional
-    @ParameterizedTest
-    @MethodSource("endpointProvider")
-    public void givenWrongAuthUser_whenDeletingPost_thenReturnError(String endpoint) throws Exception {
 
       CustomUserPrincipal principal = new CustomUserPrincipal(
         "WrongUsername",
@@ -123,7 +119,7 @@ public class EndpointIntegrationTest {
       when(jwtService.getAuthentication("valid.token")).thenReturn(authentication);
 
       // Test that delete doesn't work
-      mockMvc.perform(delete("/api/characters/1")
+      mockMvc.perform(delete(endpoint + "/1")
         .header("Authorization", "Bearer valid.token"))
         .andExpect(status().isForbidden());
     }
@@ -135,6 +131,22 @@ public class EndpointIntegrationTest {
       // This test is checking that the SimpleGrantedAuthority("ADMIN_USER") allows
       // the deleting of posts due to @PreAuthorize("hasRole('Admin') or #entity.username == authentication.principal.username")
       // in the characterRepository
+
+      // Create a character in the mocked database.  This is all I need to locate a character
+      // and verify that it was made by the person that is authenticated
+
+      String body = """
+        {
+          "title": "string",
+          "body": "string"
+        }
+        """;
+
+      mockMvc.perform(post(endpoint)
+        .header("Authorization", "Bearer valid.token")
+        .content(body))
+        .andExpect(status().isCreated());
+
       CustomUserPrincipal principal = new CustomUserPrincipal(
         "AdminUser",
         1L,
@@ -147,7 +159,7 @@ public class EndpointIntegrationTest {
       );
       when(jwtService.getAuthentication("valid.token")).thenReturn(authentication);
 
-      mockMvc.perform(delete(endpoint + "1")
+      mockMvc.perform(delete(endpoint + "/1")
         .header("Authorization", "Bearer valid.token"))
         .andExpect(status().isForbidden());
     }
@@ -156,6 +168,19 @@ public class EndpointIntegrationTest {
     @ParameterizedTest
     @MethodSource("endpointProvider")
     public void givenCorrectAuthUser_whenDeletingCharacter_thenDeleteCharacter(String endpoint) throws Exception {
+
+      String body = """
+        {
+          "title": "string",
+          "body": "string"
+        }
+        """;
+
+      mockMvc.perform(post(endpoint)
+        .header("Authorization", "Bearer valid.token")
+        .content(body))
+        .andExpect(status().isCreated());
+
       CustomUserPrincipal principal = new CustomUserPrincipal(
         "username",
         1L,
@@ -168,7 +193,7 @@ public class EndpointIntegrationTest {
       );
       when(jwtService.getAuthentication("valid.token")).thenReturn(authentication);
 
-      mockMvc.perform(delete(endpoint + "1")
+      mockMvc.perform(delete(endpoint + "/1")
         .header("Authorization", "Bearer valid.token"))
         .andExpect(status().isNoContent());
     }
@@ -177,6 +202,19 @@ public class EndpointIntegrationTest {
     @ParameterizedTest
     @MethodSource("endpointProvider")
     public void givenCorrectAuthUser_whenPatchCharacter_thenPatchCharacter(String endpoint) throws Exception {
+
+      String body = """
+        {
+          "title": "string",
+          "body": "string"
+        }
+        """;
+
+      mockMvc.perform(post(endpoint)
+        .header("Authorization", "Bearer valid.token")
+        .content(body))
+        .andExpect(status().isCreated());
+
       String updatedBody = """
         {
           "title": "updatedName",
@@ -184,7 +222,7 @@ public class EndpointIntegrationTest {
         }
         """;
 
-      mockMvc.perform(patch(endpoint + "1")
+      mockMvc.perform(patch(endpoint + "/1")
           .header("Authorization", "Bearer valid.token")
           .content(updatedBody))
           .andExpect(status().isNoContent());
