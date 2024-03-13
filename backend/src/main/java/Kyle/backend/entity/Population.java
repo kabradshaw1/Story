@@ -1,28 +1,29 @@
-// package Kyle.backend.entity;
+package Kyle.backend.entity;
 
-// import java.util.Date;
+import java.util.Date;
 
-// import org.hibernate.annotations.CreationTimestamp;
-// import org.springframework.data.annotation.CreatedBy;
-// import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
-// import jakarta.persistence.*;
-// import lombok.Data;
-// import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-// @Entity
-// @Table(name = "population")
-// @Data
-// @NoArgsConstructor
-// public class Population {
+@Entity
+@Table(name = "population")
+@Data
+@NoArgsConstructor
+public class Population {
 
-//   @Id
-//   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-//   @Column(name = "id")
-//   private Long id;
+  @Column(name = "id")
+  private Long id;
 
-//   private Integer population;
+  @Column(name = "population")
+  private Integer population;
 
 //   private Region region;
 
@@ -41,4 +42,4 @@
 //   private Timeline timeline;
 
 //   private Scene scene;
-// }
+}

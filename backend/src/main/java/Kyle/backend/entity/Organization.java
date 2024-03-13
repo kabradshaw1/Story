@@ -1,30 +1,30 @@
-// package Kyle.backend.entity;
+package Kyle.backend.entity;
 
-// import java.util.Date;
-// import java.util.HashSet;
-// import java.util.Set;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
-// import org.hibernate.annotations.CreationTimestamp;
-// import org.springframework.data.annotation.CreatedBy;
-// import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
-// import jakarta.persistence.*;
-// import lombok.Data;
-// import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-// @Entity
-// @Table(name = "organizations")
-// @Data
-// @NoArgsConstructor
-// public class Organization {
+@Entity
+@Table(name = "organizations")
+@Data
+@NoArgsConstructor
+public class Organization {
 
-//   @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "id")
-//    private Long id;
+  @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @Column(name = "id")
+   private Long id;
 
-// //   @Column(name = "title")
-// //   private String title;
+  @Column(name = "title")
+  private String title;
 
 // //   @Column(name = "body")
 // //   private String body;
@@ -64,5 +64,5 @@
 // //     inverseJoinColumns = @JoinColumn(name = "scene_id")
 // //   )
 // //   private Set<Scene> scenes = new HashSet<>();
-// }
+}
 

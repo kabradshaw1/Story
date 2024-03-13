@@ -1,6 +1,6 @@
 // package Kyle.backend.dao;
 
-// import Kyle.backend.entity.Location;
+// import Kyle.backend.entity.Organization;
 
 // import java.util.Optional;
 
@@ -11,12 +11,12 @@
 
 // @CrossOrigin("http://localhost:4200")
 // @RepositoryRestResource
-// public interface LocationRepository extends JpaRepository<Location, Long> {
+// public interface OrganizationRepository extends JpaRepository<Organization, Long> {
 
 //   @SuppressWarnings("null")
 //   @Override
 //   @PreAuthorize("hasRole('Admin') or #entity.username == authentication.principal.username")
-//   <S extends Location> S save(S entity);
+//   <S extends Organization> S save(S entity);
 
-//   Optional<Location> title(String title);
+//   Optional<Organization> title(String title);
 // }
