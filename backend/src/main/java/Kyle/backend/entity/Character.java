@@ -44,13 +44,13 @@ public class Character implements Ownable {
   @LastModifiedDate
   private Date dateModified;
 
-  // @ManyToMany
-  // @JoinTable(
-  //   name = "character_conflict",
-  //   joinColumns = @JoinColumn(name = "character_id"),
-  //   inverseJoinColumns = @JoinColumn(name = "conflict_id")
-  // )
-  // private Set<Conflict> conflicts = new HashSet<>();
+  @ManyToMany
+  @JoinTable(
+    name = "character_conflict",
+    joinColumns = @JoinColumn(name = "character_id"),
+    inverseJoinColumns = @JoinColumn(name = "conflict_id")
+  )
+  private Set<Conflict> conflicts = new HashSet<>();
 
   // @ManyToMany
   // @JoinTable(
