@@ -15,10 +15,13 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -43,10 +46,13 @@ public class EndpointIntegrationTest {
   @Autowired
   private CharacterRepository characterRepository;
 
+  @Autowired
+  private SceneRepository sceneRepository;
+
   @MockBean
   private JwtService jwtService;
 
-  private Object currentRepository;
+  private JpaRepository<?, Long> currentRepository;
 
   static Stream<Object[]> endpointProvider() {
     return Stream.of(
@@ -74,12 +80,17 @@ public class EndpointIntegrationTest {
     when(jwtService.getAuthentication("valid.token")).thenReturn(authentication);
   }
 
-  private void switchRepositoryBasedOnEntity(Class<?> entityType) {
-
-  }
-
-  @Test
-  public void givenAuthUser_whenCharacterPost_thenCreatePost() throws Exception {
+  private void switchRepositoryBasedOnEntity(String entityType) {
+    if ("character".equals(entityType)) {
+        currentRepository = characterRepository;
+    } else if ("scene".equals(entityType)) {
+        currentRepository = sceneRepository;
+    }
+}
+  @ParameterizedTest
+  @MethodSource("endpointProvider")
+  public void givenAuthUser_whenPost_thenCreatePost(String endpoint, String entityType) throws Exception {
+    switchRepositoryBasedOnEntity(entityType);
 
     String body = """
       {
@@ -94,10 +105,10 @@ public class EndpointIntegrationTest {
       .andExpect(status().isCreated());
 
     // Verify the character is in the database
-    Optional<Character> optionalCharacter = characterRepository.title("string");
-    assertTrue(optionalCharacter.isPresent());
-    assertEquals("string", optionalCharacter.get().getBody());
-    assertEquals("username", optionalCharacter.get().getUsername());
+    Optional<Character> optionalEntity = currentRepository.title("string");
+    assertTrue(optionalEntity.isPresent());
+    assertEquals("string", optionalEntity.get().getBody());
+    assertEquals("username", optionalEntity.get().getUsername());
   }
 
   @Nested
