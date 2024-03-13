@@ -22,7 +22,6 @@ import Kyle.backend.entity.User;
 @Import(DataJpaConfig.class)
 public class DataJpaConfigTest {
 
-
   @Autowired
   private TestEntityManager entityManager;
 

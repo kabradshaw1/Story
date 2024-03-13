@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Collections;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -24,15 +25,17 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
+import Kyle.backend.entity.Character;
 import Kyle.backend.config.CustomUserPrincipal;
 import Kyle.backend.dao.CharacterRepository;
+import Kyle.backend.dao.SceneRepository;
 import Kyle.backend.service.JwtService;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application-test.properties")
-public class CharacterEndpointIntegrationTest {
+public class EndpointIntegrationTest {
 
   @Autowired
   private MockMvc mockMvc;
@@ -42,6 +45,15 @@ public class CharacterEndpointIntegrationTest {
 
   @MockBean
   private JwtService jwtService;
+
+  private Object currentRepository;
+
+  static Stream<Object[]> endpointProvider() {
+    return Stream.of(
+      new Object[]{"/api/characters", CharacterRepository.class},
+      new Object[]{"/api/scenes", SceneRepository.class}
+    );
+  }
 
   @BeforeEach
   public void setup() {
@@ -62,6 +74,10 @@ public class CharacterEndpointIntegrationTest {
     when(jwtService.getAuthentication("valid.token")).thenReturn(authentication);
   }
 
+  private void switchRepositoryBasedOnEntity(Class<?> entityType) {
+
+  }
+
   @Test
   public void givenAuthUser_whenCharacterPost_thenCreatePost() throws Exception {
 
@@ -78,7 +94,7 @@ public class CharacterEndpointIntegrationTest {
       .andExpect(status().isCreated());
 
     // Verify the character is in the database
-    Optional<Kyle.backend.entity.Character> optionalCharacter = characterRepository.title("string");
+    Optional<Character> optionalCharacter = characterRepository.title("string");
     assertTrue(optionalCharacter.isPresent());
     assertEquals("string", optionalCharacter.get().getBody());
     assertEquals("username", optionalCharacter.get().getUsername());
@@ -187,7 +203,7 @@ public class CharacterEndpointIntegrationTest {
           .andExpect(status().isNoContent());
 
       // Verify the character has been updated in the database
-      Optional<Kyle.backend.entity.Character> optionalCharacter = characterRepository.title("updatedName");
+      Optional<Character> optionalCharacter = characterRepository.title("updatedName");
       assertTrue(optionalCharacter.isPresent());
       assertEquals("updatedName", optionalCharacter.get().getTitle());
       assertEquals("updatedBio", optionalCharacter.get().getBody());
