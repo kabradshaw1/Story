@@ -47,6 +47,10 @@ CREATE TABLE `scene` (
   UNIQUE (`title`)
 );
 
+CREATE TABLE `regions` (
+  `id` BIGINT AUTO_INCREMENT PRIMARY KEY
+);
+
 CREATE TABLE `character_scene` (
   `character_id` BIGINT NOT NULL,
   `scene_id` BIGINT NOT NULL,
