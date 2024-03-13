@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "timeline")
 @Data
 @NoArgsConstructor
-public class Timeline {
+public class Timeline implements Ownable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
