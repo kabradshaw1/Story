@@ -10,7 +10,9 @@ CREATE TABLE `users` (
   `password` VARCHAR(255) NOT NULL,
   `is_admin` BOOLEAN NOT NULL DEFAULT FALSE,
   `date_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `date_modified` TIMESTAMP NULL
+  `date_modified` TIMESTAMP NULL,
+  UNIQUE (`username`),
+  UNIQUE (`email`)
 );
 
 CREATE TABLE `characters` (
@@ -19,7 +21,16 @@ CREATE TABLE `characters` (
   `body` MEDIUMTEXT NOT NULL,
   `username` VARCHAR(255) NOT NULL,
   `date_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `date_modified` TIMESTAMP NULL
+  `date_modified` TIMESTAMP NULL,
+  UNIQUE (`title`)
+);
+
+CREATE TABLE `timeline` (
+  `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
+  `username` VARCHAR(255) NOT NULL,
+  `date_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` TIMESTAMP NULL,
+  `timeline` INT NOT NULL
 );
 
 CREATE TABLE `scene` (
@@ -28,7 +39,12 @@ CREATE TABLE `scene` (
   `body` MEDIUMTEXT NOT NULL,
   `username` VARCHAR(255) NOT NULL,
   `date_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `date_modified` TIMESTAMP NULL
+  `date_modified` TIMESTAMP NULL,
+  `timeline_start_id` BIGINT,
+  `timeline_end_id` BIGINT,
+  FOREIGN KEY (`timeline_start_id`) REFERENCES `timeline` (`id`),
+  FOREIGN KEY (`timeline_end_id`) REFERENCES `timeline` (`id`),
+  UNIQUE (`title`)
 );
 
 CREATE TABLE `character_scene` (
@@ -38,13 +54,3 @@ CREATE TABLE `character_scene` (
   FOREIGN KEY (`character_id`) REFERENCES `characters` (`id`),
   FOREIGN KEY (`scene_id`) REFERENCES `scene` (`id`)
 );
-
-ALTER TABLE `users`
-ADD UNIQUE (`username`),
-ADD UNIQUE (`email`);
-
-ALTER TABLE `characters`
-ADD UNIQUE (`name`);
-
-ALTER TABLE `scene`
-ADD UNIQUE (`title`);
