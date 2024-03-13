@@ -77,12 +77,22 @@ CREATE TABLE `locations` (
   UNIQUE (`title`)
 );
 
+CREATE TABLE `conflicts` (
+  `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
+  `title` VARCHAR(255) NOT NULL,
+  `body` MEDIUMTEXT NOT NULL,
+  `username` VARCHAR(255) NOT NULL,
+  `date_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` TIMESTAMP NULL,
+  UNIQUE (`title`)
+);
+
 CREATE TABLE `character_scene` (
   `character_id` BIGINT NOT NULL,
   `scene_id` BIGINT NOT NULL,
   PRIMARY KEY (`character_id`, `scene_id`),
   FOREIGN KEY (`character_id`) REFERENCES `characters` (`id`),
-  FOREIGN KEY (`scene_id`) REFERENCES `scene` (`id`)
+  FOREIGN KEY (`scene_id`) REFERENCES `scenes` (`id`)
 );
 
 CREATE TABLE `character_conflict` (
@@ -90,5 +100,13 @@ CREATE TABLE `character_conflict` (
   `conflict_id` BIGINT NOT NULL,
   PRIMARY KEY (`character_id`, `conflict_id`),
   FOREIGN KEY (`character_id`) REFERENCES `characters` (`id`),
-  FOREIGN KEY (`conflict_id`) REFERENCES `conflict` (`id`)
-)
+  FOREIGN KEY (`conflict_id`) REFERENCES `conflicts` (`id`)
+);
+
+CREATE TABLE `character_organization` (
+  `character_id` BIGINT NOT NULL,
+  `organization_id` BIGINT NOT NULL,
+  PRIMARY KEY (`character_id`, `organization_id`),
+  FOREIGN KEY (`character_id`) REFERENCES `characters` (`id`),
+  FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`)
+);

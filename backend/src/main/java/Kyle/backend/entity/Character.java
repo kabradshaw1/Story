@@ -52,13 +52,13 @@ public class Character implements Ownable {
   )
   private Set<Conflict> conflicts = new HashSet<>();
 
-  // @ManyToMany
-  // @JoinTable(
-  //   name = "character_organization",
-  //   joinColumns = @JoinColumn(name = "character_id"),
-  //   inverseJoinColumns = @JoinColumn(name = "organization_id")
-  // )
-  // private Set<Organization> organizations = new HashSet<>();
+  @ManyToMany
+  @JoinTable(
+    name = "character_organization",
+    joinColumns = @JoinColumn(name = "character_id"),
+    inverseJoinColumns = @JoinColumn(name = "organization_id")
+  )
+  private Set<Organization> organizations = new HashSet<>();
 
   // @ManyToOne
   // @JoinColumn(name = "scene_birth_id")

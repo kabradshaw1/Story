@@ -56,13 +56,13 @@ public class Organization {
 // //   @LastModifiedDate
 // //   private Date dateModified;
 
-// //   @ManyToMany
-// //   @JoinTable(
-// //     name = "character_organization",
-// //     joinColumns = @JoinColumn(name = "organization_id"),
-// //     inverseJoinColumns = @JoinColumn(name = "character_id")
-// //   )
-// //   private Set<Character> characters = new HashSet<>();
+  @ManyToMany
+  @JoinTable(
+    name = "character_organization",
+    joinColumns = @JoinColumn(name = "organization_id"),
+    inverseJoinColumns = @JoinColumn(name = "character_id")
+  )
+  private Set<Character> characters = new HashSet<>();
 
 // //   @ManyToMany
 // //   @JoinTable(
