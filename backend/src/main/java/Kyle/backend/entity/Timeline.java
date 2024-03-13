@@ -1,6 +1,8 @@
 package Kyle.backend.entity;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedBy;
@@ -33,5 +35,12 @@ public class Timeline {
   @LastModifiedDate
   private Date dateModified;
 
+  @Column(name = "timeline")
+  private Integer timeline;
 
+  @OneToMany(mappedBy = "timelineStart", cascade = CascadeType.ALL)
+  private Set<Scene> beginEnd = new HashSet<>();
+
+  @OneToMany(mappedBy = "timelineEnd", cascade = CascadeType.ALL)
+  private Set<Scene> sceneEnd = new HashSet<>();
 }

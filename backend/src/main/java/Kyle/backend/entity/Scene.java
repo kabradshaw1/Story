@@ -86,12 +86,12 @@ public class Scene {
   // )
   // private Set<Organization> organizationCreation = new HashSet<>();
 
-  // @ManyToOne
-  // @JoinColumn(name = "timeline_start_id")
-  // private Timeline timelineStart;
+  @ManyToOne
+  @JoinColumn(name = "timeline_start_id")
+  private Timeline timelineStart;
 
-  // @ManyToOne
-  // @JoinColumn(name = "timeline_end_id")
-  // private Timeline timelineEnd;
+  @ManyToOne
+  @JoinColumn(name = "timeline_end_id")
+  private Timeline timelineEnd;
 
 }
