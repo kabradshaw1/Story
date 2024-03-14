@@ -78,14 +78,6 @@ public class Scene implements Ownable {
   // @JoinColumn(name = "location_end_id")
   // private Location locationEnd;
 
-  // @ManyToMany
-  // @JoinTable(
-  //   name = "scene_organization",
-  //   joinColumns = @JoinColumn(name = "scene_id"),
-  //   inverseJoinColumns = @JoinColumn(name = "organization")
-  // )
-  // private Set<Organization> organizationCreation = new HashSet<>();
-
   @ManyToOne
   @JoinColumn(name = "timeline_start_id")
   private Timeline timelineStart;

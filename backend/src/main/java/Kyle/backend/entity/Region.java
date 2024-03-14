@@ -41,16 +41,16 @@ public class Region {
   @LastModifiedDate
   private Date dateModified;
 
-//   @OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
-//   private Set<Location> locations = new HashSet<>();
+  // @OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
+  // private Set<Location> locations = new HashSet<>();
 
-//   // Utility methods to add location
-//   public void addLocation(Location location) {
-//     if (location != null) {
-//       locations.add(location);
-//       location.setRegion(this);
-//
-//
+  // // Utility methods to add location
+  // public void addLocation(Location location) {
+  //   if (location != null) {
+  //     locations.add(location);
+  //     location.setRegion(this);
+  //   }
+  // }
 
   @ManyToMany
   @JoinTable(
@@ -60,11 +60,4 @@ public class Region {
   )
   private Set<Organization> organizations = new HashSet<>();
 
-  @ManyToMany
-  @JoinTable(
-    name = "location_organization",
-    joinColumns = @JoinColumn(name = "location_id"),
-    inverseJoinColumns = @JoinColumn(name = "organization_id")
-  )
-  private Set<Location> locations = new HashSet<>();
 }

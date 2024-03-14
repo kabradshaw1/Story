@@ -41,9 +41,9 @@ public class Location {
   @LastModifiedDate
   private Date dateModified;
 
-//   @ManyToOne
-//   @JoinColumn(name = "region")
-//   private Region region;
+  @ManyToOne
+  @JoinColumn(name = "region")
+  private Region region;
 
 //   @ManyToOne
 //   @JoinColumn(name = "timeline_start_id")

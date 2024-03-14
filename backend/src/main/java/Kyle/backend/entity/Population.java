@@ -18,7 +18,6 @@ public class Population {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-
   @Column(name = "id")
   private Long id;
 
@@ -27,17 +26,17 @@ public class Population {
 
 //   private Region region;
 
-//   @Column(name = "username")
-//   @CreatedBy
-//   private String username;
+  @Column(name = "username")
+  @CreatedBy
+  private String username;
 
-//   @Column(name = "date_created")
-//   @CreationTimestamp
-//   private Date dateCreated;
+  @Column(name = "date_created")
+  @CreationTimestamp
+  private Date dateCreated;
 
-//   @Column(name = "date_modified")
-//   @LastModifiedDate
-//   private Date dateModified;
+  @Column(name = "date_modified")
+  @LastModifiedDate
+  private Date dateModified;
 
 //   private Timeline timeline;
 
