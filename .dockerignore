@@ -1,0 +1,5 @@
+.github
+README.md
+.gitignore
+npm-debug.log
+Dockerfile

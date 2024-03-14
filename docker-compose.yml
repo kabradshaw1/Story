@@ -1,4 +1,15 @@
 services:
+  backend:
+    build: 
+      context: ./backend
+    command: >
+      sh -c "mvn spring-boot:run"
+    volumes:
+      - ./backend:/backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
   db:
     image: mysql:8.0
     environment:

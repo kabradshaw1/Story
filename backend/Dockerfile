@@ -1,4 +1,8 @@
-FROM openjdk:17-jdk-alpine3.14
+FROM openjdk:17-jdk-slim
+
+RUN apt-get update && \
+    apt-get install -y maven3.8.4
 
 WORKDIR /app
 
+COPY . .
