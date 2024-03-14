@@ -39,8 +39,22 @@ public class Timeline {
   private Integer timeline;
 
   @OneToMany(mappedBy = "timelineStart", cascade = CascadeType.ALL)
-  private Set<Scene> beginEnd = new HashSet<>();
+  private Set<Scene> sceneStarts = new HashSet<>();
+
+  public void addSceneStart(Scene sceneStart) {
+    if (sceneStart != null) {
+      sceneStarts.add(sceneStart);
+      sceneStart.setTimelineStart(this);
+    }
+  }
 
   @OneToMany(mappedBy = "timelineEnd", cascade = CascadeType.ALL)
-  private Set<Scene> sceneEnd = new HashSet<>();
+  private Set<Scene> sceneEnds = new HashSet<>();
+
+  public void addSceneEnd(Scene sceneEnd) {
+    if (sceneEnd != null) {
+      sceneEnds.add(sceneEnd);
+      sceneEnd.setTimelineEnd(this);
+    }
+  }
 }

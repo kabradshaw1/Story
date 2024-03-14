@@ -119,8 +119,8 @@ CREATE TABLE `region_organization` (
   FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`)
 );
 
-CREATE TABLE `location_organization` (
-  `region_id` BIGINT NOT NULL,
+CREATE TABLE `organization_location` (
+  `location_id` BIGINT NOT NULL,
   `organization_id` BIGINT NOT NULL,
   PRIMARY KEY (`location_id`, `organization_id`),
   FOREIGN KEY (`location_id`) REFERENCES `locations` (`id`),
@@ -128,7 +128,7 @@ CREATE TABLE `location_organization` (
 );
 
 CREATE TABLE `organization_scene` (
-  `region_id` BIGINT NOT NULL,
+  `scene_id` BIGINT NOT NULL,
   `organization_id` BIGINT NOT NULL,
   PRIMARY KEY (`organization_id`, `scene_id`),
   FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`),

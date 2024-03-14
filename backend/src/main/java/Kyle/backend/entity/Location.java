@@ -77,7 +77,7 @@ public class Location {
   @JoinTable(
     name = "organization_location",
     joinColumns = @JoinColumn(name = "organization_id"),
-    inverseJoinColumns = @JoinColumn(name = "location")
+    inverseJoinColumns = @JoinColumn(name = "location_id")
   )
-  private Set<Location> location = new HashSet<>();
+  private Set<Location> locations = new HashSet<>();
 }

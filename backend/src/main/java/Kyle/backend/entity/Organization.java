@@ -60,7 +60,7 @@ public class Organization {
 
   @ManyToMany
   @JoinTable(
-    name = "location_organization",
+    name = "organization_location",
     joinColumns = @JoinColumn(name = "organization_id"),
     inverseJoinColumns = @JoinColumn(name = "location_id")
   )
