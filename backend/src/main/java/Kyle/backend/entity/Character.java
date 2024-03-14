@@ -68,7 +68,7 @@ public class Character implements Ownable {
   // @JoinColumn(name = "scene_death_id")
   // private Scene deathScene;
 
-  @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+  @ManyToMany
   @JoinTable(
     name = "character_scene",
     joinColumns = @JoinColumn(name = "character_id"),
