@@ -61,17 +61,17 @@ public class Organization {
   @ManyToMany
   @JoinTable(
     name = "location_organization",
-    joinColumns = @JoinColumn(name = "location_id"),
-    inverseJoinColumns = @JoinColumn(name = "organization_id")
+    joinColumns = @JoinColumn(name = "organization_id"),
+    inverseJoinColumns = @JoinColumn(name = "location_id")
   )
   private Set<Location> locations = new HashSet<>();
 
-// //   @ManyToMany
-// //   @JoinTable(
-// //     name = "scene_organization",
-// //     joinColumns = @JoinColumn(name = "organization_id"),
-// //     inverseJoinColumns = @JoinColumn(name = "scene_id")
-// //   )
-// //   private Set<Scene> scenes = new HashSet<>();
+  @ManyToMany
+  @JoinTable(
+    name = "organization_scene",
+    joinColumns = @JoinColumn(name = "organization_id"),
+    inverseJoinColumns = @JoinColumn(name = "scene_id")
+  )
+  private Set<Scene> scenes = new HashSet<>();
 }
 

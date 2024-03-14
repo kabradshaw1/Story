@@ -118,3 +118,19 @@ CREATE TABLE `region_organization` (
   FOREIGN KEY (`region_id`) REFERENCES `regions` (`id`),
   FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`)
 );
+
+CREATE TABLE `location_organization` (
+  `region_id` BIGINT NOT NULL,
+  `organization_id` BIGINT NOT NULL,
+  PRIMARY KEY (`location_id`, `organization_id`),
+  FOREIGN KEY (`location_id`) REFERENCES `locations` (`id`),
+  FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`)
+);
+
+CREATE TABLE `organization_scene` (
+  `region_id` BIGINT NOT NULL,
+  `organization_id` BIGINT NOT NULL,
+  PRIMARY KEY (`organization_id`, `scene_id`),
+  FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`),
+  FOREIGN KEY (`scene_id`) REFERENCES `scenes` (`id`)
+);
