@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "locations")
 @Data
 @NoArgsConstructor
-public class Location {
+public class Location implements Ownable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

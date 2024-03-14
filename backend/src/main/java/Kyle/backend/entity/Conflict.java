@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "conflicts")
 @Data
 @NoArgsConstructor
-public class Conflict {
+public class Conflict implements Ownable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "regions")
 @Data
 @NoArgsConstructor
-public class Region {
+public class Region implements Ownable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
