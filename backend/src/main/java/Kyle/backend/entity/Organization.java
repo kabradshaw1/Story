@@ -58,13 +58,13 @@ public class Organization {
   private Set<Region> regions = new HashSet<>();
 
 
-// //   @ManyToMany
-// //   @JoinTable(
-// //     name = "organization_location",
-// //     joinColumns = @JoinColumn(name = "organization_id"),
-// //     inverseJoinColumns = @JoinColumn(name = "location_id")
-// //   )
-// //   private Set<Location> locations = new HashSet<>();
+  @ManyToMany
+  @JoinTable(
+    name = "location_organization",
+    joinColumns = @JoinColumn(name = "location_id"),
+    inverseJoinColumns = @JoinColumn(name = "organization_id")
+  )
+  private Set<Location> locations = new HashSet<>();
 
 // //   @ManyToMany
 // //   @JoinTable(

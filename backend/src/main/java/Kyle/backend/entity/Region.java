@@ -59,4 +59,12 @@ public class Region {
     inverseJoinColumns = @JoinColumn(name = "organization_id")
   )
   private Set<Organization> organizations = new HashSet<>();
+
+  @ManyToMany
+  @JoinTable(
+    name = "location_organization",
+    joinColumns = @JoinColumn(name = "location_id"),
+    inverseJoinColumns = @JoinColumn(name = "organization_id")
+  )
+  private Set<Location> locations = new HashSet<>();
 }

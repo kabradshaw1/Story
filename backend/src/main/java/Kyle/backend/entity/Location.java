@@ -73,11 +73,11 @@ public class Location {
 //     }
 //   }
 
-//   @ManyToMany
-//   @JoinTable(
-//     name = "organization_location",
-//     joinColumns = @JoinColumn(name = "location_id"),
-//     inverseJoinColumns = @JoinColumn(name = "organization")
-//   )
-//   private Set<Organization> organizations = new HashSet<>();
+  @ManyToMany
+  @JoinTable(
+    name = "organization_location",
+    joinColumns = @JoinColumn(name = "organization_id"),
+    inverseJoinColumns = @JoinColumn(name = "location")
+  )
+  private Set<Location> location = new HashSet<>();
 }
