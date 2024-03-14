@@ -110,3 +110,11 @@ CREATE TABLE `character_organization` (
   FOREIGN KEY (`character_id`) REFERENCES `characters` (`id`),
   FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`)
 );
+
+CREATE TABLE `region_organization` (
+  `region_id` BIGINT NOT NULL,
+  `organization_id` BIGINT NOT NULL,
+  PRIMARY KEY (`region_id`, `organization_id`),
+  FOREIGN KEY (`region_id`) REFERENCES `regions` (`id`),
+  FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`)
+);

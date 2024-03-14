@@ -41,21 +41,6 @@ public class Organization {
   @LastModifiedDate
   private Date dateModified;
 
-// //   @Column(name = "body")
-// //   private String body;
-
-// //   @Column(name = "username")
-// //   @CreatedBy
-// //   private String username;
-
-// //   @Column(name = "date_created")
-// //   @CreationTimestamp
-// //   private Date dateCreated;
-
-// //   @Column(name = "date_modified")
-// //   @LastModifiedDate
-// //   private Date dateModified;
-
   @ManyToMany
   @JoinTable(
     name = "character_organization",
@@ -63,6 +48,15 @@ public class Organization {
     inverseJoinColumns = @JoinColumn(name = "character_id")
   )
   private Set<Character> characters = new HashSet<>();
+
+  @ManyToMany
+  @JoinTable(
+    name = "region_organization",
+    joinColumns = @JoinColumn(name = "organization_id"),
+    inverseJoinColumns = @JoinColumn(name = "region_id")
+  )
+  private Set<Region> regions = new HashSet<>();
+
 
 // //   @ManyToMany
 // //   @JoinTable(

@@ -49,6 +49,14 @@ public class Region {
 //     if (location != null) {
 //       locations.add(location);
 //       location.setRegion(this);
-//     }
-//   }
+//
+//
+
+  @ManyToMany
+  @JoinTable(
+    name = "region_organization",
+    joinColumns = @JoinColumn(name = "region_id"),
+    inverseJoinColumns = @JoinColumn(name = "organization_id")
+  )
+  private Set<Organization> organizations = new HashSet<>();
 }
