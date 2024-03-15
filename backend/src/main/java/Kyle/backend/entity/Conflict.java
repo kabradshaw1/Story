@@ -56,7 +56,7 @@ public class Conflict implements Ownable {
 //   @LastModifiedDate
 //   private Date dateModified;
 
-  @ManyToMany
+  @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
   @JoinTable(
     name = "character_conflict",
     joinColumns = @JoinColumn(name = "conflict_id"),

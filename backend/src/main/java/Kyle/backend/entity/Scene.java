@@ -42,12 +42,7 @@ public class Scene implements Ownable {
   private Date dateModified;
 
 
-  @ManyToMany
-  @JoinTable(
-    name = "character_scene",
-    joinColumns = @JoinColumn(name = "scene_id"),
-    inverseJoinColumns = @JoinColumn(name = "character_id")
-  )
+  @ManyToMany(mappedBy = "scenes")
   private Set<Character> characters = new HashSet<>();
 
   // @ManyToOne
