@@ -5,13 +5,16 @@ services:
     command: >
       sh -c "mvn spring-boot:run"
     volumes:
-      - ./backend:/backend
+      - ./backend/src:/app/src
+      - ./backend/pom.xml:/app/pom.xml
+    environment:
+      - SPRING_PROFILE_ACTIVE=dev
     ports:
       - "8080:8080"
     depends_on:
       - db
   db:
-    image: mysql:8.0
+    image: mysql:8.3
     environment:
       MYSQL_DATABASE: story_app
       MYSQL_ROOT_PASSWORD: PanCake!
