@@ -47,7 +47,7 @@ describe('AuthEffect', () => {
       const expected = cold('--c', { c: completion });
 
       expect(effects.login$).toBeObservable(expected);
-      expect(router.navigate).toHaveBeenCalledWith(['/home']);
+      expect(router.navigate).toHaveBeenCalledWith(['/']);
     });
 
     it('givenLoginAction_whenServiceFails_thenDispatchError', () => {
@@ -104,7 +104,7 @@ describe('AuthEffect', () => {
       const expected = cold('--c', { c: completion });
 
       expect(effects.register$).toBeObservable(expected);
-      expect(router.navigate).toHaveBeenCalledWith(['/home']);
+      expect(router.navigate).toHaveBeenCalledWith(['/']);
     });
 
     it('givenRegisterAction_whenServiceFails_thenDispatchError', () => {
