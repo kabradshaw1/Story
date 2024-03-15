@@ -1,7 +1,7 @@
 FROM openjdk:17-jdk-slim
 
 RUN apt-get update && \
-    apt-get install -y maven3.8.4
+    apt-get install -y maven
 
 WORKDIR /app
 
