@@ -1,4 +1,11 @@
 services:
+  frontend:
+    build:
+      context: ./frontend
+    command: >
+      sh -c "npm start"
+    volumes:
+      - ./frontend/src:/frontend/src
   backend:
     build: 
       context: ./backend
