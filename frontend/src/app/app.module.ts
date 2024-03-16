@@ -13,6 +13,7 @@ import { authReducer } from './store/reducers/auth.reducers';
 import { ProtectedComponent } from './components/protected/protected.component';
 import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './store/effects/auth.effects';
+import { NavMenuComponent } from './component/nav-menu/nav-menu.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,7 +21,8 @@ import { AuthEffects } from './store/effects/auth.effects';
     LoginComponent,
     RegisterComponent,
     HomeComponent,
-    ProtectedComponent
+    ProtectedComponent,
+    NavMenuComponent
   ],
   imports: [
     BrowserModule,
