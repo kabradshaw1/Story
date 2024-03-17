@@ -24,6 +24,9 @@ describe('NavMenuComponent', () => {
   describe('html', () => {
     it('give_whenComponentLoaded_thenDisplayButtons', () => {
       const fixture = TestBed.createComponent(NavMenuComponent);
+      fixture.detectChanges();
+      const compiled = fixture.nativeElement as HTMLElement;
+      expect(compiled.querySelector('a[href="characters"]')).toBeTruthy();
     })
   })
 });
