@@ -2,6 +2,8 @@ services:
   frontend:
     build:
       context: ./frontend
+    ports:
+      - "4200:4200"
     command: >
       sh -c "npm start"
     volumes:

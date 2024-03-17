@@ -84,7 +84,6 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<!-- No need to specify version here; it's managed by Spring Boot's parent POM -->
 				<configuration>
 					<excludes>
 						<exclude>
