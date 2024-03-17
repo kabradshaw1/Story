@@ -1,8 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { NavMenuComponent } from './nav-menu.component';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import AppState from 'src/app/store/state/app.state';
 import { RouterTestingModule } from '@angular/router/testing';
 
 describe('NavMenuComponent', () => {
