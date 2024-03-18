@@ -15,6 +15,13 @@ import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './store/effects/auth.effects';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { CharacterComponent } from './components/nav-menu/character/character.component';
+import { SceneComponent } from './components/nav-menu/scene/scene.component';
+import { TimelineComponent } from './components/nav-menu/timeline/timeline.component';
+import { PopulationComponent } from './components/nav-menu/population/population.component';
+import { ConflictComponent } from './components/nav-menu/conflict/conflict.component';
+import { OrganizationComponent } from './components/nav-menu/organization/organization.component';
+import { LocationComponent } from './components/nav-menu/location/location.component';
+import { RegionComponent } from './components/nav-menu/region/region.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +32,14 @@ import { CharacterComponent } from './components/nav-menu/character/character.co
     HomeComponent,
     ProtectedComponent,
     NavMenuComponent,
-    CharacterComponent
+    CharacterComponent,
+    SceneComponent,
+    TimelineComponent,
+    PopulationComponent,
+    ConflictComponent,
+    OrganizationComponent,
+    LocationComponent,
+    RegionComponent
   ],
   imports: [
     BrowserModule,

@@ -23,7 +23,7 @@ describe('NavMenuComponent', () => {
   it('give_whenButtonClicked_thenCreateComponent', () => {
     // Assuming dynamicOutlet is initialized and not undefined at this point
     const spy = spyOn(component.dynamicOutlet!, 'createComponent').and.callThrough();
-    const button = fixture.debugElement.nativeElement.querySelector('#character');
+    const button = fixture.debugElement.nativeElement.querySelector('.btn');
     button.click();
     expect(spy.calls.any()).toEqual(true);
   });
