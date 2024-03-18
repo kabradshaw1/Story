@@ -14,6 +14,7 @@ import { ProtectedComponent } from './components/protected/protected.component';
 import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './store/effects/auth.effects';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
+import { CharactersComponent } from './characters/characters.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
     RegisterComponent,
     HomeComponent,
     ProtectedComponent,
-    NavMenuComponent
+    NavMenuComponent,
+    CharactersComponent
   ],
   imports: [
     BrowserModule,
