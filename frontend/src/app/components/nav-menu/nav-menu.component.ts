@@ -6,7 +6,10 @@ import { CharacterComponent } from './character/character.component';
   styleUrls: ['./nav-menu.component.css']
 })
 export class NavMenuComponent {
+
   @ViewChild('dynamicOutlet', { read: ViewContainerRef }) dynamicOutlet: ViewContainerRef | undefined;
+  
+  characterComponent = CharacterComponent
   
   constructor() {}
 
