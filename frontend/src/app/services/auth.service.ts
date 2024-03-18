@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
 import { Observable, catchError, tap, throwError } from 'rxjs';
 import { environment } from '../environment/environment';
-import { AuthState } from '../store/state/auth.state';
 import { AuthResponse, SuccessResponse } from '../types';
+import AppState from '../store/state/app.state';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,7 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private store: Store<AuthState>
+    private store: Store<AppState>
   ) { }
 
   login(email: string, password: string): Observable<AuthResponse> {
