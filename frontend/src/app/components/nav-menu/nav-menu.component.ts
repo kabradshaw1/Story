@@ -1,5 +1,5 @@
 import { Component, ViewChild, ViewContainerRef } from '@angular/core';
-
+import { CharacterComponent } from './character/character.component';
 @Component({
   selector: 'app-nav-menu',
   templateUrl: './nav-menu.component.html',

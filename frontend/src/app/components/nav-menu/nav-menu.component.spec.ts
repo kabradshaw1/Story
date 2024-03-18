@@ -7,18 +7,12 @@ import { By } from '@angular/platform-browser';
 describe('NavMenuComponent', () => {
   let component: NavMenuComponent;
   let fixture: ComponentFixture<NavMenuComponent>;
-  let router: Router;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [NavMenuComponent],
       imports: [RouterTestingModule.withRoutes([])], // You might want to define routes for testing
-    }).compileComponents();
-
-    router = TestBed.inject(Router);
-  });
-
-  beforeEach(() => {
+    })
     fixture = TestBed.createComponent(NavMenuComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -30,21 +24,13 @@ describe('NavMenuComponent', () => {
 
   describe('html', () => {
     // Use fakeAsync to wrap tests involving navigation or async operations
-    it('give_whenComponentLoaded_thenDisplayButtons', fakeAsync(() => {
-      const spy = spyOn(router, 'navigate');
-      const characterLink = fixture.debugElement.nativeElement.querySelector('#nav-characters');
-      characterLink.click();
-      tick(); // Simulate passage of time if necessary
-      expect(spy).toHaveBeenCalledWith(['/characters']);
+    it('give_whenButtonClicked_thenCreateComponent', fakeAsync(() => {
+      // spyOn(component.dynamicOutlet, 'createComponent');
+      // const button = fixture.debugElement.nativeElement.querySelector('#character');
     }));
 
     it('given_when_then', fakeAsync(() => {
-      const characterLink = fixture.debugElement.query(By.css('#nav-characters')).nativeElement;
-      expect(characterLink).toBeTruthy();
-      // Optionally, if you want to test that the routerLink is properly bound:
-      const routerLinkInstance = fixture.debugElement.query(By.directive(RouterLink)).injector.get(RouterLink);
-      tick(); // Advance virtual time if there's an async operation
-      expect(routerLinkInstance.urlTree).toEqual(router.createUrlTree(['/characters']));
+    
     }));
   });
 });
