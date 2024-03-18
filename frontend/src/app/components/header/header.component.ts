@@ -25,5 +25,4 @@ export class HeaderComponent {
       map(token => token ? this.jwtService.decodeToken<DecodedJwt>(token).username : 'Welcome')
     );
   };
-
 }

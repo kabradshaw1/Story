@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ViewContainerRef } from '@angular/core';
 
 @Component({
   selector: 'app-nav-menu',
@@ -6,5 +6,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./nav-menu.component.css']
 })
 export class NavMenuComponent {
+  @ViewChild('dynamicOutlet', { read: ViewContainerRef }) dynamicOutlet: ViewContainerRef | undefined;
+  
+  constructor() {}
 
+  loadComponent(component: any) {
+    this.dynamicOutlet?.clear();
+    this.dynamicOutlet?.createComponent(component);
+  }
 }
