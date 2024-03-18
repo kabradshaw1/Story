@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NavMenuComponent } from './nav-menu.component';
+import { CharacterComponent } from './character/character.component';
 
 describe('NavMenuComponent', () => {
   let component: NavMenuComponent;
@@ -28,7 +29,8 @@ describe('NavMenuComponent', () => {
   });
 
   it('givenComponentLoaded_whenClearComponent_ComponentCleared', () => {
-    
+    spyOn(component.dynamicOutlet!, 'clear');
+    component.loadComponent(CharacterComponent);
+    expect(component.dynamicOutlet?.clear).toHaveBeenCalled();
   })
-
 });
