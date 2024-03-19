@@ -10,4 +10,5 @@ export interface ApiState {
   region: Post,
   conflict: Post,
   organization: Post,
+  timeline: Number,
 }

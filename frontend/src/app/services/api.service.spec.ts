@@ -31,10 +31,21 @@ describe('ApiService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
-  
-  describe('get', () => {
-    it('given_when_then', () => {
 
+  describe('get', () => {
+    it('givenGetCharacterRequest_whenRequestGets200_thenDispatchGetSuccess', () => {
+      const mockResponse = { title: 'title', body: 'body' };
+      const endpoint = '/characters'
+
+      service.get(endpoint).subscribe();
+      const req = httpMock.expectOne(`http://localhost:8080/api/characters${endpoint}`);
+      expect(req.request.method).toBe('GET');
+      req.flush(mockResponse);
+
+      expect(mockDispatch).toHaveBeenCalledWith([
+        // type: '[Get] Success',
+        // post: mockResponse.body
+      ])
     });
     it('given_when_then', () => {
 
