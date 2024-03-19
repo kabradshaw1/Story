@@ -25,22 +25,28 @@ describe('Api Reducer', () => {
     const action = ApiActions.apiSuccess(
       {
         endpoint: 'character', 
-        data:{ 
+        data: { 
           title: 'test title', 
           body: 'test body' 
         }
       }
     );
+
     const state = apiReducer(initialStateWithError, action);
 
     expect(state.character?.body).toBe('test body');
     expect(state.character?.title).toBe('test title');
     expect(state.error).toBe(null); // Check that error is reset to null
   });
-  it('given_when_then', () => {
+  
+  it('givenFailure_whenReducerCalled_thenUpdateState', () => {
+    const action = ApiActions.apiFailure({
+      endpoint: "character",
+      message: "test error"
+    })
+    const state = apiReducer(initialApiState, action);
 
-  });
-  it('given_when_then', () => {
-
+    expect(state.error?.message).toBe('test error');
+    expect(state.error?.endpoint).toBe('character');
   });
 })
