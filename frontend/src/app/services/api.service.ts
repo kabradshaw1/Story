@@ -11,13 +11,13 @@ export class ApiService {
     private store: Store<ApiState> 
   ) {}
 
-  get<T>(endpoint: string): Observable<T> {
-    return this.http.get<T>(endpoint)
+  get<Post>(endpoint: string): Observable<Post> {
+    return this.http.get<Post>(endpoint)
       .pipe(
         tap(response => {
           this.store.dispatch({
             type: ''
-            payload: 
+            // payload: resp
           })
         })
       );

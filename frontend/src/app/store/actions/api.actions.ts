@@ -6,5 +6,10 @@ export const apiSuccess = createAction(
 
 export const apiPost = createAction(
   '[Api] Post Request',
-  props<{ title: string, body: string }>() 
+  props<{ endpoint: string, title: string, body: string }>() 
+)
+
+export const apiGet = createAction(
+  '[Api] Get Request',
+  props<{endpoint: string}>()
 )

@@ -79,7 +79,7 @@ export class AuthService {
   }
 }
 
-function isSuccessResponse(response: ApiResponse): response is SuccessResponse {
+function isSuccessResponse(response: AuthResponse): response is SuccessResponse {
   return (response as SuccessResponse).accessToken !== undefined;
 }
 
