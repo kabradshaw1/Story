@@ -28,7 +28,46 @@ describe('ApiService', () => {
     httpMock.verify();
   });
 
-  it('given_when_then', () => {
-    
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+  
+  describe('get', () => {
+    it('given_when_then', () => {
+
+    });
+    it('given_when_then', () => {
+
+    });
+    it('given_when_then', () => {
+
+    });
+  });
+  describe('post', () => {
+    it('given_when_then', () => {
+
+    }); 
+    it('given_when_then', () => {
+
+    });
+    it('given_when_then', () => {
+
+    });
+  })
+  describe('put', () => {
+    it('given_when_then', () => {
+
+    });    
+    it('given_when_then', () => {
+
+    });
+  })
+  describe('patch', () => {
+    it('given_when_then', () => {
+
+    });
+    it('given_when_then', () => {
+
+    });
   })
 })
