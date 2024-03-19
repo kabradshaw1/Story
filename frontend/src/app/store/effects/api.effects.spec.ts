@@ -19,12 +19,73 @@ describe('ApiEffects', () => {
         provideMockActions(() => actions$),
         {
           provide: ApiService,
-          useValue: jasmine.createSpyObj('ApiService', [])
+          useValue: jasmine.createSpyObj(
+            'ApiService', ['get', 'delete', 'put', 'post'])
         }
       ]
     })
 
     effects = TestBed.inject(ApiEffects);
     apiService = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>
-  })
+  });
+
+  describe('get$', () => {
+    it('givenGetAction_whenServiceSucceeds_thenDispatchApiService', () => {
+      const endpoint = 'character';
+      const action = ApiActions.apiLoad({endpoint});
+      const completion = ApiActions.apiSuccess({
+        endpoint: "character",
+        data: {title: 'title', body: 'body'}
+      });
+
+      actions$ = hot('-a', { a: action });
+      apiService.get.and.returnValue(cold('-b', { b: {}}));
+
+      const expected = cold('--c', { c: completion });
+      expect(effects.get$).toBeObservable(expected);
+    });
+    it('given_when_then', () => {
+
+    });
+    it('given_when_then', () => {
+
+    });
+    it('given_when_then', () => {
+
+    });
+  });
+
+  describe('delete$', () => {
+    it('given_when_then', () => {
+
+    });
+    it('given_when_then', () => {
+
+    });
+    it('given_when_then', () => {
+
+    });
+  });
+  describe('post$', () => {
+    it('given_when_then', () => {
+
+    });
+    it('given_when_then', () => {
+
+    });
+    it('given_when_then', () => {
+
+    });
+  });
+  describe('put$', () => {
+    it('given_when_then', () => {
+
+    });
+    it('given_when_then', () => {
+
+    });
+    it('given_when_then', () => {
+
+    });
+  });
 })
