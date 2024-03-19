@@ -3,6 +3,11 @@ export interface Post {
   body?: string,
 }
 
+export interface ApiError {
+  endpoint: string,
+  message: string,
+}
+
 export interface ApiState {
   character: Post | null,
   scene: Post | null,
@@ -11,6 +16,7 @@ export interface ApiState {
   conflict: Post | null,
   organization: Post | null,
   timeline: Number | null,
+  error: ApiError | null
 }
 
 export const initialApiState: ApiState = {
@@ -21,4 +27,5 @@ export const initialApiState: ApiState = {
   conflict: null,
   organization: null,
   timeline: null,
+  error: null,
 }
