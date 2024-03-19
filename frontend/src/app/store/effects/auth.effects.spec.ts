@@ -8,7 +8,7 @@ import { AuthService } from "../../services/auth.service";
 import { cold, hot } from 'jasmine-marbles';
 import { Router } from "@angular/router";
 
-describe('AuthEffect', () => {
+describe('AuthEffects', () => {
   let effects: AuthEffects;
   let actions$: Observable<Action>;
   let authService: jasmine.SpyObj<AuthService>;
