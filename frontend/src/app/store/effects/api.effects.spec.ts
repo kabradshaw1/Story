@@ -48,19 +48,44 @@ describe('ApiEffects', () => {
       const endpoint = '/characters';
       const action = ApiActions.apiLoad({endpoint});
       const completion = ApiActions.apiFailure({
-        endpoint: "/characters",
+        endpoint: endpoint,
         message: "test error"
       });
 
       actions$ = hot('-a', {a: action});
       apiService.get.and.returnValue(cold('-b', { b: { error: 'testError' }}))
-      
+
+      const expected = cold('--c', { c: completion});
+
+      expect(effects.get$).toBeObservable(expected);
     });
     it('givenGetAction_whenServiceFails_thenDispatchError', () => {
+      const endpoint = '/characters';
+      const action = ApiActions.apiLoad({endpoint});
+      const completion = ApiActions.apiFailure({
+        endpoint: endpoint,
+        message: "test error"
+      });
 
+      actions$ = hot('-a', {a: action});
+      apiService.get.and.returnValue(throwError(() => new Error('failed')))
+
+      const expected = cold('-b', { b: completion});
+
+      expect(effects.get$).toBeObservable(expected);
     });
-    it('givenGetAction_whenNothingReturned_thenDisplayUnknownError', () => {
+    it('givenGetAction_whenNoErrorOrExpectValues_thenDisplayUnknownError', () => {
+      const endpoint = '/characters'
+      const action = ApiActions.apiLoad({endpoint});
+      const completion = ApiActions.apiFailure({ endpoint: endpoint, message: "An unknown error occurred. Please try again." });
 
+      actions$ = hot('-a', { a: action });
+      // Simulate a response that has neither accessToken nor error.
+      apiService.get.and.returnValue(cold('-b', { b: {} }));
+
+      const expected = cold('--c', { c: completion });
+
+      expect(effects.get$).toBeObservable(expected);
     });
   });
 
