@@ -38,7 +38,7 @@ describe('ApiService', () => {
       const endpoint = '/characters'
 
       service.get(endpoint).subscribe();
-      const req = httpMock.expectOne(`http://localhost:8080/api/characters${endpoint}`);
+      const req = httpMock.expectOne(`http://localhost:8080/api/${endpoint}`);
       expect(req.request.method).toBe('GET');
       req.flush(mockResponse);
 

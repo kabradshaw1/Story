@@ -31,10 +31,10 @@ describe('ApiEffects', () => {
 
   describe('get$', () => {
     it('givenGetAction_whenServiceSucceeds_thenDispatchApiService', () => {
-      const endpoint = 'character';
+      const endpoint = '/characters';
       const action = ApiActions.apiLoad({endpoint});
       const completion = ApiActions.apiSuccess({
-        endpoint: "character",
+        endpoint: "characters",
         data: {title: 'title', body: 'body'}
       });
 
@@ -44,13 +44,22 @@ describe('ApiEffects', () => {
       const expected = cold('--c', { c: completion });
       expect(effects.get$).toBeObservable(expected);
     });
-    it('given_when_then', () => {
+    it('givenGetAction_whenErrorReturend_thenDispatchError', () => {
+      const endpoint = '/characters';
+      const action = ApiActions.apiLoad({endpoint});
+      const completion = ApiActions.apiFailure({
+        endpoint: "/characters",
+        message: "test error"
+      });
+
+      actions$ = hot('-a', {a: action});
+      apiService.get.and.returnValue(cold('-b', { b: { error: 'testError' }}))
+      
+    });
+    it('givenGetAction_whenServiceFails_thenDispatchError', () => {
 
     });
-    it('given_when_then', () => {
-
-    });
-    it('given_when_then', () => {
+    it('givenGetAction_whenNothingReturned_thenDisplayUnknownError', () => {
 
     });
   });

@@ -19,12 +19,12 @@ describe('Api Reducer', () => {
       conflict: null,
       organization: null,
       timeline: null,
-      error: {endpoint:'character', message:'some inital error'}
+      error: {endpoint:'/characters', message:'some inital error'}
     };
 
     const action = ApiActions.apiSuccess(
       {
-        endpoint: 'character', 
+        endpoint: '/characters', 
         data: { 
           title: 'test title', 
           body: 'test body' 
@@ -41,12 +41,12 @@ describe('Api Reducer', () => {
   
   it('givenFailure_whenReducerCalled_thenUpdateState', () => {
     const action = ApiActions.apiFailure({
-      endpoint: "character",
+      endpoint: "/characters",
       message: "test error"
     })
     const state = apiReducer(initialApiState, action);
 
     expect(state.error?.message).toBe('test error');
-    expect(state.error?.endpoint).toBe('character');
+    expect(state.error?.endpoint).toBe('/characters');
   });
 })

@@ -22,12 +22,15 @@ export class ApiEffects {
 
   })
 
-  put$ = createEffect(() => [
+  put$ = createEffect(() => {
 
-  ])
+  })
   private handleError() {
-    return (error: any) => {
-      return of(ApiAction)
+    return (error: string, endpoint: string) => {
+      return of(ApiActions.apiFailure({
+        endpoint: endpoint,
+        message: error
+      }))
     }
   }
 }
