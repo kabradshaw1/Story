@@ -20,7 +20,7 @@ describe('ApiEffects', () => {
         {
           provide: ApiService,
           useValue: jasmine.createSpyObj(
-            'ApiService', ['get', 'delete', 'put', 'post'])
+            'ApiService', ['load', 'delete', 'put', 'post'])
         }
       ]
     })
@@ -29,22 +29,22 @@ describe('ApiEffects', () => {
     apiService = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>
   });
 
-  describe('get$', () => {
-    it('givenGetAction_whenServiceSucceeds_thenDispatchApiService', () => {
+  describe('load$', () => {
+    it('givenLoadAction_whenServiceSucceeds_thenDispatchApiService', () => {
       const endpoint = '/characters';
       const action = ApiActions.apiLoad({endpoint});
       const completion = ApiActions.apiSuccess({
-        endpoint: "characters",
+        endpoint: endpoint,
         data: {title: 'title', body: 'body'}
       });
 
       actions$ = hot('-a', { a: action });
-      apiService.get.and.returnValue(cold('-b', { b: {}}));
+      apiService.load.and.returnValue(cold('-b', { b: {}}));
 
       const expected = cold('--c', { c: completion });
-      expect(effects.get$).toBeObservable(expected);
+      expect(effects.load$).toBeObservable(expected);
     });
-    it('givenGetAction_whenErrorReturend_thenDispatchError', () => {
+    it('givenLoadAction_whenErrorReturned_thenDispatchError', () => {
       const endpoint = '/characters';
       const action = ApiActions.apiLoad({endpoint});
       const completion = ApiActions.apiFailure({
@@ -53,13 +53,13 @@ describe('ApiEffects', () => {
       });
 
       actions$ = hot('-a', {a: action});
-      apiService.get.and.returnValue(cold('-b', { b: { error: 'testError' }}))
+      apiService.load.and.returnValue(cold('-b', { b: { error: 'testError' }}))
 
       const expected = cold('--c', { c: completion});
 
-      expect(effects.get$).toBeObservable(expected);
+      expect(effects.load$).toBeObservable(expected);
     });
-    it('givenGetAction_whenServiceFails_thenDispatchError', () => {
+    it('givenLoadAction_whenServiceFails_thenDispatchError', () => {
       const endpoint = '/characters';
       const action = ApiActions.apiLoad({endpoint});
       const completion = ApiActions.apiFailure({
@@ -68,24 +68,24 @@ describe('ApiEffects', () => {
       });
 
       actions$ = hot('-a', {a: action});
-      apiService.get.and.returnValue(throwError(() => new Error('failed')))
+      apiService.load.and.returnValue(throwError(() => new Error('failed')))
 
       const expected = cold('-b', { b: completion});
 
-      expect(effects.get$).toBeObservable(expected);
+      expect(effects.load$).toBeObservable(expected);
     });
-    it('givenGetAction_whenNoErrorOrExpectValues_thenDisplayUnknownError', () => {
+    it('givenLoadAction_whenNoErrorOrExpectValues_thenDisplayUnknownError', () => {
       const endpoint = '/characters'
       const action = ApiActions.apiLoad({endpoint});
       const completion = ApiActions.apiFailure({ endpoint: endpoint, message: "An unknown error occurred. Please try again." });
 
       actions$ = hot('-a', { a: action });
       // Simulate a response that has neither accessToken nor error.
-      apiService.get.and.returnValue(cold('-b', { b: {} }));
+      apiService.load.and.returnValue(cold('-b', { b: {} }));
 
       const expected = cold('--c', { c: completion });
 
-      expect(effects.get$).toBeObservable(expected);
+      expect(effects.load$).toBeObservable(expected);
     });
   });
 

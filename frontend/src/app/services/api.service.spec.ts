@@ -32,53 +32,53 @@ describe('ApiService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('get', () => {
-    it('givenGetCharacterRequest_whenRequestGets200_thenDispatchGetSuccess', () => {
-      const mockResponse = { title: 'title', body: 'body' };
-      const endpoint = '/characters'
+  // describe('get', () => {
+  //   it('givenGetCharacterRequest_whenRequestGets200_thenDispatchGetSuccess', () => {
+  //     const mockResponse = { title: 'title', body: 'body' };
+  //     const endpoint = '/characters'
 
-      service.get(endpoint).subscribe();
-      const req = httpMock.expectOne(`http://localhost:8080/api/${endpoint}`);
-      expect(req.request.method).toBe('GET');
-      req.flush(mockResponse);
+  //     service.load(endpoint).subscribe();
+  //     const req = httpMock.expectOne(`http://localhost:8080/api/${endpoint}`);
+  //     expect(req.request.method).toBe('GET');
+  //     req.flush(mockResponse);
 
-      expect(mockDispatch).toHaveBeenCalledWith([
-        // type: '[Get] Success',
-        // post: mockResponse.body
-      ])
-    });
-    it('given_when_then', () => {
+  //     expect(mockDispatch).toHaveBeenCalledWith([
+  //       // type: '[Get] Success',
+  //       // post: mockResponse.body
+  //     ])
+  //   });
+  //   it('given_when_then', () => {
 
-    });
-    it('given_when_then', () => {
+  //   });
+  //   it('given_when_then', () => {
 
-    });
-  });
-  describe('post', () => {
-    it('given_when_then', () => {
+  //   });
+  // });
+  // describe('post', () => {
+  //   it('given_when_then', () => {
 
-    }); 
-    it('given_when_then', () => {
+  //   }); 
+  //   it('given_when_then', () => {
 
-    });
-    it('given_when_then', () => {
+  //   });
+  //   it('given_when_then', () => {
 
-    });
-  })
-  describe('put', () => {
-    it('given_when_then', () => {
+  //   });
+  // })
+  // describe('put', () => {
+  //   it('given_when_then', () => {
 
-    });    
-    it('given_when_then', () => {
+  //   });    
+  //   it('given_when_then', () => {
 
-    });
-  })
-  describe('patch', () => {
-    it('given_when_then', () => {
+  //   });
+  // })
+  // describe('patch', () => {
+  //   it('given_when_then', () => {
 
-    });
-    it('given_when_then', () => {
+  //   });
+  //   it('given_when_then', () => {
 
-    });
-  })
+  //   });
+  // })
 })

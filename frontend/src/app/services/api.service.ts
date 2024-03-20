@@ -11,7 +11,7 @@ export class ApiService {
     private store: Store<ApiState> 
   ) {}
 
-  get<Post>(endpoint: string): Observable<Post> {
+  load<Post>(endpoint: string): Observable<Post> {
     return this.http.get<Post>(endpoint)
       .pipe(
         tap(response => {

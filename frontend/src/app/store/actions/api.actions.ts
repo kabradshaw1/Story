@@ -4,7 +4,7 @@ import { Post, ApiError } from '../state/api.state'; // Assuming you have an api
 // Success and Failure actions can remain generic and used by effects to respond to API call outcomes
 export const apiSuccess = createAction(
   '[Api] Success',
-  props<{ endpoint: string, data: any }>() // data can be any type, depending on the response
+  props<{ endpoint: string, data: any }>()
 );
 
 export const apiFailure = createAction(
@@ -25,7 +25,7 @@ export const apiGet = createAction(
 
 export const apiCreate = createAction(
   '[Api] Create',
-  props<{ endpoint: string, payload: Post }>() // Example using Post, adjust as needed for flexibility
+  props<{ endpoint: string, payload: Post}>() // Example using Post, adjust as needed for flexibility
 );
 
 export const apiUpdate = createAction(
