@@ -10,13 +10,13 @@ export interface ApiError {
 }
 
 export interface ApiState {
-  characters: Post | null,
-  scenes: Post | null,
-  locations: Post | null,
-  regions: Post | null,
-  conflicts: Post | null,
-  organizations: Post | null,
-  timelines: Post | null,
+  characters: Post[] | null,
+  scenes: Post[] | null,
+  locations: Post[] | null,
+  regions: Post[] | null,
+  conflicts: Post[] | null,
+  organizations: Post[] | null,
+  timelines: Post[] | null,
   error: ApiError | null;
 }
 

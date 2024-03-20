@@ -32,21 +32,46 @@ describe('ApiService', () => {
     expect(service).toBeTruthy();
   });
 
-  // describe('get', () => {
-  //   it('givenGetCharacterRequest_whenRequestGets200_thenDispatchGetSuccess', () => {
-  //     const mockResponse = { title: 'title', body: 'body' };
-  //     const endpoint = 'characters'
+  describe('load', () => {
+    it('givenLoadCharacterRequest_whenRequestReturns200_thenDispatchResponse', () => {
+      const mockCharacters = [
+        {
+          title: "asdf",
+          body: "asdfs",
+          username: "asdfasdf",
+          dateCreated: "2024-03-15T14:37:13.000+00:00",
+          dateModified: null,
+        },
+        {
+          title: "asdfsdf",
+          body: "asdfsd",
+          username: "sdfasdf",
+          dateCreated: "2024-03-17T02:49:45.000+00:00",
+          dateModified: null,
+        }
+      ];
 
-  //     service.load(endpoint).subscribe();
-  //     const req = httpMock.expectOne(`http://localhost:8080/api/${endpoint}`);
-  //     expect(req.request.method).toBe('GET');
-  //     req.flush(mockResponse);
+      const mockApiResponse = {
+        _embedded: {
+          characters: mockCharacters
+        }
+      };
 
-  //     expect(mockDispatch).toHaveBeenCalledWith([
-  //       // type: '[Get] Success',
-  //       // post: mockResponse.body
-  //     ])
-  //   });
+      const endpoint = 'characters'
+
+      service.load(endpoint).subscribe(response => {
+        expect(response).toEqual(mockCharacters);
+      });
+      const req = httpMock.expectOne(`http://localhost:8080/api/${endpoint}`);
+      expect(req.request.method).toBe('GET');
+      req.flush(mockApiResponse);
+
+      expect(mockDispatch).toHaveBeenCalledWith([
+        // type: '[Get] Success',
+        // post: mockResponse.body
+      ])
+    });
+  })
   //   it('given_when_then', () => {
 
   //   });

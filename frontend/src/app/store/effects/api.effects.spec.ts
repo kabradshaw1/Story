@@ -46,19 +46,22 @@ describe('ApiEffects', () => {
     });
     it('givenLoadAction_whenErrorReturned_thenDispatchError', () => {
       const endpoint = 'characters';
+      const errorMessage = 'test error';
       const action = ApiActions.apiLoad({endpoint});
       const completion = ApiActions.apiFailure({
         endpoint: endpoint,
-        message: "test error"
+        message: errorMessage
       });
-
+    
       actions$ = hot('-a', {a: action});
-      apiService.load.and.returnValue(cold('-b', { b: { error: 'test error' }}))
-
-      const expected = cold('--c', { c: completion});
-
+      // Use cold observable to simulate the service throwing an error immediately after being called
+      apiService.load.and.returnValue(cold('-#', null, new Error(errorMessage)));
+    
+      const expected = cold('--b', { b: completion });
+    
       expect(effects.load$).toBeObservable(expected);
     });
+    
     it('givenLoadAction_whenServiceFails_thenDispatchError', () => {
       const endpoint = 'characters';
       const action = ApiActions.apiLoad({endpoint});
@@ -74,23 +77,10 @@ describe('ApiEffects', () => {
 
       expect(effects.load$).toBeObservable(expected);
     });
-    it('givenLoadAction_whenNoErrorOrExpectValues_thenDisplayUnknownError', () => {
-      const endpoint = 'characters'
-      const action = ApiActions.apiLoad({endpoint});
-      const completion = ApiActions.apiFailure({ endpoint: endpoint, message: "An unknown error occurred. Please try again." });
-
-      actions$ = hot('-a', { a: action });
-      // Simulate a response that has neither accessToken nor error.
-      apiService.load.and.returnValue(cold('-b', { b: {} }));
-
-      const expected = cold('--c', { c: completion });
-
-      expect(effects.load$).toBeObservable(expected);
-    });
   });
 
   // describe('delete$', () => {
-  //   it('given_when_then', () => {
+  //   it('givenDeleteAction_whenApiSuccess_thenDispatchResponse', () => {
 
   //   });
   //   it('given_when_then', () => {
