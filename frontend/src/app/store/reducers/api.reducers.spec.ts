@@ -12,19 +12,19 @@ describe('Api Reducer', () => {
   it('givenSuccess_whenReducerCalled_thenUpdateState', () => {
     
     const initialStateWithError: ApiState = {
-      character: null,
-      scene: null,
-      location: null,
-      region: null,
-      conflict: null,
-      organization: null,
-      timeline: null,
-      error: {endpoint:'/characters', message:'some inital error'}
+      characters: null,
+      scenes: null,
+      locations: null,
+      regions: null,
+      conflicts: null,
+      organizations: null,
+      timelines: null,
+      error: {endpoint:'characters', message:'some inital error'}
     };
 
     const action = ApiActions.apiSuccess(
       {
-        endpoint: '/characters', 
+        endpoint: 'characters', 
         data: { 
           title: 'test title', 
           body: 'test body' 
@@ -34,19 +34,19 @@ describe('Api Reducer', () => {
 
     const state = apiReducer(initialStateWithError, action);
 
-    expect(state.character?.body).toBe('test body');
-    expect(state.character?.title).toBe('test title');
+    expect(state.characters?.body).toBe('test body');
+    expect(state.characters?.title).toBe('test title');
     expect(state.error).toBe(null); // Check that error is reset to null
   });
   
   it('givenFailure_whenReducerCalled_thenUpdateState', () => {
     const action = ApiActions.apiFailure({
-      endpoint: "/characters",
+      endpoint: "characters",
       message: "test error"
     })
     const state = apiReducer(initialApiState, action);
 
     expect(state.error?.message).toBe('test error');
-    expect(state.error?.endpoint).toBe('/characters');
+    expect(state.error?.endpoint).toBe('characters');
   });
 })

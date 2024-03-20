@@ -31,7 +31,7 @@ describe('ApiEffects', () => {
 
   describe('load$', () => {
     it('givenLoadAction_whenServiceSucceeds_thenDispatchApiService', () => {
-      const endpoint = '/characters';
+      const endpoint = 'characters';
       const action = ApiActions.apiLoad({endpoint});
       const completion = ApiActions.apiSuccess({
         endpoint: endpoint,
@@ -39,13 +39,13 @@ describe('ApiEffects', () => {
       });
 
       actions$ = hot('-a', { a: action });
-      apiService.load.and.returnValue(cold('-b', { b: {}}));
+      apiService.load.and.returnValue(cold('-b', { b: {title: 'title', body: 'body'}}));
 
       const expected = cold('--c', { c: completion });
       expect(effects.load$).toBeObservable(expected);
     });
     it('givenLoadAction_whenErrorReturned_thenDispatchError', () => {
-      const endpoint = '/characters';
+      const endpoint = 'characters';
       const action = ApiActions.apiLoad({endpoint});
       const completion = ApiActions.apiFailure({
         endpoint: endpoint,
@@ -53,14 +53,14 @@ describe('ApiEffects', () => {
       });
 
       actions$ = hot('-a', {a: action});
-      apiService.load.and.returnValue(cold('-b', { b: { error: 'testError' }}))
+      apiService.load.and.returnValue(cold('-b', { b: { error: 'test error' }}))
 
       const expected = cold('--c', { c: completion});
 
       expect(effects.load$).toBeObservable(expected);
     });
     it('givenLoadAction_whenServiceFails_thenDispatchError', () => {
-      const endpoint = '/characters';
+      const endpoint = 'characters';
       const action = ApiActions.apiLoad({endpoint});
       const completion = ApiActions.apiFailure({
         endpoint: endpoint,
@@ -68,14 +68,14 @@ describe('ApiEffects', () => {
       });
 
       actions$ = hot('-a', {a: action});
-      apiService.load.and.returnValue(throwError(() => new Error('failed')))
+      apiService.load.and.returnValue(throwError(() => new Error('test error')))
 
       const expected = cold('-b', { b: completion});
 
       expect(effects.load$).toBeObservable(expected);
     });
     it('givenLoadAction_whenNoErrorOrExpectValues_thenDisplayUnknownError', () => {
-      const endpoint = '/characters'
+      const endpoint = 'characters'
       const action = ApiActions.apiLoad({endpoint});
       const completion = ApiActions.apiFailure({ endpoint: endpoint, message: "An unknown error occurred. Please try again." });
 
@@ -89,37 +89,37 @@ describe('ApiEffects', () => {
     });
   });
 
-  describe('delete$', () => {
-    it('given_when_then', () => {
+  // describe('delete$', () => {
+  //   it('given_when_then', () => {
 
-    });
-    it('given_when_then', () => {
+  //   });
+  //   it('given_when_then', () => {
 
-    });
-    it('given_when_then', () => {
+  //   });
+  //   it('given_when_then', () => {
 
-    });
-  });
-  describe('post$', () => {
-    it('given_when_then', () => {
+  //   });
+  // });
+  // describe('post$', () => {
+  //   it('given_when_then', () => {
 
-    });
-    it('given_when_then', () => {
+  //   });
+  //   it('given_when_then', () => {
 
-    });
-    it('given_when_then', () => {
+  //   });
+  //   it('given_when_then', () => {
 
-    });
-  });
-  describe('put$', () => {
-    it('given_when_then', () => {
+  //   });
+  // });
+  // describe('put$', () => {
+  //   it('given_when_then', () => {
 
-    });
-    it('given_when_then', () => {
+  //   });
+  //   it('given_when_then', () => {
 
-    });
-    it('given_when_then', () => {
+  //   });
+  //   it('given_when_then', () => {
 
-    });
-  });
+  //   });
+  // });
 })

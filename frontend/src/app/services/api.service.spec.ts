@@ -35,7 +35,7 @@ describe('ApiService', () => {
   // describe('get', () => {
   //   it('givenGetCharacterRequest_whenRequestGets200_thenDispatchGetSuccess', () => {
   //     const mockResponse = { title: 'title', body: 'body' };
-  //     const endpoint = '/characters'
+  //     const endpoint = 'characters'
 
   //     service.load(endpoint).subscribe();
   //     const req = httpMock.expectOne(`http://localhost:8080/api/${endpoint}`);

@@ -10,23 +10,23 @@ export interface ApiError {
 }
 
 export interface ApiState {
-  character: Post | null,
-  scene: Post | null,
-  location: Post | null,
-  region: Post | null,
-  conflict: Post | null,
-  organization: Post | null,
-  timeline: Post | null,
+  characters: Post | null,
+  scenes: Post | null,
+  locations: Post | null,
+  regions: Post | null,
+  conflicts: Post | null,
+  organizations: Post | null,
+  timelines: Post | null,
   error: ApiError | null;
 }
 
 export const initialApiState: ApiState = {
-  character: null,
-  scene: null,
-  location: null,
-  region: null,
-  conflict: null,
-  organization: null,
-  timeline: null,
+  characters: null,
+  scenes: null,
+  locations: null,
+  regions: null,
+  conflicts: null,
+  organizations: null,
+  timelines: null,
   error: null
 }
