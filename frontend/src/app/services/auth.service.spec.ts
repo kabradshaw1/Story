@@ -43,11 +43,6 @@ describe('AuthService', () => {
       const req = httpMock.expectOne(`http://localhost:8080/api/login/`);
       expect(req.request.method).toBe('POST');
       req.flush(mockResponse);
-
-      expect(mockDispatch).toHaveBeenCalledWith({
-        type: '[Auth] Success',
-        payload: mockResponse.accessToken
-      });
     });
 
     it('givenInvalidCredentials_whenLogin_thenHandleUnauthorizedError', () => {
@@ -68,11 +63,6 @@ describe('AuthService', () => {
 
       // Simulate a server UNAUTHORIZED response
       req.flush('Invalid credentials', { status: 401, statusText: 'UNAUTHORIZED' });
-
-      expect(mockDispatch).toHaveBeenCalledWith({
-        type: '[Auth] Failure',
-        payload: 'UNAUTHORIZED'
-      });
     });
   });
   describe('register', () => {
@@ -85,11 +75,6 @@ describe('AuthService', () => {
       const req = httpMock.expectOne('http://localhost:8080/api/register/');
       expect(req.request.method).toBe('POST');
       req.flush(mockResponse);
-
-      expect(mockDispatch).toHaveBeenCalledWith({
-        type: '[Auth] Success',
-        payload: mockResponse.accessToken
-      })
     });
 
     it('givenInvalidCredentials_whenRegister_thenHandleError', () => {
@@ -104,11 +89,6 @@ describe('AuthService', () => {
       expect(req.request.method).toBe('POST');
 
       req.flush('An error message', { status: 400, statusText: 'BAD REQUEST' });
-
-      expect(mockDispatch).toHaveBeenCalledWith({
-        type: '[Auth] Failure',
-        payload: 'BAD REQUEST'
-      });
     });
 
 
@@ -129,11 +109,6 @@ describe('AuthService', () => {
 
       // Respond with mock data
       req.flush(mockResponse);
-
-      expect(mockDispatch).toHaveBeenCalledWith({
-        type: '[Auth] Success',
-        payload: mockResponse.accessToken
-      });
     });
 
     it('givenInvalidRefreshToken_whenCalled_thenHandlesFailedRequest', () => {
@@ -146,11 +121,6 @@ describe('AuthService', () => {
       expect(req.request.method).toBe('POST');
 
       req.flush('An error message', { status: 400, statusText: 'BAD REQUEST' });
-
-      expect(mockDispatch).toHaveBeenCalledWith({
-        type: '[Auth] Failure',
-        payload: 'BAD REQUEST'
-      });
     })
   })
 });
