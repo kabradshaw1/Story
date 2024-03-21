@@ -40,5 +40,4 @@ public class CharacterRepositoryTest {
 		assertTrue((retrievedCharacter.isPresent()));
 		assertEquals("test body", retrievedCharacter.get().getBody());
 	}
-
 }

@@ -17,4 +17,6 @@ public interface CharacterRepository extends JpaRepository<Character, Long> {
   <S extends Character> S save(S entity);
 
   Optional<Character> findByTitle(String title);
+  @SuppressWarnings("null")
+  Optional<Character> findById(Long id);
 }
