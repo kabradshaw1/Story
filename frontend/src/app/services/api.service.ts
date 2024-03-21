@@ -2,25 +2,20 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { ApiState, Post } from "../store/state/api.state";
-import { Observable, tap } from "rxjs";
+import { Observable } from "rxjs";
+import { environment } from "../environment/environment";
 
 @Injectable({providedIn: 'root'})
 export class ApiService {
+
+  private readonly baseUrl = `${environment.apiUrl}`
+
   constructor(
     private http: HttpClient,
-    private store: Store<ApiState> 
   ) {}
-
-  load<Post>(endpoint: string): Observable<Post> {
-    return this.http.get<Post>(endpoint)
-      .pipe(
-        tap(response => {
-          this.store.dispatch({
-            type: ''
-            // payload: resp
-          })
-        })
-      );
+  
+  load<T>(endpoint: string): Observable<T> {
+    return this.http.get<T>(`${this.baseUrl}${endpoint}`);
   }
 
   post<T>(endpoint: string, payload: Post): Observable<T> {

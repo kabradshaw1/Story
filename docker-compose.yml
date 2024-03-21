@@ -1,13 +1,13 @@
 services:
-  frontend:
-    build:
-      context: ./frontend
-    ports:
-      - "4200:4200"
-    command: >
-      sh -c "npm run ng serve -- --host 0.0.0.0"
-    volumes:
-      - ./frontend/src:/frontend/src
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #   ports:
+  #     - "4200:4200"
+  #   command: >
+  #     sh -c "npm run ng serve -- --host 0.0.0.0"
+  #   volumes:
+  #     - ./frontend/src:/frontend/src
   backend:
     build: 
       context: ./backend

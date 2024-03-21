@@ -65,11 +65,6 @@ describe('ApiService', () => {
       const req = httpMock.expectOne(`http://localhost:8080/api/${endpoint}`);
       expect(req.request.method).toBe('GET');
       req.flush(mockApiResponse);
-
-      expect(mockDispatch).toHaveBeenCalledWith([
-        // type: '[Get] Success',
-        // post: mockResponse.body
-      ])
     });
   })
   //   it('given_when_then', () => {

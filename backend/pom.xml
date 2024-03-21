@@ -60,6 +60,12 @@
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.0.2</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.graphql</groupId>
+			<artifactId>spring-graphql</artifactId>
+			<version>1.2.5</version>
+		</dependency>
+
 		<!-- I added this to restart the app when I made changes to src
 		but was unable to get it to work inside a container
 
