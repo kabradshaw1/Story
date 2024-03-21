@@ -23,7 +23,6 @@ type Scene {
 type Timeline {
   id: ID!
   timeline: Int
-  username: String!
   username: String
   dateCreated: String
   dateModified: String
