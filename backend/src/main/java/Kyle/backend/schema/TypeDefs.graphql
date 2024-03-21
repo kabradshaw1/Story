@@ -1,0 +1,36 @@
+type Character {
+  id: ID!
+  title: String!
+  body: String!
+  username: String
+  dateCreated: String
+  dateModified: String
+  scenes: [Scene]
+}
+
+type Scene {
+  id: ID!
+  title: String!
+  body: String!
+  username: String
+  dateCreated: String
+  dateModified: String
+  sceneStarts: Timeline
+  sceneEnds: Timeline
+  characters: [Character]
+}
+
+type Timeline {
+  id: ID!
+  timeline: Int
+  username: String!
+  username: String
+  dateCreated: String
+  dateModified: String
+}
+
+type Query {
+  character(title: String!): Character
+  characters: [Character]
+  scene
+}
