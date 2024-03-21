@@ -16,5 +16,5 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
   @PreAuthorize("hasRole('Admin') or #entity.username == authentication.principal.username")
   <S extends Location> S save(S entity);
 
-  Optional<Location> title(String title);
+  Optional<Location> findByTitle(String title);
 }

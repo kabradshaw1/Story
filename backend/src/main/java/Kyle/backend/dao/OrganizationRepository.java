@@ -16,5 +16,5 @@ public interface OrganizationRepository extends JpaRepository<Organization, Long
   @PreAuthorize("hasRole('Admin') or #entity.username == authentication.principal.username")
   <S extends Organization> S save(S entity);
 
-  Optional<Organization> title(String title);
+  Optional<Organization> findByTitle(String title);
 }

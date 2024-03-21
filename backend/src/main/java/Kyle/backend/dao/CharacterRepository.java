@@ -16,5 +16,5 @@ public interface CharacterRepository extends JpaRepository<Character, Long> {
   @PreAuthorize("hasRole('Admin') or #entity.username == authentication.principal.username")
   <S extends Character> S save(S entity);
 
-  Optional<Character> title(String title);
+  Optional<Character> findByTitle(String title);
 }

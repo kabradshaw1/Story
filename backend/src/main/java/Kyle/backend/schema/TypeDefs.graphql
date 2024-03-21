@@ -32,5 +32,6 @@ type Timeline {
 type Query {
   character(title: String!): Character
   characters: [Character]
-  scene
+  scenes: [Scene]
+  scene(title: String!): Scene
 }

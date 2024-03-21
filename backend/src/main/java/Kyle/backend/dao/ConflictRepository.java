@@ -16,5 +16,5 @@ public interface ConflictRepository extends JpaRepository<Conflict, Long> {
   @PreAuthorize("hasRole('Admin') or #entity.username == authentication.principal.username")
   <S extends Conflict> S save(S entity);
 
-  Optional<Conflict> title(String title);
+  Optional<Conflict> findByTitle(String title);
 }
