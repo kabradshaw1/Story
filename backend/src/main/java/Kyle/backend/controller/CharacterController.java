@@ -1,4 +1,4 @@
-package Kyle.backend.resolvers;
+package Kyle.backend.controller;
 
 // import java.util.List;
 
@@ -15,14 +15,14 @@ import Kyle.backend.entity.Character;
 
 @Controller
 @CrossOrigin( origins = "http://localhost:4200" )
-public class Resolvers {
+public class CharacterController {
 
 
   private final CharacterRepository characterRepository;
 
   // private final SceneRepository sceneRepository; SceneRepository sceneRepository
 
-  public Resolvers(CharacterRepository characterRepository) {
+  public CharacterController(CharacterRepository characterRepository) {
     this.characterRepository = characterRepository;
     // this.sceneRepository = sceneRepository;
   }
@@ -36,6 +36,6 @@ public class Resolvers {
 
   // @SchemaMapping
   // public List<Scene> scenes(Character character) {
-  //   return sceneRepository.getById()
+  //   return sceneRepository.getById(character)
   // }
 }

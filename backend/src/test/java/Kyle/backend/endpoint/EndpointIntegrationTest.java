@@ -41,7 +41,7 @@ public class EndpointIntegrationTest {
   static Stream<String> endpointProvider() {
     return Stream.of("/api/characters", "/api/scenes"); // Add more endpoints as needed
   }
-
+  
   @BeforeEach
   public void setup() {
     // Mocks making it past the token validation in JwtAuthFilter
