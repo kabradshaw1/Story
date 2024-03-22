@@ -53,13 +53,6 @@ public class Character implements Ownable {
   )
   private Set<Organization> organizations = new HashSet<>();
 
-  // @ManyToOne
-  // @JoinColumn(name = "scene_birth_id")
-  // private Scene birthScene;
-
-  // @ManyToOne
-  // @JoinColumn(name = "scene_death_id")
-  // private Scene deathScene;
 
   @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable(
@@ -68,6 +61,15 @@ public class Character implements Ownable {
     inverseJoinColumns = @JoinColumn(name = "scene_id")
   )
   private Set<Scene> scenes = new HashSet<>();
+}
+
+  // @ManyToOne
+  // @JoinColumn(name = "scene_birth_id")
+  // private Scene birthScene;
+
+  // @ManyToOne
+  // @JoinColumn(name = "scene_death_id")
+  // private Scene deathScene;
 
   // @ManyToOne
   // @JoinColumn(name = "timeline_birth_id")
@@ -76,4 +78,3 @@ public class Character implements Ownable {
   // @ManyToOne
   // @JoinColumn(name = "timeline_death_id")
   // private Timeline deathTimeline;
-}

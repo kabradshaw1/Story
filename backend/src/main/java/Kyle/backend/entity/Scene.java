@@ -45,6 +45,23 @@ public class Scene implements Ownable {
   @ManyToMany(mappedBy = "scenes")
   private Set<Character> characters = new HashSet<>();
 
+  @ManyToOne
+  @JoinColumn(name = "timeline_start_id")
+  private Timeline timelineStart;
+
+  @ManyToOne
+  @JoinColumn(name = "timeline_end_id")
+  private Timeline timelineEnd;
+
+  @ManyToMany
+  @JoinTable(
+    name = "organization_scene",
+    joinColumns = @JoinColumn(name = "scene_id"),
+    inverseJoinColumns = @JoinColumn(name = "organization_id")
+  )
+  private Set<Organization> organizations = new HashSet<>();
+
+}
   // @ManyToOne
   // @JoinColumn(name = "starting_location_id")
   // private Location startingLocation;
@@ -72,21 +89,3 @@ public class Scene implements Ownable {
   // @ManyToOne
   // @JoinColumn(name = "location_end_id")
   // private Location locationEnd;
-
-  @ManyToOne
-  @JoinColumn(name = "timeline_start_id")
-  private Timeline timelineStart;
-
-  @ManyToOne
-  @JoinColumn(name = "timeline_end_id")
-  private Timeline timelineEnd;
-
-  @ManyToMany
-  @JoinTable(
-    name = "organization_scene",
-    joinColumns = @JoinColumn(name = "scene_id"),
-    inverseJoinColumns = @JoinColumn(name = "organization_id")
-  )
-  private Set<Organization> organizations = new HashSet<>();
-
-}
