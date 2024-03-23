@@ -41,6 +41,9 @@ public class Timeline implements Ownable {
   @OneToMany(mappedBy = "timelineStart", cascade = CascadeType.ALL)
   private Set<Scene> sceneStarts = new HashSet<>();
 
+  @OneToMany(mappedBy = "timelineEnd", cascade = CascadeType.ALL)
+  private Set<Scene> sceneEnds = new HashSet<>();
+}
   // public void addSceneStart(Scene sceneStart) {
   //   if (sceneStart != null) {
   //     sceneStarts.add(sceneStart);
@@ -48,13 +51,9 @@ public class Timeline implements Ownable {
   //   }
   // }
 
-  @OneToMany(mappedBy = "timelineEnd", cascade = CascadeType.ALL)
-  private Set<Scene> sceneEnds = new HashSet<>();
-
-  // public void addSceneEnd(Scene sceneEnd) {
+    // public void addSceneEnd(Scene sceneEnd) {
   //   if (sceneEnd != null) {
   //     sceneEnds.add(sceneEnd);
   //     sceneEnd.setTimelineEnd(this);
   //   }
   // }
-}

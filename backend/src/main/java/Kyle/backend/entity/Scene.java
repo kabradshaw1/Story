@@ -41,7 +41,6 @@ public class Scene implements Ownable {
   @LastModifiedDate
   private Date dateModified;
 
-
   @ManyToMany
   @JoinTable(
     name = "character_scene",
@@ -58,15 +57,16 @@ public class Scene implements Ownable {
   @JoinColumn(name = "timeline_end_id")
   private Timeline timelineEnd;
 
-  @ManyToMany
-  @JoinTable(
-    name = "organization_scene",
-    joinColumns = @JoinColumn(name = "scene_id"),
-    inverseJoinColumns = @JoinColumn(name = "organization_id")
-  )
-  private Set<Organization> organizations = new HashSet<>();
 
 }
+
+// @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
+// @JoinTable(
+//   name = "organization_scene",
+//   joinColumns = @JoinColumn(name = "scene_id"),
+//   inverseJoinColumns = @JoinColumn(name = "organization_id")
+// )
+// private Set<Organization> organizations;
   // @ManyToOne
   // @JoinColumn(name = "starting_location_id")
   // private Location startingLocation;

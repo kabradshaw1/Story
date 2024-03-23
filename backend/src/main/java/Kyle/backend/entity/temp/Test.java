@@ -1,4 +1,4 @@
-package Kyle.backend.entity;
+package Kyle.backend.entity.temp;
 
 import jakarta.persistence.*;
 
