@@ -11,7 +11,6 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.util.Date;
-import java.util.HashSet;
 
 @Entity
 @Table(name = "characters")
@@ -43,7 +42,7 @@ public class Character implements Ownable {
   private Date dateModified;
 
   @ManyToMany(mappedBy = "characters")
-  private Set<Conflict> conflicts = new HashSet<>();
+  private Set<Conflict> conflicts;
 
   @ManyToMany
   @JoinTable(
@@ -51,16 +50,16 @@ public class Character implements Ownable {
     joinColumns = @JoinColumn(name = "character_id"),
     inverseJoinColumns = @JoinColumn(name = "organization_id")
   )
-  private Set<Organization> organizations = new HashSet<>();
+  private Set<Organization> organizations;
 
 
-  @ManyToMany(cascade = CascadeType.ALL)
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
     name = "character_scene",
     joinColumns = @JoinColumn(name = "character_id"),
     inverseJoinColumns = @JoinColumn(name = "scene_id")
   )
-  private Set<Scene> scenes = new HashSet<>();
+  private Set<Scene> scenes;
 }
 
   // @ManyToOne

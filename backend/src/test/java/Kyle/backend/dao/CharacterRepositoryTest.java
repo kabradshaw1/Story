@@ -37,15 +37,15 @@ public class CharacterRepositoryTest {
 		entityManager.persistAndFlush(character);
 
 		scene = new Scene();
-    scene.setTitle("test scene");
-    // Set other fields of scene as needed
+		scene.setTitle("test scene");
+		// Set other fields of scene as needed
 
-    character.getScenes().add(scene);
-    scene.getCharacters().add(character);
-    
-    entityManager.persist(scene);
-    entityManager.persist(character);
-    entityManager.flush();
+		character.getScenes().add(scene);
+		scene.getCharacters().add(character);
+		
+		entityManager.persist(scene);
+		entityManager.persist(character);
+		entityManager.flush();
 	}
 
 	@Test
@@ -54,8 +54,7 @@ public class CharacterRepositoryTest {
 		assertTrue((retrievedCharacter.isPresent()));
 		assertEquals("test body", retrievedCharacter.get().getBody());
 		assertEquals("test body", retrievedCharacter.get().getBody());
-    assertEquals(1, retrievedCharacter.get().getScenes().size());
-    assertEquals("test scene", retrievedCharacter.get().getScenes().iterator().next().getTitle());
+		assertEquals(1, retrievedCharacter.get().getScenes().size());
+		assertEquals("test scene", retrievedCharacter.get().getScenes().iterator().next().getTitle());
 	}
-
 }
