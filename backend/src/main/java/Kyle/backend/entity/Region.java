@@ -13,15 +13,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "timeline")
+@Table(name = "regions")
 @Data
 @NoArgsConstructor
-public class Timeline implements Ownable {
+public class Region implements Ownable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
   private Long id;
+
+  @Column(name = "title")
+  private String title;
+
+  @Column(name = "body")
+  private String body;
 
   @Column(name = "username")
   @CreatedBy
@@ -35,26 +41,23 @@ public class Timeline implements Ownable {
   @LastModifiedDate
   private Date dateModified;
 
-  @Column(name = "timeline")
-  private Integer timeline;
+  // @OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
+  // private Set<Location> locations = new HashSet<>();
 
-  @OneToMany(mappedBy = "timelineStart", cascade = CascadeType.ALL)
-  private Set<Scene> sceneStarts = new HashSet<>();
-
-  // public void addSceneStart(Scene sceneStart) {
-  //   if (sceneStart != null) {
-  //     sceneStarts.add(sceneStart);
-  //     sceneStart.setTimelineStart(this);
+  // // Utility methods to add location
+  // public void addLocation(Location location) {
+  //   if (location != null) {
+  //     locations.add(location);
+  //     location.setRegion(this);
   //   }
   // }
 
-  @OneToMany(mappedBy = "timelineEnd", cascade = CascadeType.ALL)
-  private Set<Scene> sceneEnds = new HashSet<>();
+  @ManyToMany
+  @JoinTable(
+    name = "region_organization",
+    joinColumns = @JoinColumn(name = "region_id"),
+    inverseJoinColumns = @JoinColumn(name = "organization_id")
+  )
+  private Set<Organization> organizations = new HashSet<>();
 
-  // public void addSceneEnd(Scene sceneEnd) {
-  //   if (sceneEnd != null) {
-  //     sceneEnds.add(sceneEnd);
-  //     sceneEnd.setTimelineEnd(this);
-  //   }
-  // }
 }

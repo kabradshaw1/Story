@@ -42,7 +42,19 @@ public class Character implements Ownable {
   @LastModifiedDate
   private Date dateModified;
 
+  @ManyToMany(mappedBy = "characters")
+  private Set<Conflict> conflicts = new HashSet<>();
+
   @ManyToMany
+  @JoinTable(
+    name = "character_organization",
+    joinColumns = @JoinColumn(name = "character_id"),
+    inverseJoinColumns = @JoinColumn(name = "organization_id")
+  )
+  private Set<Organization> organizations = new HashSet<>();
+
+
+  @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable(
     name = "character_scene",
     joinColumns = @JoinColumn(name = "character_id"),
@@ -51,16 +63,6 @@ public class Character implements Ownable {
   private Set<Scene> scenes = new HashSet<>();
 }
 
-// @ManyToMany(mappedBy = "characters")
-// private Set<Conflict> conflicts;
-
-// @ManyToMany
-// @JoinTable(
-//   name = "character_organization",
-//   joinColumns = @JoinColumn(name = "character_id"),
-//   inverseJoinColumns = @JoinColumn(name = "organization_id")
-// )
-// private Set<Organization> organizations;
   // @ManyToOne
   // @JoinColumn(name = "scene_birth_id")
   // private Scene birthScene;
