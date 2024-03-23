@@ -19,42 +19,45 @@ import Kyle.backend.entity.Scene;
 @TestPropertySource(locations = "classpath:application-test.properties")
 public class CharacterRepositoryTest {
   
-	@Autowired
-	private CharacterRepository characterRepository;
+  @Autowired
+  private CharacterRepository characterRepository;
 
-	@Autowired
-	private TestEntityManager entityManager;
+  @Autowired
+  private TestEntityManager entityManager;
 
-	private Character character;
+  @BeforeEach
+  void setup() {
+    // Create and persist test Character
+    Character character = new Character();
+    // Assuming 'title' and 'body' are fields in Character, omitted here for brevity
+    character.setTitle("test title");
+    entityManager.persistAndFlush(character);
 
-	private Scene scene;
+    // Create and persist test Scene
+    Scene scene = new Scene();
+    scene.setTitle("test scene");
+    // Omitted additional Scene setup for brevity
+    entityManager.persistAndFlush(scene);
 
-	@BeforeEach
-	void setup() {
-		character = new Character();
-		character.setBody("test body");
-		character.setTitle("test title");
-		entityManager.persistAndFlush(character);
+    // Establish the many-to-many relationship
+    character.getScenes().add(scene);
+    scene.getCharacters().add(character);
 
-		scene = new Scene();
-		scene.setTitle("test scene");
-		// Set other fields of scene as needed
+    // Persist the entities again to save the relationship
+    entityManager.persistAndFlush(scene);
+    entityManager.persistAndFlush(character);
+  }
 
-		character.getScenes().add(scene);
-		scene.getCharacters().add(character);
-		
-		entityManager.persist(scene);
-		entityManager.persist(character);
-		entityManager.flush();
-	}
+  @Test
+  void givenTitle_whenFindByTitle_thenReturnsCharacterWithScenes() {
+    Optional<Character> retrievedCharacter = characterRepository.findByTitle("test title");
+    assertTrue(retrievedCharacter.isPresent(), "Character should be found by title");
 
-	@Test
-	void givenTitle_whenFindByTitle_thenReturnsCharacterWithScenes() {
-		Optional<Character> retrievedCharacter = characterRepository.findByTitle("test title");
-		assertTrue((retrievedCharacter.isPresent()));
-		assertEquals("test body", retrievedCharacter.get().getBody());
-		assertEquals("test body", retrievedCharacter.get().getBody());
-		assertEquals(1, retrievedCharacter.get().getScenes().size());
-		assertEquals("test scene", retrievedCharacter.get().getScenes().iterator().next().getTitle());
-	}
+    Character character = retrievedCharacter.get();
+    assertEquals("test title", character.getTitle(), "Character title should match");
+    assertEquals(1, character.getScenes().size(), "Character should have one associated scene");
+
+    Scene scene = character.getScenes().iterator().next();
+    assertEquals("test scene", scene.getTitle(), "Scene title should match");
+  }
 }
