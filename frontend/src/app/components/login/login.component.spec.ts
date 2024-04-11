@@ -63,7 +63,7 @@ describe('LoginComponent', () => {
       expect(emailError.textContent).toContain('Email is required');
     });
 
-    it('givenInvalidEmail_whenEmailIsEntered_thenReturnerror', () => {
+    it('givenInvalidEmail_whenEmailIsEntered_thenReturnError', () => {
       component.loginForm.controls['email'].setValue('plainaddress');
       component.loginForm.controls['email'].markAsTouched();
 
